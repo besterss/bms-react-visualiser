@@ -529,7 +529,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -1449,7 +1449,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -1997,7 +1997,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -2780,7 +2780,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -3622,7 +3622,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -4280,7 +4280,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -5128,7 +5128,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
@@ -5806,7 +5806,7 @@ export const CONFIG_DATA = {
             //V2 - vrchni strena
             type: "partition",
             start: { x: 2.735, z: 11.7 },
-            end: { x: -1.125, z: 11.7 },
+            end: { x: 1.125, z: 11.7 },
           },
           {
             //V3 - leva strena
