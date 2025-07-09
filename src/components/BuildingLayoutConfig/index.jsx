@@ -660,19 +660,19 @@ export const CONFIG_DATA = {
           {
             //Vnitrni Schodiste01 - leva
             type: "partition",
-            start: { x: 7.15, z: -10.46 },
+            start: { x: 7.15, z: -10.65 },
             end: { x: 7.15, z: -16.8 },
           },
           {
             //Vnitrni Schodiste01 - nahore
             type: "partition",
-            start: { x: 7.15, z: -10.46 },
-            end: { x: 9.65, z: -10.46 },
+            start: { x: 7.15, z: -10.65 },
+            end: { x: 9.65, z: -10.65 },  
           },
           {
             //Vnitrni Schodiste01 - prava
             type: "partition",
-            start: { x: 9.65, z: -10.46 },
+            start: { x: 9.65, z: -10.65},
             end: { x: 9.65, z: -16.8 },
           },
           {
