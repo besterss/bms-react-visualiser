@@ -6350,8 +6350,8 @@ export const CONFIG_DATA = {
       },
       layout: {
         rooms_grid: {
-          columns: 35.82,
-          rows: 35.82,
+          columns: 1,
+          rows: 1,
         },
 
         walls: [
