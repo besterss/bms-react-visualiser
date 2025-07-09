@@ -4589,6 +4589,30 @@ export const CONFIG_DATA = {
             start: { x: 3, z: -7.8 },
             end: { x: -3, z: -7.8 },
           },
+          {
+            //schody tocite v pravo nahore
+            type: "circular",
+            center: { x: 13.5, z: 7.2 },
+            radius: 1.515,
+          },
+          {
+            //schody tocite v pravo nahore sloup
+            type: "circular",
+            center: { x: 13.5, z: 7.2 },
+            radius: 0.4,
+          },
+          {
+            //leva strana - vrchni stena
+            type: "partition",
+            start: { x: 10.2, z: 6.8 },
+            end: { x: 13.5, z: 6.8 },
+          },
+          {
+            //leva strana - spodni stena
+            type: "partition",
+            start: { x: 10.2, z: 8.7 },
+            end: { x: 13.5, z: 8.7 },
+          },
         ],
       },
       temperature_data: [0],
