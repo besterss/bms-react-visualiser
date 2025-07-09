@@ -4535,10 +4535,16 @@ export const CONFIG_DATA = {
             end: { x: -10.2, z: 16.8 },
           },
           {
-            //Y osa - vlevo
+            //Y osa - vpravo1
             type: "partition",
             start: { x: 10.2, z: -16.8 },
-            end: { x: 10.2, z: 16.8 },
+            end: { x: 10.2, z: 6.8 },
+          },
+          {
+            //Y osa - vpravo2
+            type: "partition",
+            start: { x: 10.2, z: 16.8 },
+            end: { x: 10.2, z: 8.7 },
           },
           {
             // Technické hnízdo - vlevo
