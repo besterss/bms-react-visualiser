@@ -641,596 +641,719 @@ export const CONFIG_DATA = {
       name: "2NP",
       type: "underground",
       dimensions: {
-        width: 36,
-        depth: 36,
+        width: 35.82,
+        depth: 35.82,
       },
       layout: {
         rooms_grid: {
-          columns: 18,
-          rows: 18,
+          columns: 35.82,
+          rows: 35.82,
         },
 
         walls: [
           {
             type: "outline",
             points: [
-              { x: -18, z: -18 },
-              { x: 18, z: -18 },
-              { x: 18, z: 18 },
-              { x: -18, z: 18 },
+              { x: -17.91, z: -17.91 },
+              { x: 17.91, z: -17.91 },
+              { x: 17.91, z: 17.91 },
+              { x: -17.91, z: 17.91 },
             ],
           },
 
           {
             type: "outline",
             points: [
-              { x: -16.9, z: -16.9 },
-              { x: 16.9, z: -16.9 },
-              { x: 16.9, z: 16.9 },
-              { x: -16.9, z: 16.9 },
+              { x: -16.8, z: -16.8 },
+              { x: 16.8, z: -16.8 },
+              { x: 16.8, z: 16.8 },
+              { x: -16.8, z: 16.8 },
             ],
           },
-
           {
-            //2.09
-            type: "partition",
-            start: { x: -16.9, z: -10.3 },
-            end: { x: -10.3, z: -10.3 },
+            //schody tocite v pravo nahore
+            type: "circular",
+            center: { x: 13.5, z: 7.2 },
+            radius: 1.515,
           },
           {
-            type: "partition",
-            start: { x: -10.3, z: -10.3 },
-            end: { x: -10.3, z: -7.9 },
-          },
-          {
-            type: "partition",
-            start: { x: -16.9, z: -7.9 },
-            end: { x: -10.3, z: -7.9 },
-          },
-          {
-            type: "partition",
-            start: { x: -16.3, z: -8.3 },
-            end: { x: -16.3, z: -9.9 },
-          },
-          {
-            type: "partition",
-            start: { x: -16.3, z: -8.3 },
-            end: { x: -11.9, z: -8.3 },
-          },
-          {
-            type: "partition",
-            start: { x: -16.3, z: -9.9 },
-            end: { x: -11.9, z: -9.9 },
-          },
-          {
-            type: "partition",
-            start: { x: -11.9, z: -8.3 },
-            end: { x: -11.9, z: -8.5 },
-          },
-          {
-            type: "partition",
-            start: { x: -11.9, z: -9.9 },
-            end: { x: -11.9, z: -9.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -11.9, z: -9.7 },
-            end: { x: -10.3, z: -9.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -11.9, z: -8.5 },
-            end: { x: -10.3, z: -8.5 },
-          },
-          {
-            //2.01
-            type: "partition",
-            start: { x: 10.3, z: -16.9 },
-            end: { x: 10.3, z: -10.3 },
-          },
-          {
-            type: "partition",
-            start: { x: 10.3, z: -10.3 },
-            end: { x: 6.7, z: -10.3 },
-          },
-          {
-            type: "partition",
-            start: { x: 6.7, z: -10.3 },
-            end: { x: 6.7, z: -16.9 },
-          },
-          {
-            //2.01
-            type: "partition",
-            start: { x: 9.7, z: -16.9 },
-            end: { x: 9.7, z: -10.5 },
-          },
-          {
-            type: "partition",
-            start: { x: 9.7, z: -10.5 },
-            end: { x: 7.2, z: -10.5 },
-          },
-          {
-            type: "partition",
-            start: { x: 7.2, z: -10.5 },
-            end: { x: 7.2, z: -16.9 },
-          },
-          {
-            //2.13
-            type: "partition",
-            start: { x: -5, z: -11.5 },
-            end: { x: -2.6, z: -11.5 },
-          },
-          {
-            type: "partition",
-            start: { x: -5, z: -15.7 },
-            end: { x: -2.6, z: -15.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -5, z: -11.5 },
-            end: { x: -5, z: -15.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -2.6, z: -11.5 },
-            end: { x: -2.6, z: -15.7 },
-          },
-          //2.14
-          {
-            type: "partition",
-            start: { x: -10.3, z: -4.9 },
-            end: { x: -10.3, z: -0.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -10.3, z: -4.9 },
-            end: { x: -6.1, z: -4.9 },
-          },
-          {
-            type: "partition",
-            start: { x: -6.1, z: -4.9 },
-            end: { x: -6.1, z: -0.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -10.3, z: -0.7 },
-            end: { x: -6.1, z: -0.7 },
-          },
-          //2.11
-          {
-            type: "partition",
-            start: { x: -0.7, z: -4.9 },
-            end: { x: -0.7, z: 4.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -0.7, z: 4.7 },
-            end: { x: 4.1, z: 4.7 },
-          },
-          {
-            type: "partition",
-            start: { x: 4.1, z: -4.9 },
-            end: { x: 4.1, z: 4.7 },
-          },
-          {
-            type: "partition",
-            start: { x: -0.7, z: -4.9 },
-            end: { x: 4.1, z: -4.9 },
-          },
-          {
-            type: "partition",
-            start: { x: 1.6, z: 2.5 },
-            end: { x: 1.6, z: -2.1 },
-          },
-          {
-            type: "partition",
-            start: { x: 1.6, z: -2.1 },
-            end: { x: 1.8, z: -2.1 },
-          },
-          {
-            type: "partition",
-            start: { x: 1.8, z: -2.1 },
-            end: { x: 1.8, z: 2.5 },
-          },
-          {
-            type: "partition",
-            start: { x: 1.6, z: 2.5 },
-            end: { x: 1.8, z: 2.5 },
-          },
-          {
-            //2.18
-            type: "partition",
-            start: { x: 5.9, z: 4.7 },
-            end: { x: 5.9, z: 0.5 },
-          },
-          {
-            type: "partition",
-            start: { x: 5.9, z: 4.7 },
-            end: { x: 8.3, z: 4.7 },
-          },
-          {
-            type: "partition",
-            start: { x: 8.3, z: 4.7 },
-            end: { x: 8.3, z: 0.5 },
-          },
-          {
-            type: "partition",
-            start: { x: 5.9, z: 0.5 },
-            end: { x: 8.3, z: 0.5 },
+            //schody tocite v pravo nahore sloup
+            type: "circular",
+            center: { x: 13.5, z: 7.2 },
+            radius: 0.4,
           },
 
           {
-            //2.15
+            //Schodiste01 - leva
             type: "partition",
-            start: { x: -15.7, z: 13.9 },
-            end: { x: -15.7, z: 9.7 },
+            start: { x: 10.2, z: -16.8 },
+            end: { x: 10.2, z: -10.2 },
           },
           {
+            //Schodiste01 - nahore
             type: "partition",
-            start: { x: -15.7, z: 13.9 },
-            end: { x: -11.5, z: 13.9 },
+            start: { x: 10.2, z: -10.2 },
+            end: { x: 6.6, z: -10.2 },
           },
           {
+            //Schodiste01 - prava
             type: "partition",
-            start: { x: -15.7, z: 9.7 },
-            end: { x: -11.5, z: 9.7 },
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 6.6, z: -16.8 },
           },
           {
+            //Vnitrni Schodiste01 - leva
             type: "partition",
-            start: { x: -11.5, z: 13.9 },
-            end: { x: -11.5, z: 9.7 },
+            start: { x: 7.15, z: -10.46 },
+            end: { x: 7.15, z: -16.8 },
           },
           {
-            //spo stena leva
+            //Vnitrni Schodiste01 - nahore
             type: "partition",
-            start: { x: -10.3, z: 16.9 },
-            end: { x: -10.3, z: 9.5 },
+            start: { x: 7.15, z: -10.46 },
+            end: { x: 9.65, z: -10.46 },
           },
           {
-            //spol stena vodorovna
+            //Vnitrni Schodiste01 - prava
             type: "partition",
-            start: { x: -10.3, z: 9.5 },
-            end: { x: 10.3, z: 9.5 },
+            start: { x: 9.65, z: -10.46 },
+            end: { x: 9.65, z: -16.8 },
           },
           {
-            //spol stena prava
+            //Rozvadece - dolni
             type: "partition",
-            start: { x: 10.3, z: 9.5 },
-            end: { x: 10.3, z: 16.9 },
+            start: { x: -16.8, z: -10.2 },
+            end: { x: -10.2, z: -10.2 },
           },
           {
-            //1.02
+            //Rozvadece - prava
             type: "partition",
-            start: { x: -9.7, z: 16.5 },
-            end: { x: -9.7, z: 10.4 },
+            start: { x: -10.2, z: -10.2 },
+            end: { x: -10.2, z: -7.8 },
           },
           {
+            //Rozvadece - horni
             type: "partition",
-            start: { x: -9.7, z: 10.4 },
-            end: { x: -7.2, z: 10.4 },
+            start: { x: -16.8, z: -7.8 },
+            end: { x: -10.2, z: -7.8 },
           },
           {
+            //Rozdelovace - leva
             type: "partition",
-            start: { x: -7.2, z: 10.4 },
-            end: { x: -7.2, z: 16.5 },
+            start: { x: -16.2, z: -8.2 },
+            end: { x: -16.2, z: -9.8 },
           },
           {
+            //Rozdelovace - prava
             type: "partition",
-            start: { x: -7.2, z: 16.5 },
-            end: { x: -9.7, z: 16.5 },
+            start: { x: -13.59, z: -8.2 },
+            end: { x: -13.59, z: -9.8 },
           },
           {
-            //
+            //Rozdelovace - spodni
             type: "partition",
-            start: { x: -6.6, z: 16.5 },
-            end: { x: -6.6, z: 15 },
+            start: { x: -16.2, z: -9.8 },
+            end: { x: -13.59, z: -9.8 },
           },
           {
+            //Rozdelovace - vrchni
             type: "partition",
-            start: { x: -6.6, z: 15 },
-            end: { x: -4, z: 15 },
+            start: { x: -16.2, z: -8.2 },
+            end: { x: -13.59, z: -8.2 },
           },
           {
+            //Rozdelovace vnitrni - vrchni
             type: "partition",
-            start: { x: -4, z: 15 },
-            end: { x: -4, z: 16.4 },
+            start: { x: -16.12, z: -8.28 },
+            end: { x: -13.71, z: -8.28 },
           },
           {
+            //Rozdelovace vnitrni - spodni
             type: "partition",
-            start: { x: -4, z: 16.4 },
-            end: { x: -6.6, z: 16.4 },
+            start: { x: -16.12, z: -9.72 },
+            end: { x: -13.71, z: -9.72 },
           },
           {
-            //
+            //Rozdelovace vnitrni - leva
             type: "partition",
-            start: { x: -6.6, z: 14.9 },
-            end: { x: -6.6, z: 13.5 },
+            start: { x: -16.12, z: -8.28 },
+            end: { x: -16.12, z: -9.72 },
           },
           {
+            //Rozdelovace vnitrni - prava
             type: "partition",
-            start: { x: -6.6, z: 13.5 },
-            end: { x: -4, z: 13.5 },
+            start: { x: -13.71, z: -8.28 },
+            end: { x: -13.71, z: -9.72 },
           },
           {
+            //Rozdelovace prava - horni
             type: "partition",
-            start: { x: -4, z: 13.5 },
-            end: { x: -4, z: 14.9 },
+            start: { x: -13.59, z: -8.2 },
+            end: { x: -11.95, z: -8.2 },
           },
           {
+            //Rozdelovace prava - spodni
             type: "partition",
-            start: { x: -4, z: 14.9 },
-            end: { x: -6.6, z: 14.9 },
+            start: { x: -13.59, z: -9.8 },
+            end: { x: -11.95, z: -9.8 },
           },
           {
-            //
+            //Rozdelovace mala stena - spodni
             type: "partition",
-            start: { x: -6.6, z: 13.4 },
-            end: { x: -6.6, z: 11.8 },
+            start: { x: -11.95, z: -9.8 },
+            end: { x: -11.95, z: -9.5 },
           },
           {
+            //Rozdelovace mala stena - horni
             type: "partition",
-            start: { x: -6.6, z: 11.8 },
-            end: { x: -4, z: 11.8 },
+            start: { x: -11.95, z: -8.2 },
+            end: { x: -11.95, z: -8.5 },
           },
           {
+            //Rozdelovace mala stena - nahore
             type: "partition",
-            start: { x: -4, z: 11.8 },
-            end: { x: -4, z: 13.4 },
+            start: { x: -11.95, z: -8.5 },
+            end: { x: -10.2, z: -8.5 },
           },
           {
+            //Rozdelovace mala stena - dole
             type: "partition",
-            start: { x: -4, z: 13.4 },
-            end: { x: -6.6, z: 13.4 },
+            start: { x: -11.95, z: -9.5 },
+            end: { x: -10.2, z: -9.5 },
           },
           {
-            //
+            //2.13 - dole
             type: "partition",
-            start: { x: -6.6, z: 11.7 },
-            end: { x: -6.6, z: 9.9 },
+            start: { x: -4.88, z: -15.6 },
+            end: { x: -2.48, z: -15.6 },
           },
           {
+            //2.13 - nahore
             type: "partition",
-            start: { x: -6.6, z: 9.9 },
-            end: { x: -4, z: 9.9 },
+            start: { x: -4.88, z: -11.4 },
+            end: { x: -2.48, z: -11.4 },
           },
           {
+            //2.13 - vlevo
             type: "partition",
-            start: { x: -4, z: 9.9 },
-            end: { x: -4, z: 11.7 },
+            start: { x: -4.88, z: -11.4 },
+            end: { x: -4.88, z: -15.6 },
           },
           {
+            //2.13 - vpravo
             type: "partition",
-            start: { x: -4, z: 11.7 },
-            end: { x: -6.6, z: 11.7 },
+            start: { x: -2.48, z: -11.4 },
+            end: { x: -2.48, z: -15.6 },
           },
-          {
-            // 1.04
-            type: "partition",
-            start: { x: -3.8, z: 16.4 },
-            end: { x: -3.8, z: 9.9 },
-          },
+          //2.14 - vlevo
           {
             type: "partition",
-            start: { x: -3.8, z: 9.9 },
-            end: { x: -1.1, z: 9.9 },
+            start: { x: -10.2, z: -4.8 },
+            end: { x: -10.2, z: -0.4 },
           },
+          //2.14 - vpravo
           {
             type: "partition",
-            start: { x: -1.1, z: 9.9 },
-            end: { x: -1.1, z: 16.4 },
+            start: { x: -6, z: -4.8 },
+            end: { x: -6, z: -0.4 },
           },
+          //2.14 - dole
           {
             type: "partition",
-            start: { x: -1.1, z: 16.4 },
-            end: { x: -3.8, z: 16.4 },
+            start: { x: -6, z: -4.8 },
+            end: { x: -10.2, z: -4.8 },
           },
-          {
-            // 1.19
-            type: "partition",
-            start: { x: -0.7, z: 16.4 },
-            end: { x: -0.7, z: 14.1 },
-          },
+          //2.14 - nahore
           {
             type: "partition",
-            start: { x: -0.7, z: 14.1 },
-            end: { x: 3.3, z: 14.1 },
+            start: { x: -6, z: -0.4 },
+            end: { x: -10.2, z: -0.4 },
           },
           {
+            //schodiste11 vnejsi leva
             type: "partition",
-            start: { x: 3.3, z: 14.1 },
-            end: { x: 3.3, z: 15.2 },
+            start: { x: -0.6, z: 4.8 },
+            end: { x: -0.6, z: -4.8 },
           },
           {
+            //schodiste11 vnejsi spodni
             type: "partition",
-            start: { x: 3.3, z: 15.2 },
-            end: { x: 3.4, z: 15.2 },
+            start: { x: -0.6, z: -4.8 },
+            end: { x: 4.2, z: -4.8 },
           },
           {
+            //schodiste11 vnejsi prava
             type: "partition",
-            start: { x: 3.4, z: 15.2 },
-            end: { x: 3.4, z: 14.1 },
+            start: { x: 4.2, z: -4.8 },
+            end: { x: 4.2, z: 4.8 },
           },
           {
+            //schodiste11 vnejsi prava
             type: "partition",
-            start: { x: 3.4, z: 14.1 },
-            end: { x: 4.5, z: 14.1 },
+            start: { x: 4.2, z: 4.8 },
+            end: { x: -0.6, z: 4.8 },
           },
           {
+            //schodiste11 vnitrni leva
             type: "partition",
-            start: { x: 4.5, z: 14.1 },
-            end: { x: 4.5, z: 16.4 },
+            start: { x: 1.7, z: 2.37 },
+            end: { x: 1.7, z: -2.37 },
           },
           {
+            //schodiste11 vnitrni spodni
             type: "partition",
-            start: { x: 4.5, z: 16.4 },
-            end: { x: 3.4, z: 16.4 },
+            start: { x: 1.7, z: -2.37 },
+            end: { x: 1.9, z: -2.37 },
           },
           {
+            //schodiste11 vnitrni prava
             type: "partition",
-            start: { x: 3.4, z: 16.4 },
-            end: { x: 3.4, z: 15.9 },
+            start: { x: 1.9, z: -2.37 },
+            end: { x: 1.9, z: 2.37 },
           },
           {
+            //schodiste11 vnitrni vrchni
             type: "partition",
-            start: { x: 3.4, z: 15.9 },
-            end: { x: 3.3, z: 15.9 },
+            start: { x: 1.9, z: 2.37 },
+            end: { x: 1.7, z: 2.37 },
           },
+          //2.18 vlevo
           {
             type: "partition",
-            start: { x: 3.3, z: 15.9 },
-            end: { x: 3.3, z: 16.4 },
+            start: { x: 8.3, z: 4.8 },
+            end: { x: 8.3, z: 0.6 },
           },
+          //2.18 vpravo
           {
             type: "partition",
-            start: { x: 3.3, z: 16.4 },
-            end: { x: -0.7, z: 16.4 },
+            start: { x: 5.9, z: 4.8 },
+            end: { x: 5.9, z: 0.6 },
           },
-          {
-            // sachta za vytahy
-            type: "partition",
-            start: { x: -0.7, z: 14 },
-            end: { x: -0.7, z: 11.9 },
-          },
+          //2.18 dole
           {
             type: "partition",
-            start: { x: -0.7, z: 11.9 },
+            start: { x: 5.9, z: 0.6 },
+            end: { x: 8.3, z: 0.6 },
+          },
+          //2.18 nahore
+          {
+            type: "partition",
+            start: { x: 5.9, z: 4.8 },
+            end: { x: 8.3, z: 4.8 },
+          },
+          {
+            //2.15 vlevo
+            type: "partition",
+            start: { x: -15.6, z: 13.8 },
+            end: { x: -15.6, z: 9.6 },
+          },
+          {
+            //2.15 vpravo
+            type: "partition",
+            start: { x: -11.4, z: 13.8 },
+            end: { x: -11.4, z: 9.6 },
+          },
+          {
+            //2.15 dole
+            type: "partition",
+            start: { x: -15.6, z: 9.6 },
+            end: { x: -11.4, z: 9.6 },
+          },
+          {
+            //2.15 nahore
+            type: "partition",
+            start: { x: -15.6, z: 13.8 },
+            end: { x: -11.4, z: 13.8 },
+          },
+          {
+            //vrsek - leva stena
+            type: "partition",
+            start: { x: -10.2, z: 16.8 },
+            end: { x: -10.2, z: 9.6 },
+          },
+          {
+            //vrsek - spodni stena
+            type: "partition",
+            start: { x: -10.2, z: 9.6 },
+            end: { x: 10.2, z: 9.6 },
+          },
+          {
+            //vrsek - prava stena
+            type: "partition",
+            start: { x: 10.2, z: 9.6 },
+            end: { x: 10.2, z: 16.8 },
+          },
+          {
+            //Schodiste02 - leva stena
+            type: "partition",
+            start: { x: -9.65, z: 16.6 },
+            end: { x: -9.65, z: 9.8 },
+          },
+          {
+            //Schodiste02 - spodni stena
+            type: "partition",
+            start: { x: -9.65, z: 9.8 },
+            end: { x: -7.15, z: 9.8 },
+          },
+          {
+            //Schodiste02 - prava stena
+            type: "partition",
+            start: { x: -7.15, z: 16.6 },
+            end: { x: -7.15, z: 9.8 },
+          },
+          {
+            //Schodiste02 - vrchni stena
+            type: "partition",
+            start: { x: -7.15, z: 16.6 },
+            end: { x: -9.65, z: 16.6 },
+          },
+          {
+            //V4 - leva stena
+            type: "partition",
+            start: { x: -6.6, z: 16.6 },
+            end: { x: -6.6, z: 15.05 },
+          },
+          {
+            //V4 - spodni stena
+            type: "partition",
+            start: { x: -6.6, z: 15.05 },
+            end: { x: -4.05, z: 15.05 },
+          },
+          {
+            //V4 - prava stena
+            type: "partition",
+            start: { x: -4.05, z: 15.05 },
+            end: { x: -4.05, z: 16.6 },
+          },
+          {
+            //V4 - vrchni stena
+            type: "partition",
+            start: { x: -4.05, z: 16.6 },
+            end: { x: -6.6, z: 16.6 },
+          },
+          {
+            //V5 - leva stena
+            type: "partition",
+            start: { x: -6.6, z: 14.85 },
+            end: { x: -6.6, z: 13.45 },
+          },
+          {
+            //V5 - spodni stena
+            type: "partition",
+            start: { x: -6.6, z: 13.45 },
+            end: { x: -4.05, z: 13.45 },
+          },
+          {
+            //V5 - prava stena
+            type: "partition",
+            start: { x: -4.05, z: 13.45 },
+            end: { x: -4.05, z: 14.85 },
+          },
+          {
+            //V5 - vrchni stena
+            type: "partition",
+            start: { x: -4.05, z: 14.85 },
+            end: { x: -6.6, z: 14.85 },
+          },
+          {
+            //RozvodnaSLP - leva stena
+            type: "partition",
+            start: { x: -6.6, z: 13.3 },
+            end: { x: -6.6, z: 11.75 },
+          },
+          {
+            //RozvodnaSLP - spodni stena
+            type: "partition",
+            start: { x: -6.6, z: 11.75 },
+            end: { x: -4.05, z: 11.75 },
+          },
+          {
+            //RozvodnaSLP - spodni stena
+            type: "partition",
+            start: { x: -4.05, z: 11.75 },
+            end: { x: -4.05, z: 13.3 },
+          },
+          {
+            //RozvodnaSLP - spodni stena
+            type: "partition",
+            start: { x: -4.05, z: 13.3 },
+            end: { x: -6.6, z: 13.3 },
+          },
+          {
+            //WC zam - leva stena
+            type: "partition",
+            start: { x: -6.6, z: 11.6 },
+            end: { x: -6.6, z: 9.8 },
+          },
+          {
+            //WC zam - spodni stena
+            type: "partition",
+            start: { x: -6.6, z: 9.8 },
+            end: { x: -4.05, z: 9.8 },
+          },
+          {
+            //WC zam - prava stena
+            type: "partition",
+            start: { x: -4.05, z: 9.8 },
+            end: { x: -4.05, z: 11.6 },
+          },
+          {
+            //WC zam - vrchni stena
+            type: "partition",
+            start: { x: -4.05, z: 11.6 },
+            end: { x: -6.6, z: 11.6 },
+          },
+          {
+            //mp prostor - leva stena
+            type: "partition",
+            start: { x: -3.85, z: 16.6 },
+            end: { x: -3.85, z: 9.8 },
+          },
+          {
+            //mp prostor - spodni stena
+            type: "partition",
+            start: { x: -3.85, z: 9.8 },
+            end: { x: -1.15, z: 9.8 },
+          },
+          {
+            //mp prostor - prava stena
+            type: "partition",
+            start: { x: -1.15, z: 9.8 },
+            end: { x: -1.15, z: 16.6 },
+          },
+          {
+            //mp prostor - vrchni stena
+            type: "partition",
+            start: { x: -1.15, z: 16.6 },
+            end: { x: -3.85, z: 16.6 },
+          },
+          {
+            //Kuchynka - leva stena
+            type: "partition",
+            start: { x: -0.75, z: 16.6 },
+            end: { x: -0.75, z: 14.3 },
+          },
+          {
+            //Kuchynka - spodni stena
+            type: "partition",
+            start: { x: -0.75, z: 14.3 },
+            end: { x: 3.25, z: 14.3 },
+          },
+          {
+            //Kuchynka - prava stena
+            type: "partition",
+            start: { x: 3.25, z: 14.3 },
+            end: { x: 3.25, z: 16.6 },
+          },
+          {
+            //Kuchynka - horni stena
+            type: "partition",
+            start: { x: 3.25, z: 16.6 },
+            end: { x: -0.75, z: 16.6 },
+          },
+          {
+            //Uklid - leva stena
+            type: "partition",
+            start: { x: 3.4, z: 16.6 },
+            end: { x: 3.4, z: 14.3 },
+          },
+          {
+            //Uklid - spodni stena
+            type: "partition",
+            start: { x: 3.4, z: 14.3 },
+            end: { x: 4.5, z: 14.3 },
+          },
+          {
+            //Uklid - prava stena
+            type: "partition",
+            start: { x: 4.5, z: 14.3 },
+            end: { x: 4.5, z: 16.6 },
+          },
+          {
+            //Uklid - vrchni stena
+            type: "partition",
+            start: { x: 4.5, z: 16.6 },
+            end: { x: 3.4, z: 16.6 },
+          },
+          {
+            //Empty1 - leva stena
+            type: "partition",
+            start: { x: -0.75, z: 14 },
+            end: { x: -0.75, z: 11.9 },
+          },
+          {
+            //Empty1 - spodni stena
+            type: "partition",
+            start: { x: -0.75, z: 11.9 },
             end: { x: 4.5, z: 11.9 },
           },
           {
+            //Empty1 - prava stena
             type: "partition",
             start: { x: 4.5, z: 11.9 },
             end: { x: 4.5, z: 14 },
           },
           {
+            //Empty1 - vrchni stena
             type: "partition",
             start: { x: 4.5, z: 14 },
-            end: { x: -0.7, z: 14 },
+            end: { x: -0.75, z: 14 },
           },
           {
-            //vytahy
+            //V1 - leva strena
             type: "partition",
-            start: { x: -0.7, z: 11.8 },
-            end: { x: -0.7, z: 9.9 },
+            start: { x: -0.75, z: 11.7 },
+            end: { x: -0.75, z: 9.8 },
           },
           {
+            //V1 - spodni strena
             type: "partition",
-            start: { x: -0.7, z: 9.9 },
-            end: { x: 0.9, z: 9.9 },
+            start: { x: -0.75, z: 9.8 },
+            end: { x: 0.965, z: 9.8 },
           },
           {
+            //V1 - prava strena
             type: "partition",
-            start: { x: 0.9, z: 9.9 },
-            end: { x: 0.9, z: 11.8 },
+            start: { x: 0.965, z: 9.8 },
+            end: { x: 0.965, z: 11.7 },
           },
           {
+            //V1 - vrchni strena
             type: "partition",
-            start: { x: 0.9, z: 11.8 },
-            end: { x: -0.7, z: 11.8 },
+            start: { x: 0.965, z: 11.7 },
+            end: { x: -0.75, z: 11.7 },
           },
           {
-            //
+            //V2 - leva strena
             type: "partition",
-            start: { x: 1.1, z: 11.8 },
-            end: { x: 1.1, z: 9.9 },
+            start: { x: 1.125, z: 11.7 },
+            end: { x: 1.125, z: 9.8 },
           },
           {
+            //V2 - spodni strena
             type: "partition",
-            start: { x: 1.1, z: 9.9 },
-            end: { x: 2.7, z: 9.9 },
+            start: { x: 1.125, z: 9.8 },
+            end: { x: 2.735, z: 9.8 },
           },
           {
+            //V2 - prava strena
             type: "partition",
-            start: { x: 2.7, z: 9.9 },
-            end: { x: 2.7, z: 11.8 },
+            start: { x: 2.735, z: 9.8 },
+            end: { x: 2.735, z: 11.7 },
           },
           {
+            //V2 - vrchni strena
             type: "partition",
-            start: { x: 2.7, z: 11.8 },
-            end: { x: 1.1, z: 11.8 },
+            start: { x: 2.735, z: 11.7 },
+            end: { x: -1.125, z: 11.7 },
           },
           {
-            //
+            //V3 - leva strena
             type: "partition",
-            start: { x: 2.9, z: 11.8 },
-            end: { x: 2.9, z: 9.9 },
+            start: { x: 2.925, z: 11.7 },
+            end: { x: 2.925, z: 9.8 },
           },
           {
+            //V3 - spodni strena
             type: "partition",
-            start: { x: 2.9, z: 9.9 },
-            end: { x: 4.5, z: 9.9 },
+            start: { x: 2.925, z: 9.8 },
+            end: { x: 4.545, z: 9.8 },
           },
           {
+            //V3 - prava strena
             type: "partition",
-            start: { x: 4.5, z: 9.9 },
-            end: { x: 4.5, z: 11.8 },
+            start: { x: 4.545, z: 9.8 },
+            end: { x: 4.545, z: 11.7 },
           },
           {
+            //V3 - vrchni strena
             type: "partition",
-            start: { x: 4.5, z: 11.8 },
-            end: { x: 2.9, z: 11.8 },
+            start: { x: 4.545, z: 11.7 },
+            end: { x: 2.925, z: 11.7 },
           },
           {
-            // sachta nejaka
+            //Empty2 - leva strena
             type: "partition",
-            start: { x: 5, z: 16.4 },
-            end: { x: 5, z: 15.1 },
+            start: { x: 5.02, z: 16.6 },
+            end: { x: 5.02, z: 15.3 },
           },
           {
+            //Empty2 - spodni strena
             type: "partition",
-            start: { x: 5, z: 15.1 },
-            end: { x: 9.6, z: 15.1 },
+            start: { x: 5.02, z: 15.3 },
+            end: { x: 9.62, z: 15.3 },
           },
           {
+            //Empty2 - prava strena
             type: "partition",
-            start: { x: 9.6, z: 16.4 },
-            end: { x: 9.6, z: 15.1 },
+            start: { x: 9.62, z: 15.3 },
+            end: { x: 9.62, z: 16.6 },
           },
           {
+            //Empty2 - vrchni strena
             type: "partition",
-            start: { x: 9.6, z: 16.4 },
-            end: { x: 5, z: 16.4 },
+            start: { x: 9.62, z: 16.6 },
+            end: { x: 5.02, z: 16.6 },
           },
           {
-            // zachody
+            //WC muzi - leva stena
             type: "partition",
-            start: { x: 5, z: 14.9 },
-            end: { x: 5, z: 9.9 },
+            start: { x: 5.02, z: 15.1 },
+            end: { x: 5.02, z: 9.8 },
           },
           {
+            //WC muzi - spodni stena
             type: "partition",
-            start: { x: 5, z: 9.9 },
-            end: { x: 7.2, z: 9.9 },
+            start: { x: 5.02, z: 9.8 },
+            end: { x: 7.17, z: 9.8 },
           },
           {
+            //WC muzi - prava stena
             type: "partition",
-            start: { x: 7.2, z: 14.9 },
-            end: { x: 7.2, z: 9.9 },
+            start: { x: 7.17, z: 9.8 },
+            end: { x: 7.17, z: 15.1 },
           },
           {
+            //WC muzi - vrchni stena
             type: "partition",
-            start: { x: 7.2, z: 14.9 },
-            end: { x: 5, z: 14.9 },
+            start: { x: 7.17, z: 15.1 },
+            end: { x: 5.02, z: 15.1 },
           },
           {
-            // zachody 2
+            //WC zeny - leva stena 1
             type: "partition",
-            start: { x: 7.4, z: 14.9 },
-            end: { x: 7.4, z: 9.9 },
+            start: { x: 7.42, z: 15.1 },
+            end: { x: 7.42, z: 13.3 },
           },
           {
+            //WC zeny - spojeni leve steny
             type: "partition",
-            start: { x: 7.4, z: 9.9 },
-            end: { x: 9.6, z: 9.9 },
+            start: { x: 7.42, z: 13.3 },
+            end: { x: 7.37, z: 13.3 },
           },
           {
+            //WC zeny - leva stena 2
             type: "partition",
-            start: { x: 9.6, z: 9.9 },
-            end: { x: 9.6, z: 14.9 },
+            start: { x: 7.37, z: 13.3 },
+            end: { x: 7.37, z: 9.8 },
           },
           {
+            //WC zeny - spodni stena
             type: "partition",
-            start: { x: 9.6, z: 14.9 },
-            end: { x: 7.4, z: 14.9 },
+            start: { x: 7.37, z: 9.8 },
+            end: { x: 9.62, z: 9.8 },
+          },
+          {
+            //WC zeny - prava stena
+            type: "partition",
+            start: { x: 9.62, z: 9.8 },
+            end: { x: 9.62, z: 15.1 },
+          },
+          {
+            //WC zeny - prava stena
+            type: "partition",
+            start: { x: 9.62, z: 15.1 },
+            end: { x: 7.37, z: 15.1 },
           },
         ],
       },
