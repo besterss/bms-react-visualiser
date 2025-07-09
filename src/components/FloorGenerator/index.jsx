@@ -212,6 +212,11 @@ export class FloorGenerator {
         const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
         const wallMesh = this.createWallSegment(p1, p2, `${floorName}_partition_${index}`, yLevel, wallHeight, wallThickness, isUnderground);
         floorMeshes.push(wallMesh);
+      } else if (wall.type === 'circular') {
+                const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
+                const radius = wall.radius;
+                const circularWall = this.createCircularWall(center, radius, wallHeight, wallThickness, `${floorName}_circular_${index}`, yLevel, isUnderground);
+                floorMeshes.push(circularWall);
       }
     });
 
@@ -243,4 +248,34 @@ export class FloorGenerator {
     wall.material = this.materials.wallOpaque;
     return wall;
   }
+
+  createCircularWall(center, radius, wallHeight, wallThickness, name, yLevel, isUnderground) {
+        const outerCylinder = BABYLON.MeshBuilder.CreateCylinder(`${name}_outer`, {
+            height: wallHeight,
+            diameter: 2 * (radius + wallThickness / 2)
+        }, this.scene);
+
+        const innerCylinder = BABYLON.MeshBuilder.CreateCylinder(`${name}_inner`, {
+            height: wallHeight + 1,
+            diameter: 2 * radius,
+            updatable: false,
+            sideOrientation: BABYLON.Mesh.DOUBLESIDE
+        }, this.scene);
+
+        const circularWall = BABYLON.CSG.FromMesh(outerCylinder).subtract(BABYLON.CSG.FromMesh(innerCylinder)).toMesh(name, isUnderground ? this.materials.undergroundTransparent : this.materials.wallOpaque, this.scene);
+
+        outerCylinder.dispose();
+        innerCylinder.dispose();
+
+        circularWall.position.set(center.x, yLevel + wallHeight / 2, center.z);
+
+        circularWall.convertToFlatShadedMesh();
+
+        const material = isUnderground ? this.materials.undergroundTransparent : this.materials.wallOpaque;
+        material.alpha = 0.35;
+        material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+        circularWall.material = material;
+
+        return circularWall;
+    }
 }
