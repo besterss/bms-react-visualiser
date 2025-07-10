@@ -252,7 +252,7 @@ export const CONFIG_DATA = {
           {
             //vrsek - leva stena
             type: "partition",
-            start: { x: -10.2, z: 16.6 },
+            start: { x: -10.2, z: 16.8 },
             end: { x: -10.2, z: 9.6 },
           },
           {
@@ -1654,7 +1654,7 @@ export const CONFIG_DATA = {
           {
             //vrsek - leva stena
             type: "partition",
-            start: { x: -10.2, z: 16.6 },
+            start: { x: -10.2, z: 16.8 },
             end: { x: -10.2, z: 9.6 },
           },
           {
