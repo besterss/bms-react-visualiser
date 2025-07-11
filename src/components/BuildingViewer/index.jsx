@@ -1,11 +1,10 @@
-
-import React, { useEffect, useRef, useState } from 'react';
-import * as BABYLON from 'babylonjs';
-import { FloorGenerator } from '../FloorGenerator';
-import { CONFIG_DATA } from '../BuildingLayoutConfig';
-import FloorControls from '../FloorControls';
-import InfoBox from '../InfoBox';
-import './buildingviewer.css';
+import React, { useEffect, useRef, useState } from "react";
+import * as BABYLON from "babylonjs";
+import { FloorGenerator } from "../FloorGenerator";
+import { CONFIG_DATA } from "../BuildingLayoutConfig";
+import FloorControls from "../FloorControls";
+import InfoBox from "../InfoBox";
+import "./buildingviewer.css";
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -18,15 +17,16 @@ const BuildingViewer = () => {
   const [showHeatmap, setShowHeatmap] = useState(false);
   const [showWifi, setShowWifi] = useState(false);
   const [roomInfo, setRoomInfo] = useState({
-    temperature: 'N/A',
-    wifiSignal: 'N/A',
-    floorArea: 'N/A',
-    activeFloor: 'N/A'
+    temperature: "N/A",
+    wifiSignal: "N/A",
+    floorArea: "N/A",
+    activeFloor: "N/A",
   });
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    // Engine and Scene Initialization
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
       preserveDrawingBuffer: true,
       stencil: true,
@@ -36,58 +36,79 @@ const BuildingViewer = () => {
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
 
-    // Initialize floor generator
-    const generator = new FloorGenerator(babylonScene, babylonEngine, CONFIG_DATA);
+    const generator = new FloorGenerator(
+      babylonScene,
+      babylonEngine,
+      CONFIG_DATA
+    );
     const result = generator.generateFloors();
-    
+
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
 
-    // Setup camera
+    // Camera and Lighting Setup
     setupCamera(babylonScene, result.floorData);
-
-    // Setup lighting
     setupLighting(babylonScene);
-
-    // Setup event handlers
     setupEventHandlers(babylonScene);
 
-    // Show first floor by default
+    // Show the first floor by default after engine and scene are ready
     if (result.floorData.length > 0) {
-      showFloor(result.floorData[0].floorNumber, result.allFloorMeshes, result.floorData, generator);
+      showFloor(
+        result.floorData[0].floorNumber,
+        result.allFloorMeshes,
+        result.floorData,
+        generator
+      );
       setCurrentActiveFloor(result.floorData[0].floorNumber);
-      setRoomInfo(prev => ({
+      setRoomInfo((prev) => ({
         ...prev,
         activeFloor: result.floorData[0].name,
-        floorArea: `${result.floorData[0].area.toFixed(2)} m²`
+        floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
 
-    // Render loop
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
     });
 
-    // Handle window resize
     const handleResize = () => {
       babylonEngine.resize();
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
     };
   }, []);
 
-  const setupCamera = (scene, floors) => {
-    const totalHeight = floors.length * (CONFIG_DATA.visualization.wall_height + 
-      CONFIG_DATA.visualization.floor_thickness + CONFIG_DATA.visualization.floor_spacing);
+useEffect(() => {
+    if (engine && scene) {
+      const floors = CONFIG_DATA.floors;
+       if (floors && currentActiveFloor !== null) {
+        const targetFloor = floors[1]; // Přizpůsobte dle struktury dat
+        if (targetFloor && currentActiveFloor === targetFloor.id) {
+                  console.log("jojojojo");
+          if (targetFloor.parking) {
+            clearParkingSpots(scene); // Remove current spots before adding new ones
+            addParkingSpots(scene, targetFloor.parking);
+          }
+        } else {
+          clearParkingSpots(scene); // Clear spots if not on target floor
+        }
+      }
+    }
+  }, [engine, scene, currentActiveFloor]);
 
+  const setupCamera = (scene, floors) => {
+    const totalHeight =
+      floors.length *
+      (CONFIG_DATA.visualization.wall_height +
+        CONFIG_DATA.visualization.floor_thickness +
+        CONFIG_DATA.visualization.floor_spacing);
     const camera = new BABYLON.ArcRotateCamera(
       "camera",
       -Math.PI / 2,
@@ -104,8 +125,16 @@ const BuildingViewer = () => {
   };
 
   const setupLighting = (scene) => {
-    const light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-    const light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 50, -10), scene);
+    const light1 = new BABYLON.HemisphericLight(
+      "light1",
+      new BABYLON.Vector3(1, 1, 0),
+      scene
+    );
+    const light2 = new BABYLON.PointLight(
+      "light2",
+      new BABYLON.Vector3(0, 50, -10),
+      scene
+    );
     light1.intensity = 0.7;
     light2.intensity = 0.3;
   };
@@ -115,10 +144,10 @@ const BuildingViewer = () => {
       if (pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
         const mesh = pointerInfo.pickInfo.pickedMesh;
         if (mesh.metadata && mesh.metadata.temperature !== undefined) {
-          setRoomInfo(prev => ({
+          setRoomInfo((prev) => ({
             ...prev,
             temperature: `${mesh.metadata.temperature.toFixed(1)}°C`,
-            wifiSignal: getWifiSignalLabel(mesh.metadata.wifiSignal)
+            wifiSignal: getWifiSignalLabel(mesh.metadata.wifiSignal),
           }));
         }
       }
@@ -127,54 +156,76 @@ const BuildingViewer = () => {
 
   const getWifiSignalLabel = (signal) => {
     switch (signal) {
-      case 0: return 'No Signal';
-      case 1: return 'Weak';
-      case 2: return 'Normal';
-      case 3: return 'Strong';
-      default: return 'Unknown';
+      case 0:
+        return "No Signal";
+      case 1:
+        return "Weak";
+      case 2:
+        return "Normal";
+      case 3:
+        return "Strong";
+      default:
+        return "Unknown";
     }
   };
 
-  const showFloor = (floorId, meshes = allFloorMeshes, floors = floorData, generator = floorGenerator) => {
+  const showFloor = (
+    floorId,
+    meshes = allFloorMeshes,
+    floors = floorData,
+    generator = floorGenerator
+  ) => {
     if (!generator) return;
-
     setCurrentActiveFloor(floorId);
-    
+
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
-      const isActiveFloor = floorId === "all" || floorInfo.floorNumber === floorId;
-      
+      const isActiveFloor =
+        floorId === "all" || floorInfo.floorNumber === floorId;
+
       floorMeshes.forEach((mesh) => {
         if (floorId === "all") {
           mesh.setEnabled(true);
-          // Apply transparent materials for all floors view
           if (mesh.name.includes("_room") && mesh.name.includes("_floor")) {
             const roomIdx = mesh.metadata.roomIndex;
             const floorNum = mesh.metadata.floorNumber;
-            
+
             if (showHeatmap) {
-              mesh.material = generator.roomTransparentHeatmapMaterialMap.get(`${floorNum}_${roomIdx}_trans`);
+              mesh.material = generator.roomTransparentHeatmapMaterialMap.get(
+                `${floorNum}_${roomIdx}_trans`
+              );
             } else if (showWifi) {
-              mesh.material = generator.roomTransparentWifiMaterialMap.get(`${floorNum}_${roomIdx}_trans_wifi`);
+              mesh.material = generator.roomTransparentWifiMaterialMap.get(
+                `${floorNum}_${roomIdx}_trans_wifi`
+              );
             } else {
               mesh.material = generator.materials.floorDefaultTransparent;
             }
           } else {
-            mesh.material = floorInfo.floorNumber < 0 ? 
-              generator.materials.undergroundTransparent : 
-              generator.materials.allFloorsTransparent;
+            mesh.material =
+              floorInfo.floorNumber < 0
+                ? generator.materials.undergroundTransparent
+                : generator.materials.allFloorsTransparent;
           }
         } else {
           mesh.setEnabled(isActiveFloor);
-          
-          if (isActiveFloor && mesh.name.includes("_room") && mesh.name.includes("_floor")) {
+
+          if (
+            isActiveFloor &&
+            mesh.name.includes("_room") &&
+            mesh.name.includes("_floor")
+          ) {
             const roomIdx = mesh.metadata.roomIndex;
             const floorNum = mesh.metadata.floorNumber;
-            
+
             if (showHeatmap) {
-              mesh.material = generator.roomHeatmapMaterialMap.get(`${floorNum}_${roomIdx}_opaque`);
+              mesh.material = generator.roomHeatmapMaterialMap.get(
+                `${floorNum}_${roomIdx}_opaque`
+              );
             } else if (showWifi) {
-              mesh.material = generator.roomWifiMaterialMap.get(`${floorNum}_${roomIdx}_opaque_wifi`);
+              mesh.material = generator.roomWifiMaterialMap.get(
+                `${floorNum}_${roomIdx}_opaque_wifi`
+              );
             } else {
               mesh.material = generator.materials.floorDefault;
             }
@@ -185,34 +236,34 @@ const BuildingViewer = () => {
       });
     });
 
-    // Update room info
     if (floorId !== "all") {
-      const selectedFloor = floors.find(f => f.floorNumber === floorId);
+      const selectedFloor = floors.find((f) => f.floorNumber === floorId);
       if (selectedFloor) {
-        setRoomInfo(prev => ({
+        setRoomInfo((prev) => ({
           ...prev,
           activeFloor: selectedFloor.name,
-          floorArea: `${selectedFloor.area.toFixed(2)} m²`
+          floorArea: `${selectedFloor.area.toFixed(2)} m²`,
         }));
       }
     } else {
-      setRoomInfo(prev => ({
+      setRoomInfo((prev) => ({
         ...prev,
-        activeFloor: 'All Floors',
-        floorArea: `${floors.reduce((sum, f) => sum + f.area, 0).toFixed(2)} m²`
+        activeFloor: "All Floors",
+        floorArea: `${floors
+          .reduce((sum, f) => sum + f.area, 0)
+          .toFixed(2)} m²`,
       }));
     }
   };
 
   const handleFloorChange = (floorId) => {
     showFloor(floorId);
-    setRoomInfo(prev => ({
+    setRoomInfo((prev) => ({
       ...prev,
-      temperature: 'N/A',
-      wifiSignal: 'N/A'
+      temperature: "N/A",
+      wifiSignal: "N/A",
     }));
   };
-
   const handleHeatmapToggle = (checked) => {
     setShowHeatmap(checked);
     if (checked) setShowWifi(false);
@@ -220,13 +271,79 @@ const BuildingViewer = () => {
       showFloor(currentActiveFloor);
     }
   };
-
   const handleWifiToggle = (checked) => {
     setShowWifi(checked);
     if (checked) setShowHeatmap(false);
     if (currentActiveFloor !== null) {
       showFloor(currentActiveFloor);
     }
+  };
+
+  const addParkingSpots = (scene, parkingConfig) => {
+    if (!scene || !parkingConfig) return;
+
+    const freeMaterial = new BABYLON.StandardMaterial("freeMaterial", scene);
+    freeMaterial.diffuseColor = new BABYLON.Color3(120 / 255, 190 / 255, 142 / 255);
+
+    const reservedMaterial = new BABYLON.StandardMaterial("reservedMaterial", scene);
+    reservedMaterial.diffuseColor = new BABYLON.Color3(150 / 255, 150 / 255, 150 / 255);
+
+    const occupiedMaterial = new BABYLON.StandardMaterial("occupiedMaterial", scene);
+    occupiedMaterial.diffuseColor = new BABYLON.Color3(230 / 255, 125 / 255, 115 / 255);
+
+    const borderMaterial = new BABYLON.StandardMaterial("borderMaterial", scene);
+    borderMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1); // White color
+
+    parkingConfig.forEach((spot, index) => {
+      const width = Math.abs(spot.end.x - spot.start.x);
+      const depth = Math.abs(spot.end.z - spot.start.z);
+      const positionX = (spot.start.x + spot.end.x) / 2;
+      const positionZ = (spot.start.z + spot.end.z) / 2;
+      const height = 0.2;
+
+      const parkingSpot = BABYLON.MeshBuilder.CreateBox(`spot${index}`, { height, width, depth }, scene);
+      parkingSpot.position = new BABYLON.Vector3(positionX, 3.5, positionZ);
+
+      let baseMaterial;
+      switch (spot.status) {
+        case "occupied":
+          baseMaterial = occupiedMaterial;
+          break;
+        case "reserved":
+          baseMaterial = reservedMaterial;
+          break;
+        default:
+          baseMaterial = freeMaterial;
+          break;
+      }
+
+      parkingSpot.material = baseMaterial;
+
+      // Create borders
+      const borderThickness = 0.1;
+      const borderHeight = 0.1;
+
+      const createBorder = (w, h, d, x, y, z, idx) => {
+        const border = BABYLON.MeshBuilder.CreateBox(`spotBorder${index}_${idx}`, { height: h, width: w, depth: d }, scene);
+        border.position = new BABYLON.Vector3(x, y, z);
+        border.material = borderMaterial;
+      };
+
+      createBorder(width, borderHeight, borderThickness, positionX, 3.5 + height / 2, positionZ + depth / 2, 0);
+      createBorder(width, borderHeight, borderThickness, positionX, 3.5 + height / 2, positionZ - depth / 2, 1);
+      createBorder(borderThickness, borderHeight, depth, positionX - width / 2, 3.5 + height / 2, positionZ, 2);
+      createBorder(borderThickness, borderHeight, depth, positionX + width / 2, 3.5 + height / 2, positionZ, 3);
+    });
+  };
+
+  const clearParkingSpots = (scene) => {
+    if (!scene || !scene.meshes) return;
+
+    scene.meshes.filter(mesh => 
+      mesh.name.startsWith("spot") || mesh.name.startsWith("spotBorder")
+    ).forEach(mesh => {
+      mesh.dispose();
+    });
   };
 
   return (
@@ -240,13 +357,13 @@ const BuildingViewer = () => {
         onHeatmapToggle={handleHeatmapToggle}
         onWifiToggle={handleWifiToggle}
       />
-      
+
       <InfoBox roomInfo={roomInfo} />
-      
-      <canvas 
-        ref={canvasRef} 
+
+      <canvas
+        ref={canvasRef}
         className="render-canvas"
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: "100%", height: "100%" }}
       />
     </div>
   );
