@@ -2317,25 +2317,21 @@ export const CONFIG_DATA = {
           },
         ],
       },
-      parking: [
+            parking: [
+        // 1
         {
-          start: { x: -29.14, z: 54.48 },
-          end: { x: -24.14, z: 50.98 },
+          start: { x: -29.14, z: 30.98 },
+          end: { x: -24.14, z: 28.48 },
           status: "free",
         },
         {
-          start: { x: -29.14, z: 50.98 },
-          end: { x: -24.14, z: 48.48 },
-          status: "free",
+          start: { x: -29.14, z: 35.98 },
+          end: { x: -24.14, z: 33.48 },
+          status: "occupied",
         },
         {
-          start: { x: -29.14, z: 45.98 },
-          end: { x: -24.14, z: 43.48 },
-          status: "reserved",
-        },
-        {
-          start: { x: -29.14, z: 43.48 },
-          end: { x: -24.14, z: 40.98 },
+          start: { x: -29.14, z: 38.48 },
+          end: { x: -24.14, z: 35.98 },
           status: "reserved",
         },
         {
@@ -2344,44 +2340,45 @@ export const CONFIG_DATA = {
           status: "reserved",
         },
         {
-          start: { x: -29.14, z: 38.48 },
-          end: { x: -24.14, z: 35.98 },
+          start: { x: -29.14, z: 43.48 },
+          end: { x: -24.14, z: 40.98 },
           status: "reserved",
         },
         {
-          start: { x: -29.14, z: 35.98 },
-          end: { x: -24.14, z: 33.48 },
+          start: { x: -29.14, z: 45.98 },
+          end: { x: -24.14, z: 43.48 },
+          status: "reserved",
+        },
+        {
+          start: { x: -29.14, z: 50.98 },
+          end: { x: -24.14, z: 48.48 },
+          status: "free",
+        },
+        {
+          start: { x: -29.14, z: 54.48 },
+          end: { x: -24.14, z: 50.98 },
+          status: "free",
+        },
+
+        // 2
+        {
+          start: { x: -18.065, z: 30.98 },
+          end: { x: -13.065, z: 28.48 },
           status: "occupied",
         },
         {
-          start: { x: -29.14, z: 30.98 },
-          end: { x: -24.14, z: 28.48 },
-          status: "free",
-        },
-        // 2
-        {
-          start: { x: -18.065, z: 54.48 },
-          end: { x: -13.065, z: 50.98 },
-          status: "reserved",
+          start: { x: -18.065, z: 33.48 },
+          end: { x: -13.065, z: 30.98 },
+          status: "occupied",
         },
         {
-          start: { x: -18.065, z: 50.98 },
-          end: { x: -13.065, z: 48.48 },
-          status: "reserved",
+          start: { x: -18.065, z: 35.98 },
+          end: { x: -13.065, z: 33.48 },
+          status: "occupfreeied",
         },
         {
-          start: { x: -18.065, z: 48.48 },
-          end: { x: -13.065, z: 45.98 },
-          status: "reserved",
-        },
-        {
-          start: { x: -18.065, z: 45.98 },
-          end: { x: -13.065, z: 43.48 },
-          status: "free",
-        },
-        {
-          start: { x: -18.065, z: 43.48 },
-          end: { x: -13.065, z: 40.98 },
+          start: { x: -18.065, z: 38.48 },
+          end: { x: -13.065, z: 35.98 },
           status: "free",
         },
         {
@@ -2390,64 +2387,35 @@ export const CONFIG_DATA = {
           status: "free",
         },
         {
-          start: { x: -18.065, z: 38.48 },
-          end: { x: -13.065, z: 35.98 },
+          start: { x: -18.065, z: 43.48 },
+          end: { x: -13.065, z: 40.98 },
           status: "free",
         },
         {
-          start: { x: -18.065, z: 35.98 },
-          end: { x: -13.065, z: 33.48 },
-          status: "occupfreeied",
+          start: { x: -18.065, z: 45.98 },
+          end: { x: -13.065, z: 43.48 },
+          status: "free",
         },
         {
-          start: { x: -18.065, z: 33.48 },
-          end: { x: -13.065, z: 30.98 },
-          status: "occupied",
+          start: { x: -18.065, z: 48.48 },
+          end: { x: -13.065, z: 45.98 },
+          status: "reserved",
         },
         {
-          start: { x: -18.065, z: 30.98 },
-          end: { x: -13.065, z: 28.48 },
-          status: "occupied",
+          start: { x: -18.065, z: 50.98 },
+          end: { x: -13.065, z: 48.48 },
+          status: "reserved",
         },
+        {
+          start: { x: -18.065, z: 54.48 },
+          end: { x: -13.065, z: 50.98 },
+          status: "reserved",
+        },
+
         // 3
         {
-          start: { x: -12.915, z: 54.48 },
-          end: { x: -7.915, z: 50.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: -12.915, z: 50.98 },
-          end: { x: -7.915, z: 48.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: -12.915, z: 48.48 },
-          end: { x: -7.915, z: 45.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: -12.915, z: 45.98 },
-          end: { x: -7.915, z: 43.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: -12.915, z: 43.48 },
-          end: { x: -7.915, z: 40.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: -12.915, z: 40.98 },
-          end: { x: -7.915, z: 38.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: -12.915, z: 38.48 },
-          end: { x: -7.915, z: 35.98 },
-          status: "free",
-        },
-        {
-          start: { x: -12.915, z: 35.98 },
-          end: { x: -7.915, z: 33.48 },
+          start: { x: -12.915, z: 30.98 },
+          end: { x: -7.915, z: 28.48 },
           status: "free",
         },
         {
@@ -2456,44 +2424,55 @@ export const CONFIG_DATA = {
           status: "free",
         },
         {
-          start: { x: -12.915, z: 30.98 },
-          end: { x: -7.915, z: 28.48 },
+          start: { x: -12.915, z: 35.98 },
+          end: { x: -7.915, z: 33.48 },
           status: "free",
         },
+        {
+          start: { x: -12.915, z: 38.48 },
+          end: { x: -7.915, z: 35.98 },
+          status: "free",
+        },
+        {
+          start: { x: -12.915, z: 40.98 },
+          end: { x: -7.915, z: 38.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: -12.915, z: 43.48 },
+          end: { x: -7.915, z: 40.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: -12.915, z: 45.98 },
+          end: { x: -7.915, z: 43.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: -12.915, z: 48.48 },
+          end: { x: -7.915, z: 45.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: -12.915, z: 50.98 },
+          end: { x: -7.915, z: 48.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: -12.915, z: 54.48 },
+          end: { x: -7.915, z: 50.98 },
+          status: "occupied",
+        },
+
         // 4
         {
-          start: { x: -1.84, z: 54.48 },
-          end: { x: 3.16, z: 50.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: -1.84, z: 50.98 },
-          end: { x: 3.16, z: 48.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: -1.84, z: 48.48 },
-          end: { x: 3.16, z: 45.98 },
+          start: { x: -1.84, z: 30.98 },
+          end: { x: 3.16, z: 28.48 },
           status: "free",
         },
         {
-          start: { x: -1.84, z: 45.98 },
-          end: { x: 3.16, z: 43.48 },
-          status: "free",
-        },
-        {
-          start: { x: -1.84, z: 43.48 },
-          end: { x: 3.16, z: 40.98 },
-          status: "free",
-        },
-        {
-          start: { x: -1.84, z: 40.98 },
-          end: { x: 3.16, z: 38.48 },
-          status: "free",
-        },
-        {
-          start: { x: -1.84, z: 38.48 },
-          end: { x: 3.16, z: 35.98 },
+          start: { x: -1.84, z: 33.48 },
+          end: { x: 3.16, z: 30.98 },
           status: "free",
         },
         {
@@ -2502,54 +2481,45 @@ export const CONFIG_DATA = {
           status: "occupied",
         },
         {
-          start: { x: -1.84, z: 33.48 },
-          end: { x: 3.16, z: 30.98 },
+          start: { x: -1.84, z: 38.48 },
+          end: { x: 3.16, z: 35.98 },
           status: "free",
         },
         {
-          start: { x: -1.84, z: 30.98 },
-          end: { x: 3.16, z: 28.48 },
+          start: { x: -1.84, z: 40.98 },
+          end: { x: 3.16, z: 38.48 },
           status: "free",
         },
+        {
+          start: { x: -1.84, z: 43.48 },
+          end: { x: 3.16, z: 40.98 },
+          status: "free",
+        },
+        {
+          start: { x: -1.84, z: 45.98 },
+          end: { x: 3.16, z: 43.48 },
+          status: "free",
+        },
+        {
+          start: { x: -1.84, z: 48.48 },
+          end: { x: 3.16, z: 45.98 },
+          status: "free",
+        },
+        {
+          start: { x: -1.84, z: 50.98 },
+          end: { x: 3.16, z: 48.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: -1.84, z: 54.48 },
+          end: { x: 3.16, z: 50.98 },
+          status: "occupied",
+        },
+
         // 5
         {
-          start: { x: 3.31, z: 54.48 },
-          end: { x: 8.31, z: 50.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: 3.31, z: 50.98 },
-          end: { x: 8.31, z: 48.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 3.31, z: 48.48 },
-          end: { x: 8.31, z: 45.98 },
-          status: "free",
-        },
-        {
-          start: { x: 3.31, z: 45.98 },
-          end: { x: 8.31, z: 43.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 3.31, z: 43.48 },
-          end: { x: 8.31, z: 40.98 },
-          status: "free",
-        },
-        {
-          start: { x: 3.31, z: 40.98 },
-          end: { x: 8.31, z: 38.48 },
-          status: "free",
-        },
-        {
-          start: { x: 3.31, z: 38.48 },
-          end: { x: 8.31, z: 35.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: 3.31, z: 35.98 },
-          end: { x: 8.31, z: 33.48 },
+          start: { x: 3.31, z: 30.98 },
+          end: { x: 8.31, z: 28.48 },
           status: "occupied",
         },
         {
@@ -2558,8 +2528,38 @@ export const CONFIG_DATA = {
           status: "free",
         },
         {
-          start: { x: 3.31, z: 30.98 },
-          end: { x: 8.31, z: 28.48 },
+          start: { x: 3.31, z: 35.98 },
+          end: { x: 8.31, z: 33.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: 3.31, z: 38.48 },
+          end: { x: 8.31, z: 35.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: 3.31, z: 40.98 },
+          end: { x: 8.31, z: 38.48 },
+          status: "free",
+        },
+        {
+          start: { x: 3.31, z: 43.48 },
+          end: { x: 8.31, z: 40.98 },
+          status: "free",
+        },
+        {
+          start: { x: 3.31, z: 45.98 },
+          end: { x: 8.31, z: 43.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: 3.31, z: 48.48 },
+          end: { x: 8.31, z: 45.98 },
+          status: "free",
+        },
+        {
+          start: { x: 3.31, z: 50.98 },
+          end: { x: 8.31, z: 48.48 },
           status: "occupied",
         },
         {
@@ -2567,51 +2567,12 @@ export const CONFIG_DATA = {
           end: { x: 8.31, z: 50.98 },
           status: "occupied",
         },
-        {
-          start: { x: 3.31, z: 50.98 },
-          end: { x: 8.31, z: 48.48 },
-          status: "free",
-        },
+
         // 6
         {
-          start: { x: 14.385, z: 54.48 },
-          end: { x: 19.385, z: 50.98 },
+          start: { x: 14.385, z: 30.98 },
+          end: { x: 19.385, z: 28.48 },
           status: "occupied",
-        },
-        {
-          start: { x: 14.385, z: 50.98 },
-          end: { x: 19.385, z: 48.48 },
-          status: "free",
-        },
-        {
-          start: { x: 14.385, z: 48.48 },
-          end: { x: 19.385, z: 45.98 },
-          status: "free",
-        },
-        {
-          start: { x: 14.385, z: 45.98 },
-          end: { x: 19.385, z: 43.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 14.385, z: 43.48 },
-          end: { x: 19.385, z: 40.98 },
-          status: "free",
-        },
-        {
-          start: { x: 14.385, z: 40.98 },
-          end: { x: 19.385, z: 38.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 14.385, z: 38.48 },
-          end: { x: 19.385, z: 35.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: 14.385, z: 35.98 },
-          end: { x: 19.385, z: 33.48 },
-          status: "free",
         },
         {
           start: { x: 14.385, z: 33.48 },
@@ -2619,13 +2580,33 @@ export const CONFIG_DATA = {
           status: "free",
         },
         {
-          start: { x: 14.385, z: 30.98 },
-          end: { x: 19.385, z: 28.48 },
+          start: { x: 14.385, z: 35.98 },
+          end: { x: 19.385, z: 33.48 },
+          status: "free",
+        },
+        {
+          start: { x: 14.385, z: 38.48 },
+          end: { x: 19.385, z: 35.98 },
           status: "occupied",
         },
         {
-          start: { x: 14.385, z: 54.48 },
-          end: { x: 19.385, z: 50.98 },
+          start: { x: 14.385, z: 40.98 },
+          end: { x: 19.385, z: 38.48 },
+          status: "free",
+        },
+        {
+          start: { x: 14.385, z: 43.48 },
+          end: { x: 19.385, z: 40.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: 14.385, z: 45.98 },
+          end: { x: 19.385, z: 43.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: 14.385, z: 48.48 },
+          end: { x: 19.385, z: 45.98 },
           status: "free",
         },
         {
@@ -2633,45 +2614,16 @@ export const CONFIG_DATA = {
           end: { x: 19.385, z: 48.48 },
           status: "free",
         },
+        {
+          start: { x: 14.385, z: 54.48 },
+          end: { x: 19.385, z: 50.98 },
+          status: "occupied",
+        },
+
         // 7
         {
-          start: { x: 19.535, z: 54.48 },
-          end: { x: 24.535, z: 50.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: 19.535, z: 50.98 },
-          end: { x: 24.535, z: 48.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 19.535, z: 48.48 },
-          end: { x: 24.535, z: 45.98 },
-          status: "free",
-        },
-        {
-          start: { x: 19.535, z: 45.98 },
-          end: { x: 24.535, z: 43.48 },
-          status: "free",
-        },
-        {
-          start: { x: 19.535, z: 43.48 },
-          end: { x: 24.535, z: 40.98 },
-          status: "free",
-        },
-        {
-          start: { x: 19.535, z: 40.98 },
-          end: { x: 24.535, z: 38.48 },
-          status: "free",
-        },
-        {
-          start: { x: 19.535, z: 38.48 },
-          end: { x: 24.535, z: 35.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: 19.535, z: 35.98 },
-          end: { x: 24.535, z: 33.48 },
+          start: { x: 19.535, z: 30.98 },
+          end: { x: 24.535, z: 28.48 },
           status: "occupied",
         },
         {
@@ -2680,59 +2632,50 @@ export const CONFIG_DATA = {
           status: "free",
         },
         {
-          start: { x: 19.535, z: 30.98 },
-          end: { x: 24.535, z: 28.48 },
+          start: { x: 19.535, z: 35.98 },
+          end: { x: 24.535, z: 33.48 },
           status: "occupied",
         },
         {
-          start: { x: 19.535, z: 54.48 },
-          end: { x: 24.535, z: 50.98 },
+          start: { x: 19.535, z: 38.48 },
+          end: { x: 24.535, z: 35.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: 19.535, z: 40.98 },
+          end: { x: 24.535, z: 38.48 },
+          status: "free",
+        },
+        {
+          start: { x: 19.535, z: 43.48 },
+          end: { x: 24.535, z: 40.98 },
+          status: "free",
+        },
+        {
+          start: { x: 19.535, z: 45.98 },
+          end: { x: 24.535, z: 43.48 },
+          status: "free",
+        },
+        {
+          start: { x: 19.535, z: 48.48 },
+          end: { x: 24.535, z: 45.98 },
           status: "free",
         },
         {
           start: { x: 19.535, z: 50.98 },
           end: { x: 24.535, z: 48.48 },
-          status: "free",
+          status: "occupied",
         },
+        {
+          start: { x: 19.535, z: 54.48 },
+          end: { x: 24.535, z: 50.98 },
+          status: "occupied",
+        },
+
         // 8
         {
-          start: { x: 30.61, z: 54.48 },
-          end: { x: 35.61, z: 50.98 },
-          status: "free",
-        },
-        {
-          start: { x: 30.61, z: 50.98 },
-          end: { x: 35.61, z: 48.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 30.61, z: 45.98 },
-          end: { x: 35.61, z: 43.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 30.61, z: 43.48 },
-          end: { x: 35.61, z: 40.98 },
-          status: "free",
-        },
-        {
-          start: { x: 30.61, z: 40.98 },
-          end: { x: 35.61, z: 38.48 },
-          status: "occupied",
-        },
-        {
-          start: { x: 30.61, z: 38.48 },
-          end: { x: 35.61, z: 35.98 },
-          status: "occupied",
-        },
-        {
-          start: { x: 30.61, z: 35.98 },
-          end: { x: 35.61, z: 33.48 },
-          status: "free",
-        },
-        {
-          start: { x: 30.61, z: 33.48 },
-          end: { x: 35.61, z: 30.98 },
+          start: { x: 30.61, z: 28.48 },
+          end: { x: 35.61, z: 25.98 },
           status: "free",
         },
         {
@@ -2741,8 +2684,43 @@ export const CONFIG_DATA = {
           status: "free",
         },
         {
-          start: { x: 30.61, z: 28.48 },
-          end: { x: 35.61, z: 25.98 },
+          start: { x: 30.61, z: 33.48 },
+          end: { x: 35.61, z: 30.98 },
+          status: "free",
+        },
+        {
+          start: { x: 30.61, z: 35.98 },
+          end: { x: 35.61, z: 33.48 },
+          status: "free",
+        },
+        {
+          start: { x: 30.61, z: 38.48 },
+          end: { x: 35.61, z: 35.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: 30.61, z: 40.98 },
+          end: { x: 35.61, z: 38.48 },
+          status: "free",
+        },
+        {
+          start: { x: 30.61, z: 43.48 },
+          end: { x: 35.61, z: 40.98 },
+          status: "occupied",
+        },
+        {
+          start: { x: 30.61, z: 45.98 },
+          end: { x: 35.61, z: 43.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: 30.61, z: 50.98 },
+          end: { x: 35.61, z: 48.48 },
+          status: "occupied",
+        },
+        {
+          start: { x: 30.61, z: 54.48 },
+          end: { x: 35.61, z: 50.98 },
           status: "free",
         },
       ],
