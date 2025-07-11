@@ -1,4 +1,4 @@
-import * as BABYLON from 'babylonjs';
+import * as BABYLON from "babylonjs";
 
 export class FloorGenerator {
   constructor(scene, engine, configData) {
@@ -12,70 +12,108 @@ export class FloorGenerator {
     this.roomWifiMaterialMap = new Map();
     this.roomTransparentWifiMaterialMap = new Map();
     this.materials = {};
-    
+
     this.initializeMaterials();
   }
 
   initializeMaterials() {
     // Wall materials
-    this.materials.wallOpaque = new BABYLON.StandardMaterial("wallOpaqueMat", this.scene);
+    this.materials.wallOpaque = new BABYLON.StandardMaterial(
+      "wallOpaqueMat",
+      this.scene
+    );
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
     this.materials.wallOpaque.alpha = 1.0;
 
     // Transparent materials
-    this.materials.allFloorsTransparent = new BABYLON.StandardMaterial("allFloorsTransparentMat", this.scene);
-    this.materials.allFloorsTransparent.diffuseColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+    this.materials.allFloorsTransparent = new BABYLON.StandardMaterial(
+      "allFloorsTransparentMat",
+      this.scene
+    );
+    this.materials.allFloorsTransparent.diffuseColor = new BABYLON.Color3(
+      0.8,
+      0.8,
+      0.8
+    );
     this.materials.allFloorsTransparent.backFaceCulling = false;
     this.materials.allFloorsTransparent.alpha = 0.35;
-    this.materials.allFloorsTransparent.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.allFloorsTransparent.transparencyMode =
+      BABYLON.Material.MATERIAL_ALPHABLEND;
 
-    this.materials.undergroundTransparent = new BABYLON.StandardMaterial("undergroundTransparentMat", this.scene);
-    this.materials.undergroundTransparent.diffuseColor = new BABYLON.Color3(0.6, 0.8, 1);
+    this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
+      "undergroundTransparentMat",
+      this.scene
+    );
+    this.materials.undergroundTransparent.diffuseColor = new BABYLON.Color3(
+      0.6,
+      0.8,
+      1
+    );
     this.materials.undergroundTransparent.backFaceCulling = false;
     this.materials.undergroundTransparent.alpha = 0.25;
-    this.materials.undergroundTransparent.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.undergroundTransparent.transparencyMode =
+      BABYLON.Material.MATERIAL_ALPHABLEND;
 
     // Default floor materials
-    this.materials.floorDefault = new BABYLON.StandardMaterial("floorDefaultMat", this.scene);
-    this.materials.floorDefault.diffuseColor = new BABYLON.Color3(0.83, 0.85, 0.85);
+    this.materials.floorDefault = new BABYLON.StandardMaterial(
+      "floorDefaultMat",
+      this.scene
+    );
+    this.materials.floorDefault.diffuseColor = new BABYLON.Color3(
+      0.83,
+      0.85,
+      0.85
+    );
     this.materials.floorDefault.backFaceCulling = false;
     this.materials.floorDefault.alpha = 1.0;
 
-    this.materials.floorDefaultTransparent = new BABYLON.StandardMaterial("floorDefaultTransparentMat", this.scene);
-    this.materials.floorDefaultTransparent.diffuseColor = new BABYLON.Color3(0.83, 0.85, 0.85);
+    this.materials.floorDefaultTransparent = new BABYLON.StandardMaterial(
+      "floorDefaultTransparentMat",
+      this.scene
+    );
+    this.materials.floorDefaultTransparent.diffuseColor = new BABYLON.Color3(
+      0.83,
+      0.85,
+      0.85
+    );
     this.materials.floorDefaultTransparent.backFaceCulling = false;
     this.materials.floorDefaultTransparent.alpha = 0.35;
-    this.materials.floorDefaultTransparent.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.floorDefaultTransparent.transparencyMode =
+      BABYLON.Material.MATERIAL_ALPHABLEND;
   }
 
   getColorFromTemperature(temp, alpha = 1.0) {
     let r, g, b;
 
-    if (temp <= 0) { 
-      r = 1.0; g = 1.0; b = 1.0; // White
-    } else if (temp <= 10) { 
+    if (temp <= 0) {
+      r = 1.0;
+      g = 1.0;
+      b = 1.0; // White
+    } else if (temp <= 10) {
       const t = temp / 10.0;
       r = BABYLON.Scalar.Lerp(1.0, 0.0, t);
       g = BABYLON.Scalar.Lerp(1.0, 0.0, t);
       b = BABYLON.Scalar.Lerp(1.0, 1.0, t);
-    } else if (temp <= 20) { 
+    } else if (temp <= 20) {
       const t = (temp - 10.0) / 10.0;
       r = BABYLON.Scalar.Lerp(0.0, 1.0, t);
       g = BABYLON.Scalar.Lerp(0.0, 1.0, t);
       b = BABYLON.Scalar.Lerp(1.0, 0.0, t);
-    } else if (temp <= 30) { 
+    } else if (temp <= 30) {
       const t = (temp - 20.0) / 10.0;
       r = BABYLON.Scalar.Lerp(1.0, 1.0, t);
       g = BABYLON.Scalar.Lerp(1.0, 0.5, t);
       b = BABYLON.Scalar.Lerp(0.0, 0.0, t);
-    } else if (temp <= 50) { 
-      const t = (temp - 30.0) / 20.0; 
+    } else if (temp <= 50) {
+      const t = (temp - 30.0) / 20.0;
       r = BABYLON.Scalar.Lerp(1.0, 1.0, t);
       g = BABYLON.Scalar.Lerp(0.5, 0.0, t);
       b = BABYLON.Scalar.Lerp(0.0, 0.0, t);
-    } else { 
-      r = 1.0; g = 0.0; b = 0.0;
+    } else {
+      r = 1.0;
+      g = 0.0;
+      b = 0.0;
     }
     return new BABYLON.Color4(r, g, b, alpha);
   }
@@ -84,51 +122,79 @@ export class FloorGenerator {
     let r, g, b;
 
     switch (signal) {
-      case 0: r = 1.0; g = 0.0; b = 0.0; break;
-      case 1: r = 1.0; g = 1.0; b = 0.0; break;
-      case 2: r = 0.6; g = 1.0; b = 0.0; break;
-      case 3: r = 0.0; g = 1.0; b = 0.0; break;
-      default: r = 1.0; g = 1.0; b = 1.0; break;
+      case 0:
+        r = 1.0;
+        g = 0.0;
+        b = 0.0;
+        break;
+      case 1:
+        r = 1.0;
+        g = 1.0;
+        b = 0.0;
+        break;
+      case 2:
+        r = 0.6;
+        g = 1.0;
+        b = 0.0;
+        break;
+      case 3:
+        r = 0.0;
+        g = 1.0;
+        b = 0.0;
+        break;
+      default:
+        r = 1.0;
+        g = 1.0;
+        b = 1.0;
+        break;
     }
     return new BABYLON.Color4(r, g, b, alpha);
   }
 
   createRoomMaterial(color, isTransparent) {
-    const material = new BABYLON.StandardMaterial(`roomMat_${Math.random()}`, this.scene);
+    const material = new BABYLON.StandardMaterial(
+      `roomMat_${Math.random()}`,
+      this.scene
+    );
     material.diffuseColor = new BABYLON.Color3(color.r, color.g, color.b);
     material.alpha = color.a;
     material.backFaceCulling = false;
-    material.transparencyMode = isTransparent ? BABYLON.Material.MATERIAL_ALPHABLEND : BABYLON.Material.MATERIAL_OPAQUE;
+    material.transparencyMode = isTransparent
+      ? BABYLON.Material.MATERIAL_ALPHABLEND
+      : BABYLON.Material.MATERIAL_OPAQUE;
     return material;
   }
 
   generateFloors() {
     // Process each floor from config
     this.config.floors.forEach((floorConfig, index) => {
-      const yLevel = index * (this.config.visualization.wall_height + 
-        this.config.visualization.floor_thickness + this.config.visualization.floor_spacing);
-      
+      const yLevel =
+        index *
+        (this.config.visualization.wall_height +
+          this.config.visualization.floor_thickness +
+          this.config.visualization.floor_spacing);
+
       const floorResult = this.createFloorFromConfig(floorConfig, yLevel);
       this.allFloorMeshes.push(floorResult.meshes);
       this.floorData.push({
         floorNumber: floorConfig.id,
         name: floorConfig.name,
         area: floorResult.area,
-        type: floorConfig.type
+        type: floorConfig.type,
       });
     });
 
     return {
       allFloorMeshes: this.allFloorMeshes,
-      floorData: this.floorData
+      floorData: this.floorData,
     };
   }
 
   createFloorFromConfig(floorConfig, yLevel) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
-    const isUnderground = floorConfig.type === 'underground';
-    
+    const isUnderground = floorConfig.type === "underground";
+
     const dimensions = floorConfig.dimensions;
     const layout = floorConfig.layout;
     const wallHeight = this.config.visualization.wall_height;
@@ -139,7 +205,7 @@ export class FloorGenerator {
     const roomsGrid = layout.rooms_grid;
     const roomWidth = dimensions.width / roomsGrid.columns;
     const roomDepth = dimensions.depth / roomsGrid.rows;
-    
+
     const startX = -dimensions.width / 2 + roomWidth / 2;
     const startZ = -dimensions.depth / 2 + roomDepth / 2;
 
@@ -155,36 +221,56 @@ export class FloorGenerator {
 
         // Create room floor mesh
         const roomFloorMesh = BABYLON.MeshBuilder.CreateBox(
-          `${floorName}_room${roomIdx}_floor`, 
-          { 
-            width: roomWidth - 0.1, 
-            height: roomFloorHeight, 
-            depth: roomDepth - 0.1 
-          }, 
+          `${floorName}_room${roomIdx}_floor`,
+          {
+            width: roomWidth - 0.1,
+            height: roomFloorHeight,
+            depth: roomDepth - 0.1,
+          },
           this.scene
         );
-        
+
         roomFloorMesh.position.x = centerX;
         roomFloorMesh.position.z = centerZ;
         roomFloorMesh.position.y = yLevel + roomFloorHeight / 2;
         roomFloorMesh.isPickable = true;
 
         // Store materials for this room
-        this.roomHeatmapMaterialMap.set(`${floorConfig.id}_${roomIdx}_opaque`, 
-          this.createRoomMaterial(this.getColorFromTemperature(roomTemp, 1.0), false));
-        this.roomTransparentHeatmapMaterialMap.set(`${floorConfig.id}_${roomIdx}_trans`, 
-          this.createRoomMaterial(this.getColorFromTemperature(roomTemp, 0.35), true));
-        
-        this.roomWifiMaterialMap.set(`${floorConfig.id}_${roomIdx}_opaque_wifi`, 
-          this.createRoomMaterial(this.getColorFromWifiSignal(roomWifiSignal, 1.0), false));
-        this.roomTransparentWifiMaterialMap.set(`${floorConfig.id}_${roomIdx}_trans_wifi`, 
-          this.createRoomMaterial(this.getColorFromWifiSignal(roomWifiSignal, 0.35), true));
+        this.roomHeatmapMaterialMap.set(
+          `${floorConfig.id}_${roomIdx}_opaque`,
+          this.createRoomMaterial(
+            this.getColorFromTemperature(roomTemp, 1.0),
+            false
+          )
+        );
+        this.roomTransparentHeatmapMaterialMap.set(
+          `${floorConfig.id}_${roomIdx}_trans`,
+          this.createRoomMaterial(
+            this.getColorFromTemperature(roomTemp, 0.35),
+            true
+          )
+        );
 
-        roomFloorMesh.metadata = { 
-          temperature: roomTemp, 
+        this.roomWifiMaterialMap.set(
+          `${floorConfig.id}_${roomIdx}_opaque_wifi`,
+          this.createRoomMaterial(
+            this.getColorFromWifiSignal(roomWifiSignal, 1.0),
+            false
+          )
+        );
+        this.roomTransparentWifiMaterialMap.set(
+          `${floorConfig.id}_${roomIdx}_trans_wifi`,
+          this.createRoomMaterial(
+            this.getColorFromWifiSignal(roomWifiSignal, 0.35),
+            true
+          )
+        );
+
+        roomFloorMesh.metadata = {
+          temperature: roomTemp,
           wifiSignal: roomWifiSignal,
-          floorNumber: floorConfig.id, 
-          roomIndex: roomIdx 
+          floorNumber: floorConfig.id,
+          roomIndex: roomIdx,
         };
 
         floorMeshes.push(roomFloorMesh);
@@ -193,46 +279,85 @@ export class FloorGenerator {
     }
 
     // Create walls
+    // Create walls
     layout.walls.forEach((wall, index) => {
-      if (wall.type === 'outline') {
+      if (wall.type === "outline") {
         // Create outline walls
         for (let i = 0; i < wall.points.length; i++) {
           const p1 = new BABYLON.Vector3(wall.points[i].x, 0, wall.points[i].z);
           const p2 = new BABYLON.Vector3(
-            wall.points[(i + 1) % wall.points.length].x, 
-            0, 
+            wall.points[(i + 1) % wall.points.length].x,
+            0,
             wall.points[(i + 1) % wall.points.length].z
           );
-          const wallMesh = this.createWallSegment(p1, p2, `${floorName}_outline_${i}`, yLevel, wallHeight, wallThickness, isUnderground);
+          const wallMesh = this.createWallSegment(
+            p1,
+            p2,
+            `${floorName}_outline_${i}`,
+            yLevel,
+            wallHeight,
+            wallThickness,
+            isUnderground
+          );
           floorMeshes.push(wallMesh);
         }
-      } else if (wall.type === 'partition') {
-        // Create partition walls
+      } else if (wall.type === "partition") {
+        // Create partition walls with custom thickness
         const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
         const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
-        const wallMesh = this.createWallSegment(p1, p2, `${floorName}_partition_${index}`, yLevel, wallHeight, wallThickness, isUnderground);
+        const partitionThickness = wall.partitionWidth || wallThickness; // Default to global thickness if not specified
+        const wallMesh = this.createWallSegment(
+          p1,
+          p2,
+          `${floorName}_partition_${index}`,
+          yLevel,
+          wallHeight,
+          partitionThickness,
+          isUnderground
+        );
         floorMeshes.push(wallMesh);
-      } else if (wall.type === 'circular') {
-                const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
-                const radius = wall.radius;
-                const circularWall = this.createCircularWall(center, radius, wallHeight, wallThickness, `${floorName}_circular_${index}`, yLevel, isUnderground);
-                floorMeshes.push(circularWall);
+      } else if (wall.type === "circular") {
+        // Create circular walls
+        const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
+        const radius = wall.radius;
+        const circularWall = this.createCircularWall(
+          center,
+          radius,
+          wallHeight,
+          wallThickness,
+          `${floorName}_circular_${index}`,
+          yLevel,
+          isUnderground
+        );
+        floorMeshes.push(circularWall);
       }
     });
 
-    return { 
-      meshes: floorMeshes, 
-      area: dimensions.width * dimensions.depth 
+    return {
+      meshes: floorMeshes,
+      area: dimensions.width * dimensions.depth,
     };
   }
 
-  createWallSegment(p1, p2, name, yLevel, wallHeight, wallThickness, isUnderground) {
+  createWallSegment(
+    p1,
+    p2,
+    name,
+    yLevel,
+    wallHeight,
+    wallThickness,
+    isUnderground
+  ) {
     const wallLength = BABYLON.Vector3.Distance(p1, p2);
-    const wall = BABYLON.MeshBuilder.CreateBox(name, {
-      width: wallThickness, 
-      height: wallHeight, 
-      depth: wallLength
-    }, this.scene);
+    const wall = BABYLON.MeshBuilder.CreateBox(
+      name,
+      {
+        width: wallThickness,
+        height: wallHeight,
+        depth: wallLength,
+      },
+      this.scene
+    );
 
     // Position wall
     const midPoint = BABYLON.Vector3.Center(p1, p2);
@@ -249,33 +374,59 @@ export class FloorGenerator {
     return wall;
   }
 
-  createCircularWall(center, radius, wallHeight, wallThickness, name, yLevel, isUnderground) {
-        const outerCylinder = BABYLON.MeshBuilder.CreateCylinder(`${name}_outer`, {
-            height: wallHeight,
-            diameter: 2 * (radius + wallThickness / 2)
-        }, this.scene);
+  createCircularWall(
+    center,
+    radius,
+    wallHeight,
+    wallThickness,
+    name,
+    yLevel,
+    isUnderground
+  ) {
+    const outerCylinder = BABYLON.MeshBuilder.CreateCylinder(
+      `${name}_outer`,
+      {
+        height: wallHeight,
+        diameter: 2 * (radius + wallThickness / 2),
+      },
+      this.scene
+    );
 
-        const innerCylinder = BABYLON.MeshBuilder.CreateCylinder(`${name}_inner`, {
-            height: wallHeight + 1,
-            diameter: 2 * radius,
-            updatable: false,
-            sideOrientation: BABYLON.Mesh.DOUBLESIDE
-        }, this.scene);
+    const innerCylinder = BABYLON.MeshBuilder.CreateCylinder(
+      `${name}_inner`,
+      {
+        height: wallHeight + 1,
+        diameter: 2 * radius,
+        updatable: false,
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+      },
+      this.scene
+    );
 
-        const circularWall = BABYLON.CSG.FromMesh(outerCylinder).subtract(BABYLON.CSG.FromMesh(innerCylinder)).toMesh(name, isUnderground ? this.materials.undergroundTransparent : this.materials.wallOpaque, this.scene);
+    const circularWall = BABYLON.CSG.FromMesh(outerCylinder)
+      .subtract(BABYLON.CSG.FromMesh(innerCylinder))
+      .toMesh(
+        name,
+        isUnderground
+          ? this.materials.undergroundTransparent
+          : this.materials.wallOpaque,
+        this.scene
+      );
 
-        outerCylinder.dispose();
-        innerCylinder.dispose();
+    outerCylinder.dispose();
+    innerCylinder.dispose();
 
-        circularWall.position.set(center.x, yLevel + wallHeight / 2, center.z);
+    circularWall.position.set(center.x, yLevel + wallHeight / 2, center.z);
 
-        circularWall.convertToFlatShadedMesh();
+    circularWall.convertToFlatShadedMesh();
 
-        const material = isUnderground ? this.materials.undergroundTransparent : this.materials.wallOpaque;
-        material.alpha = 0.35;
-        material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
-        circularWall.material = material;
+    const material = isUnderground
+      ? this.materials.undergroundTransparent
+      : this.materials.wallOpaque;
+    material.alpha = 0.35;
+    material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    circularWall.material = material;
 
-        return circularWall;
-    }
+    return circularWall;
+  }
 }
