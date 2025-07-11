@@ -24,7 +24,6 @@ export const CONFIG_DATA = {
               { x: -18.37, z: 18.37 },
             ],
           },
-
           {
             //vrsek - leva stena
             type: "partition",
@@ -1042,6 +1041,66 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -18.37, z: 18.37 },
             end: { x: -18.37, z: 21.37 },
+          },
+          {
+            //parkoviste stredova leva
+            type: "partition",
+            start: { x: -1.15, z: 21.37 },
+            end: { x: -1.15, z: 54.68 },
+          },
+          {
+            // parkoviste stredova prava
+            type: "partition",
+            start: { x: -0.75, z: 21.37 },
+            end: { x: -0.75, z: 54.68 },
+          },
+          {
+            // C
+            type: "partition",
+            start: { x: -18.37, z: 8.23 },
+            end: { x: -38.85, z: 8.23 },
+          },
+          {
+            // a
+            type: "partition",
+            start: { x: 18.37, z: 8.23 },
+            end: { x: 38.85, z: 8.23 },
+          },
+          {
+            // avrchni
+            type: "partition",
+            start: { x: 38.85, z: 8.23 },
+            end: { x: 38.85, z: 21.37 },
+          },
+          {
+            // cvrchni
+            type: "partition",
+            start: { x: -38.85, z: 8.23 },
+            end: { x: -38.85, z: 21.37 },
+          },
+          {
+            //odvetraci šachta š7 spodni
+            type: "partition",
+            start: { x: 38.85, z: 51.35 },
+            end: { x: 36.09, z: 51.35 },
+          },
+          {
+            //odvetraci šachta š7
+            type: "partition",
+            start: { x: 36.09, z: 54.68 },
+            end: { x: 36.09, z: 51.35 },
+          },
+          {
+            //odvetraci šachta š7
+            type: "partition",
+            start: { x: 36.09, z: 40.86 },
+            end: { x: 36.09, z: 51.35 },
+          },
+          {
+            //odvetraci šachta š7 spodni
+            type: "partition",
+            start: { x: 38.85, z: 40.86 },
+            end: { x: 36.09, z: 40.86 },
           },
         ],
       },
