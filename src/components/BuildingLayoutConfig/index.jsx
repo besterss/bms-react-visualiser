@@ -4415,7 +4415,7 @@ export const CONFIG_DATA = {
           {
             //3.11 prava stena
             type: "partition",
-            start: { x: -11.4, z: 0.4 },
+            start: { x: -11.4, z: 1.3 },
             end: { x: -11.4, z: 4.6 },
           },
           {
@@ -4427,7 +4427,7 @@ export const CONFIG_DATA = {
           {
             //3.12 leva strana
             type: "partition",
-            start: { x: -4.8, z: -0.8 },
+            start: { x: -4.8, z: -1.7 },
             end: { x: -4.8, z: -5 },
           },
           {
