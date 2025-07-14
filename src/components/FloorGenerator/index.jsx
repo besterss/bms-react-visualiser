@@ -317,14 +317,14 @@ export class FloorGenerator {
         );
         floorMeshes.push(wallMesh);
       } else if (wall.type === "circular") {
-        // Create circular walls
         const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
         const radius = wall.radius;
+        const circularThickness = wall.circularWidth || wallThickness; // Default to global thickness if not specified
         const circularWall = this.createCircularWall(
           center,
           radius,
           wallHeight,
-          wallThickness,
+          circularThickness,
           `${floorName}_circular_${index}`,
           yLevel,
           isUnderground
@@ -383,50 +383,65 @@ export class FloorGenerator {
     yLevel,
     isUnderground
   ) {
-    const outerCylinder = BABYLON.MeshBuilder.CreateCylinder(
-      `${name}_outer`,
-      {
-        height: wallHeight,
-        diameter: 2 * (radius + wallThickness / 2),
-      },
-      this.scene
-    );
-
-    const innerCylinder = BABYLON.MeshBuilder.CreateCylinder(
-      `${name}_inner`,
-      {
-        height: wallHeight + 1,
-        diameter: 2 * radius,
-        updatable: false,
-        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
-      },
-      this.scene
-    );
-
-    const circularWall = BABYLON.CSG.FromMesh(outerCylinder)
-      .subtract(BABYLON.CSG.FromMesh(innerCylinder))
-      .toMesh(
+    let circularWall;
+    if (radius === 0) {
+      // If radius is zero, create a solid cylinder/pillar
+      circularWall = BABYLON.MeshBuilder.CreateCylinder(
         name,
-        isUnderground
-          ? this.materials.undergroundTransparent
-          : this.materials.wallOpaque,
+        {
+          height: wallHeight,
+          diameter: wallThickness,
+        },
+        this.scene
+      );
+    } else {
+      // Create the outer cylinder mesh
+      const outerCylinder = BABYLON.MeshBuilder.CreateCylinder(
+        `${name}_outer`,
+        {
+          height: wallHeight,
+          diameter: 2 * (radius + wallThickness / 2),
+        },
+        this.scene
+      );
+      // Create the inner cylinder mesh (to subtract from outer)
+      const innerCylinder = BABYLON.MeshBuilder.CreateCylinder(
+        `${name}_inner`,
+        {
+          height: wallHeight + 1, // Slightly taller to ensure correct boolean operation
+          diameter: 2 * radius,
+          updatable: false,
+          sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+        },
         this.scene
       );
 
-    outerCylinder.dispose();
-    innerCylinder.dispose();
+      // Perform a boolean subtraction to create hollow circular wall
+      circularWall = BABYLON.CSG.FromMesh(outerCylinder)
+        .subtract(BABYLON.CSG.FromMesh(innerCylinder))
+        .toMesh(
+          name,
+          isUnderground
+            ? this.materials.undergroundTransparent
+            : this.materials.wallOpaque,
+          this.scene
+        );
+      // Clean up the temporary meshes
+      outerCylinder.dispose();
+      innerCylinder.dispose();
+    }
 
+    // Positioning the circular wall
     circularWall.position.set(center.x, yLevel + wallHeight / 2, center.z);
-
+    // Ensure normals are recalculated correctly
     circularWall.convertToFlatShadedMesh();
-
+    // Apply the appropriate material with transparency
     const material = isUnderground
       ? this.materials.undergroundTransparent
       : this.materials.wallOpaque;
-    material.alpha = 0.35;
+    material.alpha = 0.35; // Adjust transparency level
     material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     circularWall.material = material;
-
     return circularWall;
   }
 }
