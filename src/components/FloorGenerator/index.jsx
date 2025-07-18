@@ -330,6 +330,27 @@ export class FloorGenerator {
           isUnderground
         );
         floorMeshes.push(circularWall);
+      } else if (wall.type === "curved") {
+        const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
+        const start = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
+        const end = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
+        const radius = wall.radius;
+        const width = wall.width;
+
+        const curvedWall = this.createCurvedWall(
+          center,
+          radius,
+          start,
+          end,
+          wallHeight,
+          wallThickness,
+          width,
+          `${floorName}_curved_${index}`,
+          yLevel,
+          isUnderground
+        );
+
+        floorMeshes.push(curvedWall);
       }
     });
 
@@ -372,6 +393,77 @@ export class FloorGenerator {
 
     wall.material = this.materials.wallOpaque;
     return wall;
+  }
+  createCurvedWall(
+    center,
+    radius,
+    start,
+    end,
+    wallHeight,
+    wallThickness,
+    width,
+    name,
+    yLevel,
+    isUnderground
+  ) {
+    // Calculate start and end angles for the curved wall
+    let startAngle = Math.atan2(start.z - center.z, start.x - center.x);
+    let endAngle = Math.atan2(end.z - center.z, end.x - center.x);
+
+    // Ensure shortest path on the circle
+    if (endAngle < startAngle) {
+      endAngle += 2 * Math.PI;
+    }
+    if (endAngle - startAngle > Math.PI) {
+      [startAngle, endAngle] = [endAngle, startAngle];
+      endAngle += 2 * Math.PI;
+    }
+
+    const arcPath = [];
+    const numSegments = 72; // Number of segments for smoothness
+
+    for (let i = 0; i <= numSegments; i++) {
+      const angle = startAngle + (i * (endAngle - startAngle)) / numSegments;
+      const x = center.x + radius * Math.cos(angle);
+      const z = center.z + radius * Math.sin(angle);
+      arcPath.push(new BABYLON.Vector3(x, yLevel, z));
+    }
+
+    // Define the shape to be extruded
+    const shape = [
+      new BABYLON.Vector3(width / 2, 0, 0),
+      new BABYLON.Vector3(width / 2, wallHeight, 0),
+      new BABYLON.Vector3(-width / 2, wallHeight, 0),
+      new BABYLON.Vector3(-width / 2, 0, 0),
+    ];
+
+    const extrusionPath = arcPath.map(
+      (point) => new BABYLON.Vector3(point.x, point.y, point.z)
+    );
+
+    const curvedWall = BABYLON.MeshBuilder.ExtrudeShape(
+      name,
+      {
+        shape,
+        path: extrusionPath,
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+        cap: BABYLON.Mesh.CAP_END, // Use CAP_END to flatten the top
+      },
+      this.scene
+    );
+
+    // Convert to flat shaded mesh to ensure a flat top
+    curvedWall.convertToFlatShadedMesh();
+
+    // Assign the appropriate material
+    curvedWall.material = isUnderground
+      ? this.materials.undergroundTransparent
+      : this.materials.wallOpaque;
+
+    // Optional: Disable receiving shadows for consistent appearance
+    curvedWall.receiveShadows = false;
+
+    return curvedWall;
   }
 
   createCircularWall(
