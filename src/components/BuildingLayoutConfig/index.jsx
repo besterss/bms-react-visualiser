@@ -1251,6 +1251,14 @@ export const CONFIG_DATA = {
       },
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 10, z: 10, value: 28 },
+          { x: 30, z: 30, value: 25 },
+        ],
+        wifi: [{ x: 20, z: 20, value: 60 }],
+        airQuality: [{ x: 40, z: 10, value: 50 }],
+      },
     },
     {
       id: -1,
@@ -3813,6 +3821,17 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 5, z: 6, value: 24 },
+          { x: 15, z: 14, value: 26 },
+        ],
+        wifi: [{ x: 20, z: 20, value: 65 }],
+        airQuality: [
+          { x: 25, z: 18, value: 55 },
+          { x: 8, z: 15, value: 52 },
+        ],
+      },
     },
     {
       id: 0,
@@ -4396,6 +4415,14 @@ export const CONFIG_DATA = {
       },
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [{ x: 12, z: 9, value: 28 }],
+        wifi: [
+          { x: 18, z: 12, value: 75 },
+          { x: 6, z: 21, value: 70 },
+        ],
+        airQuality: [{ x: 30, z: 8, value: 60 }],
+      },
     },
     {
       id: 1,
@@ -4952,6 +4979,18 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 7, z: 17, value: 25 },
+          { x: 19, z: 9, value: 29 },
+          { x: 13, z: 5, value: 30 },
+        ],
+        wifi: [{ x: 24, z: 12, value: 80 }],
+        airQuality: [
+          { x: 9, z: 11, value: 50 },
+          { x: 16, z: 7, value: 58 },
+        ],
+      },
     },
     {
       id: 2,
@@ -5412,6 +5451,17 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [{ x: 8, z: 3, value: 27 }],
+        wifi: [
+          { x: 10, z: 15, value: 68 },
+          { x: 22, z: 20, value: 72 },
+        ],
+        airQuality: [
+          { x: 14, z: 22, value: 55 },
+          { x: 19, z: 13, value: 53 },
+        ],
+      },
     },
     {
       id: 3,
@@ -6029,6 +6079,17 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 16, z: 11, value: 30 },
+          { x: 25, z: 19, value: 26 },
+        ],
+        wifi: [{ x: 5, z: 10, value: 70 }],
+        airQuality: [
+          { x: 28, z: 15, value: 48 },
+          { x: 2, z: 16, value: 62 },
+        ],
+      },
     },
     {
       id: 4,
@@ -6655,6 +6716,14 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [{ x: 11, z: 10, value: 31 }],
+        wifi: [
+          { x: 3, z: 14, value: 77 },
+          { x: 17, z: 18, value: 69 },
+        ],
+        airQuality: [{ x: 5, z: 9, value: 60 }],
+      },
     },
     {
       id: 5,
@@ -7232,6 +7301,17 @@ export const CONFIG_DATA = {
 
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 13, z: 4, value: 29 },
+          { x: 21, z: 8, value: 24 },
+        ],
+        wifi: [
+          { x: 11, z: 23, value: 62 },
+          { x: 25, z: 26, value: 75 },
+        ],
+        airQuality: [{ x: 22, z: 5, value: 57 }],
+      },
     },
     {
       id: 6,
@@ -7931,6 +8011,17 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 9, z: 7, value: 28 },
+          { x: 14, z: 15, value: 27 },
+        ],
+        wifi: [{ x: 20, z: 3, value: 68 }],
+        airQuality: [
+          { x: 30, z: 7, value: 60 },
+          { x: 6, z: 11, value: 54 },
+        ],
+      },
     },
     {
       id: 7,
@@ -8655,6 +8746,14 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [{ x: 18, z: 12, value: 24 }],
+        wifi: [
+          { x: 25, z: 22, value: 70 },
+          { x: 7, z: 17, value: 65 },
+        ],
+        airQuality: [{ x: 12, z: 20, value: 50 }],
+      },
     },
     {
       id: 8,
@@ -9128,6 +9227,18 @@ export const CONFIG_DATA = {
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
+      sensors: {
+        temperature: [
+          { x: 27, z: 10, value: 30 },
+          { x: 30, z: 18, value: 29 },
+          { x: 2, z: 9, value: 31 },
+        ],
+        wifi: [{ x: 15, z: 14, value: 73 }],
+        airQuality: [
+          { x: 10, z: 6, value: 56 },
+          { x: 21, z: 25, value: 60 },
+        ],
+      },
     },
   ],
   visualization: {

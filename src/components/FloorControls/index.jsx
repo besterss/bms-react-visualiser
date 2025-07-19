@@ -1,11 +1,13 @@
-export const FloorControls = ({ 
-  floors, 
-  activeFloor, 
-  onFloorChange, 
-  showHeatmap, 
-  showWifi, 
-  onHeatmapToggle, 
-  onWifiToggle 
+// FloorControls.jsx
+
+import React from 'react';
+
+const FloorControls = ({
+  floors,
+  activeFloor,
+  onFloorChange,
+  activeDisplayOption,
+  onOptionToggle,
 }) => {
   return (
     <div className="controls">
@@ -27,24 +29,31 @@ export const FloorControls = ({
           All Floors
         </button>
       </div>
-
       <div className="control-group">
         <h3>Display Options</h3>
         <label>
           <input
             type="checkbox"
-            checked={showHeatmap}
-            onChange={(e) => onHeatmapToggle(e.target.checked)}
+            checked={activeDisplayOption === 'heatmap'}
+            onChange={() => onOptionToggle('heatmap')}
           />
-          Show Temperature in Floor
+          Show Temperature
         </label>
         <label>
           <input
             type="checkbox"
-            checked={showWifi}
-            onChange={(e) => onWifiToggle(e.target.checked)}
+            checked={activeDisplayOption === 'wifi'}
+            onChange={() => onOptionToggle('wifi')}
           />
           Show WiFi Signal Quality
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={activeDisplayOption === 'airQuality'}
+            onChange={() => onOptionToggle('airQuality')}
+          />
+          Show Air Quality
         </label>
       </div>
     </div>

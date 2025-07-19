@@ -6,6 +6,7 @@ import FloorControls from "../FloorControls";
 import InfoBox from "../InfoBox";
 import "./buildingviewer.css";
 import * as GUI from "@babylonjs/gui";
+import { showBubblesOnActiveFloor } from "../BubbleUtils";
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -15,8 +16,7 @@ const BuildingViewer = () => {
   const [floorData, setFloorData] = useState([]);
   const [allFloorMeshes, setAllFloorMeshes] = useState([]);
   const [currentActiveFloor, setCurrentActiveFloor] = useState(null);
-  const [showHeatmap, setShowHeatmap] = useState(false);
-  const [showWifi, setShowWifi] = useState(false);
+  const [activeDisplayOption, setActiveDisplayOption] = useState(null);
   const [roomInfo, setRoomInfo] = useState({
     temperature: "N/A",
     wifiSignal: "N/A",
@@ -85,6 +85,32 @@ const BuildingViewer = () => {
       babylonEngine.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (
+      engine &&
+      scene &&
+      currentActiveFloor !== null &&
+      allFloorMeshes.length
+    ) {
+      showBubblesOnActiveFloor(
+        scene,
+        currentActiveFloor,
+        allFloorMeshes,
+        activeDisplayOption === "heatmap",
+        activeDisplayOption === "wifi",
+        activeDisplayOption === "airQuality"
+      );
+    }
+  }, [engine, scene, currentActiveFloor, allFloorMeshes, activeDisplayOption]);
+
+  const handleOptionToggle = (option) => {
+    if (activeDisplayOption === option) {
+      setActiveDisplayOption(null); // If the same option is clicked, uncheck it (toggle off)
+    } else {
+      setActiveDisplayOption(option); // Set the clicked option to be active
+    }
+  };
 
   useEffect(() => {
     if (engine && scene) {
@@ -184,59 +210,12 @@ const BuildingViewer = () => {
         floorId === "all" || floorInfo.floorNumber === floorId;
 
       floorMeshes.forEach((mesh) => {
-        if (floorId === "all") {
-          mesh.setEnabled(true);
-          if (mesh.name.includes("_room") && mesh.name.includes("_floor")) {
-            const roomIdx = mesh.metadata.roomIndex;
-            const floorNum = mesh.metadata.floorNumber;
-
-            if (showHeatmap) {
-              mesh.material = generator.roomTransparentHeatmapMaterialMap.get(
-                `${floorNum}_${roomIdx}_trans`
-              );
-            } else if (showWifi) {
-              mesh.material = generator.roomTransparentWifiMaterialMap.get(
-                `${floorNum}_${roomIdx}_trans_wifi`
-              );
-            } else {
-              mesh.material = generator.materials.floorDefaultTransparent;
-            }
-          } else {
-            mesh.material =
-              floorInfo.floorNumber < 0
-                ? generator.materials.undergroundTransparent
-                : generator.materials.allFloorsTransparent;
-          }
-        } else {
-          mesh.setEnabled(isActiveFloor);
-
-          if (
-            isActiveFloor &&
-            mesh.name.includes("_room") &&
-            mesh.name.includes("_floor")
-          ) {
-            const roomIdx = mesh.metadata.roomIndex;
-            const floorNum = mesh.metadata.floorNumber;
-
-            if (showHeatmap) {
-              mesh.material = generator.roomHeatmapMaterialMap.get(
-                `${floorNum}_${roomIdx}_opaque`
-              );
-            } else if (showWifi) {
-              mesh.material = generator.roomWifiMaterialMap.get(
-                `${floorNum}_${roomIdx}_opaque_wifi`
-              );
-            } else {
-              mesh.material = generator.materials.floorDefault;
-            }
-          } else if (isActiveFloor) {
-            mesh.material = generator.materials.wallOpaque;
-          }
-        }
+        mesh.setEnabled(isActiveFloor);
       });
     });
 
     if (floorId !== "all") {
+      // Update room information for a specific floor
       const selectedFloor = floors.find((f) => f.floorNumber === floorId);
       if (selectedFloor) {
         setRoomInfo((prev) => ({
@@ -246,6 +225,7 @@ const BuildingViewer = () => {
         }));
       }
     } else {
+      // Update room information for all floors
       setRoomInfo((prev) => ({
         ...prev,
         activeFloor: "All Floors",
@@ -263,20 +243,6 @@ const BuildingViewer = () => {
       temperature: "N/A",
       wifiSignal: "N/A",
     }));
-  };
-  const handleHeatmapToggle = (checked) => {
-    setShowHeatmap(checked);
-    if (checked) setShowWifi(false);
-    if (currentActiveFloor !== null) {
-      showFloor(currentActiveFloor);
-    }
-  };
-  const handleWifiToggle = (checked) => {
-    setShowWifi(checked);
-    if (checked) setShowHeatmap(false);
-    if (currentActiveFloor !== null) {
-      showFloor(currentActiveFloor);
-    }
   };
 
   const addParkingSpots = (scene, parkingConfig) => {
@@ -437,10 +403,8 @@ const BuildingViewer = () => {
         floors={floorData}
         activeFloor={currentActiveFloor}
         onFloorChange={handleFloorChange}
-        showHeatmap={showHeatmap}
-        showWifi={showWifi}
-        onHeatmapToggle={handleHeatmapToggle}
-        onWifiToggle={handleWifiToggle}
+        activeDisplayOption={activeDisplayOption}
+        onOptionToggle={handleOptionToggle}
       />
 
       <InfoBox roomInfo={roomInfo} />
