@@ -12,7 +12,6 @@ const LabelComponent = ({ scene, positionX, positionZ, text, floorIndex }) => {
 
     // Calculate y position based on floorIndex logic
     const yPosition = floorIndex * 3.45 + 0.25; // Position above the floor with some offset
-    console.log(yPosition);
     // Position the plane correctly
     plane.position = new BABYLON.Vector3(positionX, yPosition, positionZ);
     plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
