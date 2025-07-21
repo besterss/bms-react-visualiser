@@ -13,7 +13,7 @@ const FloorControls = ({
     <div className="controls">
       <div className="control-group">
         <h3>Floor Controls</h3>
-        {floors.map((floor) => (
+        {floors.toReversed().map((floor) => (
           <button
             key={floor.floorNumber}
             className={activeFloor === floor.floorNumber ? 'active' : ''}
