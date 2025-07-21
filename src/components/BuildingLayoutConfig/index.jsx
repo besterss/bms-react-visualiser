@@ -4,10 +4,11 @@ export const CONFIG_DATA = {
       id: -2,
       name: "P2",
       type: "underground",
-      dimensions: {
-        width: 120,
-        depth: 120,
-      },
+      segments: [
+        { width: 35.82, depth: 35.82, position: { x: 0, z: 0 } }, // kostka hlavni
+        { width: 78, depth: 46.9, position: { x: 0, z: 31.5 } }, //sklad
+        { width: 8, depth: 29, position: { x: -40, z: 40.3 } }, //retencni nadrz
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -1264,10 +1265,12 @@ export const CONFIG_DATA = {
       id: -1,
       name: "P1",
       type: "underground",
-      dimensions: {
-        width: 120,
-        depth: 120,
-      },
+      segments: [
+        { width: 35.82, depth: 35.82, position: { x: 0, z: 0 } }, // kostka hlavni
+        { width: 78, depth: 47, position: { x: 0, z: 31.2 } }, //parkoviste
+        { width: 3.5, depth: 31, position: { x: -39, z: 39 } },
+        { width: 6, depth: 14.55, position: { x: -41, z: 18.05 } },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -3838,8 +3841,8 @@ export const CONFIG_DATA = {
       name: "1NP",
       type: "underground",
       dimensions: {
-        width: 35.82,
-        depth: 35.82,
+        width: 120,
+        depth: 120,
       },
       layout: {
         rooms_grid: {

@@ -194,95 +194,99 @@ export class FloorGenerator {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
     const isUnderground = floorConfig.type === "underground";
-
-    const dimensions = floorConfig.dimensions;
     const layout = floorConfig.layout;
     const wallHeight = this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
 
-    // Create rooms based on grid
-    const roomsGrid = layout.rooms_grid;
-    const roomWidth = dimensions.width / roomsGrid.columns;
-    const roomDepth = dimensions.depth / roomsGrid.rows;
-
-    const startX = -dimensions.width / 2 + roomWidth / 2;
-    const startZ = -dimensions.depth / 2 + roomDepth / 2;
-
-    let roomIdx = 0;
-    for (let row = 0; row < roomsGrid.rows; row++) {
-      for (let col = 0; col < roomsGrid.columns; col++) {
-        const centerX = startX + col * roomWidth;
-        const centerZ = startZ + row * roomDepth;
-
-        // Get temperature and WiFi data from static config
-        const roomTemp = floorConfig.temperature_data[roomIdx] || 20;
-        const roomWifiSignal = floorConfig.wifi_signal_data[roomIdx] || 2;
-
-        // Create room floor mesh
-        const roomFloorMesh = BABYLON.MeshBuilder.CreateBox(
-          `${floorName}_room${roomIdx}_floor`,
-          {
-            width: roomWidth - 0.1,
-            height: roomFloorHeight,
-            depth: roomDepth - 0.1,
-          },
+    if (floorConfig.segments) {
+      // Process segment based floors
+      floorConfig.segments.forEach((segmentConfig) => {
+        const { width, depth, position } = segmentConfig;
+        const segmentMesh = BABYLON.MeshBuilder.CreateBox(
+          `${floorName}_segment`,
+          { width: width - 0.1, height: roomFloorHeight, depth: depth - 0.1 },
           this.scene
         );
+        segmentMesh.position.x = position.x;
+        segmentMesh.position.y = yLevel;
+        segmentMesh.position.z = position.z;
+        segmentMesh.isPickable = true;
 
-        roomFloorMesh.position.x = centerX;
-        roomFloorMesh.position.z = centerZ;
-        roomFloorMesh.position.y = yLevel + roomFloorHeight / 2;
-        roomFloorMesh.isPickable = true;
+        floorMeshes.push(segmentMesh);
+      });
+    } else if (floorConfig.dimensions) {
+      // Process dimension based floors only if segments are not present
+      const dimensions = floorConfig.dimensions;
+      const roomsGrid = layout.rooms_grid;
+      const roomWidth = dimensions.width / roomsGrid.columns;
+      const roomDepth = dimensions.depth / roomsGrid.rows;
+      const startX = -dimensions.width / 2 + roomWidth / 2;
+      const startZ = -dimensions.depth / 2 + roomDepth / 2;
+      let roomIdx = 0;
+      for (let row = 0; row < roomsGrid.rows; row++) {
+        for (let col = 0; col < roomsGrid.columns; col++) {
+          const centerX = startX + col * roomWidth;
+          const centerZ = startZ + row * roomDepth;
+          const roomTemp = floorConfig.temperature_data[roomIdx] || 20;
+          const roomWifiSignal = floorConfig.wifi_signal_data[roomIdx] || 2;
 
-        // Store materials for this room
-        this.roomHeatmapMaterialMap.set(
-          `${floorConfig.id}_${roomIdx}_opaque`,
-          this.createRoomMaterial(
-            this.getColorFromTemperature(roomTemp, 1.0),
-            false
-          )
-        );
-        this.roomTransparentHeatmapMaterialMap.set(
-          `${floorConfig.id}_${roomIdx}_trans`,
-          this.createRoomMaterial(
-            this.getColorFromTemperature(roomTemp, 0.35),
-            true
-          )
-        );
+          const roomFloorMesh = BABYLON.MeshBuilder.CreateBox(
+            `${floorName}_room${roomIdx}_floor`,
+            {
+              width: roomWidth - 0.1,
+              height: roomFloorHeight,
+              depth: roomDepth - 0.1,
+            },
+            this.scene
+          );
+          roomFloorMesh.position.x = centerX;
+          roomFloorMesh.position.z = centerZ;
+          roomFloorMesh.position.y = yLevel + roomFloorHeight / 2;
+          roomFloorMesh.isPickable = true;
 
-        this.roomWifiMaterialMap.set(
-          `${floorConfig.id}_${roomIdx}_opaque_wifi`,
-          this.createRoomMaterial(
-            this.getColorFromWifiSignal(roomWifiSignal, 1.0),
-            false
-          )
-        );
-        this.roomTransparentWifiMaterialMap.set(
-          `${floorConfig.id}_${roomIdx}_trans_wifi`,
-          this.createRoomMaterial(
-            this.getColorFromWifiSignal(roomWifiSignal, 0.35),
-            true
-          )
-        );
-
-        roomFloorMesh.metadata = {
-          temperature: roomTemp,
-          wifiSignal: roomWifiSignal,
-          floorNumber: floorConfig.id,
-          roomIndex: roomIdx,
-        };
-
-        floorMeshes.push(roomFloorMesh);
-        roomIdx++;
+          this.roomHeatmapMaterialMap.set(
+            `${floorConfig.id}_${roomIdx}_opaque`,
+            this.createRoomMaterial(
+              this.getColorFromTemperature(roomTemp, 1.0),
+              false
+            )
+          );
+          this.roomTransparentHeatmapMaterialMap.set(
+            `${floorConfig.id}_${roomIdx}_trans`,
+            this.createRoomMaterial(
+              this.getColorFromTemperature(roomTemp, 0.35),
+              true
+            )
+          );
+          this.roomWifiMaterialMap.set(
+            `${floorConfig.id}_${roomIdx}_opaque_wifi`,
+            this.createRoomMaterial(
+              this.getColorFromWifiSignal(roomWifiSignal, 1.0),
+              false
+            )
+          );
+          this.roomTransparentWifiMaterialMap.set(
+            `${floorConfig.id}_${roomIdx}_trans_wifi`,
+            this.createRoomMaterial(
+              this.getColorFromWifiSignal(roomWifiSignal, 0.35),
+              true
+            )
+          );
+          roomFloorMesh.metadata = {
+            temperature: roomTemp,
+            wifiSignal: roomWifiSignal,
+            floorNumber: floorConfig.id,
+            roomIndex: roomIdx,
+          };
+          floorMeshes.push(roomFloorMesh);
+          roomIdx++;
+        }
       }
     }
 
-    // Create walls
-    // Create walls
     layout.walls.forEach((wall, index) => {
       if (wall.type === "outline") {
-        // Create outline walls
         for (let i = 0; i < wall.points.length; i++) {
           const p1 = new BABYLON.Vector3(wall.points[i].x, 0, wall.points[i].z);
           const p2 = new BABYLON.Vector3(
@@ -302,10 +306,9 @@ export class FloorGenerator {
           floorMeshes.push(wallMesh);
         }
       } else if (wall.type === "partition") {
-        // Create partition walls with custom thickness
         const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
         const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
-        const partitionThickness = wall.partitionWidth || wallThickness; // Default to global thickness if not specified
+        const partitionThickness = wall.partitionWidth || wallThickness;
         const wallMesh = this.createWallSegment(
           p1,
           p2,
@@ -319,7 +322,7 @@ export class FloorGenerator {
       } else if (wall.type === "circular") {
         const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
         const radius = wall.radius;
-        const circularThickness = wall.circularWidth || wallThickness; // Default to global thickness if not specified
+        const circularThickness = wall.circularWidth || wallThickness;
         const circularWall = this.createCircularWall(
           center,
           radius,
@@ -336,7 +339,6 @@ export class FloorGenerator {
         const end = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
         const radius = wall.radius;
         const width = wall.width;
-
         const curvedWall = this.createCurvedWall(
           center,
           radius,
@@ -349,14 +351,22 @@ export class FloorGenerator {
           yLevel,
           isUnderground
         );
-
         floorMeshes.push(curvedWall);
       }
     });
 
+    const area = floorConfig.segments
+      ? floorConfig.segments.reduce(
+          (total, segment) => total + segment.width * segment.depth,
+          0
+        )
+      : floorConfig.dimensions
+      ? floorConfig.dimensions.width * floorConfig.dimensions.depth
+      : 0;
+
     return {
       meshes: floorMeshes,
-      area: dimensions.width * dimensions.depth,
+      area: area,
     };
   }
 
