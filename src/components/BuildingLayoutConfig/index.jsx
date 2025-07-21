@@ -4241,6 +4241,69 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
+          },
+          {
             //1.09a - spodni
             type: "partition",
             start: { x: -16.8, z: -10 },
@@ -4435,8 +4498,28 @@ export const CONFIG_DATA = {
         airQuality: [{ x: 30, z: 8, value: 60 }],
       },
       roomLabels: [
-        { x: 5, z: 5, label: "Room 101" },
-        { x: 15, z: 10, label: "Room 102" },
+        { x: -13.5, z: 13.5, label: "1.13" },
+        { x: -8.25, z: 15.5, label: "1.02" },
+        { x: -5.4, z: 15.8, label: "V4" },
+        { x: -5.4, z: 14.1, label: "V5" },
+        { x: -5.4, z: 12.5, label: "1.03" },
+        { x: -5.4, z: 10.7, label: "1.06" },
+        { x: -2.5, z: 13.5, label: "1.04" },
+        { x: 1.3, z: 15.5, label: "1.19" },
+        { x: 4, z: 15.5, label: "1.16" },
+        { x: 0.1, z: 10.6, label: "V1" },
+        { x: 1.95, z: 10.6, label: "V2" },
+        { x: 3.8, z: 10.6, label: "V3" },
+        { x: 6.15, z: 12.4, label: "1.07" },
+        { x: 9, z: 12.4, label: "1.08" },
+        { x: 0, z: 7.5, label: "1.10" },
+        { x: 1.8, z: -3.5, label: "1.11" },
+        { x: 13.5, z: -8, label: "1.12" },
+        { x: -12.7, z: -9, label: "1.09a" },
+        { x: -11, z: -9, label: "1.09a" },
+        { x: 8.4, z: -13.5, label: "1.01" },
+        { x: -4.75, z: -16, label: "1.15" },
+        { x: 1.8, z: -16, label: "1.14" },
       ],
     },
     {
@@ -4935,6 +5018,69 @@ export const CONFIG_DATA = {
             end: { x: 8.65, z: 9.7 },
             partitionWidth: 0.2,
           },
+          {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
+          },
         ],
       },
       rooms: [
@@ -5266,6 +5412,69 @@ export const CONFIG_DATA = {
             start: { x: 6.05, z: 9.7 },
             end: { x: 8.65, z: 9.7 },
             partitionWidth: 0.2,
+          },
+          {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
           },
           {
             //3.11 leva stena
@@ -5817,6 +6026,69 @@ export const CONFIG_DATA = {
             start: { x: 6.05, z: 9.7 },
             end: { x: 8.65, z: 9.7 },
             partitionWidth: 0.2,
+          },
+          {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
           },
           {
             //4.12 vlevo
@@ -6373,6 +6645,69 @@ export const CONFIG_DATA = {
             start: { x: 6.05, z: 9.7 },
             end: { x: 8.65, z: 9.7 },
             partitionWidth: 0.2,
+          },
+          {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
           },
           {
             //Schodiste01 - prava
@@ -7102,6 +7437,69 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
+          },
+          {
             //Rozvadece - dolni
             type: "partition",
             start: { x: -16.8, z: -10.2 },
@@ -7603,6 +8001,69 @@ export const CONFIG_DATA = {
             start: { x: 6.05, z: 9.7 },
             end: { x: 8.65, z: 9.7 },
             partitionWidth: 0.2,
+          },
+          {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
           },
           {
             //Schodiste01 - prava
@@ -8394,6 +8855,69 @@ export const CONFIG_DATA = {
             start: { x: 6.05, z: 9.7 },
             end: { x: 8.65, z: 9.7 },
             partitionWidth: 0.2,
+          },
+          {
+            //1.07 - partition 1 leva
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 5.125, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 1 prava
+            type: "partition",
+            start: { x: 6.025, z: 13.275 },
+            end: { x: 7.2, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 leva
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 5.125, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.07 - partition 2 prava
+            type: "partition",
+            start: { x: 6.025, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 leva
+            type: "partition",
+            start: { x: 7.4, z: 13.275 },
+            end: { x: 8.675, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 1 prava
+            type: "partition",
+            start: { x: 9.575, z: 13.275 },
+            end: { x: 9.65, z: 13.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - partition 2 leva
+            type: "partition",
+            start: { x: 7.4, z: 11.525 },
+            end: { x: 8.3, z: 11.525 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 11.575 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+          },
+          {
+            //1.08 - zachod prava 2
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
           },
           {
             //Kostka - vlevo1
@@ -9321,7 +9845,7 @@ export const CONFIG_DATA = {
     roomLabels: [
       { x: 5, z: 5, label: "Room 101" },
       { x: 15, z: 10, label: "Room 102" },
-    ],  
+    ],
   },
   materials: {
     floor_types: {
