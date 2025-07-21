@@ -1260,6 +1260,10 @@ export const CONFIG_DATA = {
         wifi: [{ x: 20, z: 20, value: 60 }],
         airQuality: [{ x: 40, z: 10, value: 50 }],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: -1,
@@ -3835,6 +3839,10 @@ export const CONFIG_DATA = {
           { x: 8, z: 15, value: 52 },
         ],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 0,
@@ -4426,6 +4434,10 @@ export const CONFIG_DATA = {
         ],
         airQuality: [{ x: 30, z: 8, value: 60 }],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 1,
@@ -4994,6 +5006,10 @@ export const CONFIG_DATA = {
           { x: 16, z: 7, value: 58 },
         ],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 2,
@@ -5465,6 +5481,10 @@ export const CONFIG_DATA = {
           { x: 19, z: 13, value: 53 },
         ],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 3,
@@ -6093,6 +6113,10 @@ export const CONFIG_DATA = {
           { x: 2, z: 16, value: 62 },
         ],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 4,
@@ -6727,6 +6751,10 @@ export const CONFIG_DATA = {
         ],
         airQuality: [{ x: 5, z: 9, value: 60 }],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 5,
@@ -7315,6 +7343,10 @@ export const CONFIG_DATA = {
         ],
         airQuality: [{ x: 22, z: 5, value: 57 }],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 6,
@@ -8025,6 +8057,10 @@ export const CONFIG_DATA = {
           { x: 6, z: 11, value: 54 },
         ],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 7,
@@ -8757,6 +8793,10 @@ export const CONFIG_DATA = {
         ],
         airQuality: [{ x: 12, z: 20, value: 50 }],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
     {
       id: 8,
@@ -9242,6 +9282,10 @@ export const CONFIG_DATA = {
           { x: 21, z: 25, value: 60 },
         ],
       },
+      roomLabels: [
+        { x: 5, z: 5, label: "Room 101" },
+        { x: 15, z: 10, label: "Room 102" },
+      ],
     },
   ],
   visualization: {
@@ -9274,6 +9318,10 @@ export const CONFIG_DATA = {
       },
       frequency: "2.4GHz/5GHz",
     },
+    roomLabels: [
+      { x: 5, z: 5, label: "Room 101" },
+      { x: 15, z: 10, label: "Room 102" },
+    ],  
   },
   materials: {
     floor_types: {

@@ -3,6 +3,7 @@ import * as BABYLON from "babylonjs";
 import { FloorGenerator } from "../FloorGenerator";
 import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import FloorControls from "../FloorControls";
+import LabelComponent from "../LabelComponent";
 import InfoBox from "../InfoBox";
 import "./buildingviewer.css";
 import * as GUI from "@babylonjs/gui";
@@ -17,6 +18,7 @@ const BuildingViewer = () => {
   const [allFloorMeshes, setAllFloorMeshes] = useState([]);
   const [currentActiveFloor, setCurrentActiveFloor] = useState(null);
   const [activeDisplayOption, setActiveDisplayOption] = useState(null);
+  const [labelData, setLabelData] = useState([]);
   const [roomInfo, setRoomInfo] = useState({
     temperature: "N/A",
     wifiSignal: "N/A",
@@ -113,21 +115,44 @@ const BuildingViewer = () => {
   };
 
   useEffect(() => {
-    if (engine && scene) {
-      const floors = CONFIG_DATA.floors;
-      if (floors && currentActiveFloor !== null) {
-        const targetFloor = floors[1]; // Přizpůsobte dle struktury dat
-        if (targetFloor && currentActiveFloor === targetFloor.id) {
-          if (targetFloor.parking) {
-            clearParkingSpots(scene); // Remove current spots before adding new ones
-            addParkingSpots(scene, targetFloor.parking);
-          }
-        } else {
-          clearParkingSpots(scene); // Clear spots if not on target floor
-        }
-      }
+    if (!engine || !scene) return; // Ensure engine and scene are both available
+
+    const floors = CONFIG_DATA.floors;
+    if (!floors || currentActiveFloor === null) return; // Ensure floors data is available and an active floor is set
+
+    const targetFloor = floors[1]; // Adjust this index according to your data structure
+    if (!targetFloor) return; // Ensure the target floor exists
+
+    if (currentActiveFloor === targetFloor.id && targetFloor.parking) {
+      clearParkingSpots(scene); // Clear existing parking spots if any
+      addParkingSpots(scene, targetFloor.parking); // Add new parking spots for the target floor
+    } else {
+      clearParkingSpots(scene); // Clear parking spots if not on the target floor
     }
-  }, [engine, scene, currentActiveFloor]);
+
+    if (currentActiveFloor !== "all") {
+      const currentFloor = floors.find(
+        (floor) => floor.id === currentActiveFloor
+      );
+
+      if (currentFloor && currentFloor.roomLabels) {
+        // Retrieve the floor index appropriately
+        // This assumes that CONFIG_DATA.floors is an array and currentFloor has a valid index in it
+        const floorIndex = floors.indexOf(currentFloor);
+
+        const newLabelData = currentFloor.roomLabels.map((label) => ({
+          positionX: label.x,
+          positionZ: label.z,
+          text: label.label,
+          floorIndex, // include the calculated floor index
+        }));
+
+        setLabelData(newLabelData);
+      }
+    } else {
+      clearLabels(scene);
+    }
+  }, [engine, scene, currentActiveFloor, CONFIG_DATA]);
 
   const setupCamera = (scene, floors) => {
     const totalHeight =
@@ -423,6 +448,18 @@ const BuildingViewer = () => {
       });
   };
 
+    const clearLabels = (scene) => {
+    if (!scene || !scene.meshes) return;
+    scene.meshes
+      .filter(
+        (mesh) =>
+          mesh.name.startsWith("label")
+      )
+      .forEach((mesh) => {
+        mesh.dispose();
+      });
+  };
+
   return (
     <div className="building-viewer">
       <FloorControls
@@ -440,6 +477,17 @@ const BuildingViewer = () => {
         className="render-canvas"
         style={{ width: "100%", height: "100%" }}
       />
+
+      {labelData.map((label, index) => (
+        <LabelComponent
+          key={index}
+          scene={scene}
+          positionX={label.positionX}
+          positionZ={label.positionZ}
+          text={label.text}
+          floorIndex={label.floorIndex} // Ensure this is set according to the floor logic
+        />
+      ))}
     </div>
   );
 };
