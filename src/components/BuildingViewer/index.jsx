@@ -210,6 +210,32 @@ const BuildingViewer = () => {
         floorId === "all" || floorInfo.floorNumber === floorId;
 
       floorMeshes.forEach((mesh) => {
+        if (floorId === "all") {
+          mesh.setEnabled(true);
+          if (mesh.name.includes("_room") && mesh.name.includes("_floor")) {
+            const roomIdx = mesh.metadata.roomIndex;
+            const floorNum = mesh.metadata.floorNumber;
+          } else {
+            mesh.material =
+              floorInfo.floorNumber < 0
+                ? generator.materials.undergroundTransparent
+                : generator.materials.allFloorsTransparent;
+          }
+        } else {
+          mesh.setEnabled(isActiveFloor);
+
+          if (
+            isActiveFloor &&
+            mesh.name.includes("_room") &&
+            mesh.name.includes("_floor")
+          ) {
+            const roomIdx = mesh.metadata.roomIndex;
+            const floorNum = mesh.metadata.floorNumber;
+          } else if (isActiveFloor) {
+            mesh.material = generator.materials.wallOpaque;
+          }
+        }
+
         mesh.setEnabled(isActiveFloor);
       });
     });
