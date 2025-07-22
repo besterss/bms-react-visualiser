@@ -178,16 +178,22 @@ const BuildingViewer = () => {
   const setupLighting = (scene) => {
     const light1 = new BABYLON.HemisphericLight(
       "light1",
-      new BABYLON.Vector3(1, 1, 0),
+      new BABYLON.Vector3(-100, -100, -100),
       scene
     );
     const light2 = new BABYLON.PointLight(
       "light2",
-      new BABYLON.Vector3(0, 50, -10),
+      new BABYLON.Vector3(0, 100, 0),
       scene
     );
-    light1.intensity = 0.7;
-    light2.intensity = 0.3;
+    const light3 = new BABYLON.HemisphericLight(
+      "light3",
+      new BABYLON.Vector3(100, -100, 100),
+      scene
+    );
+    light1.intensity = 0.4;
+    light2.intensity = 0.5;
+    light3.intensity = 0.3;
   };
 
   const setupEventHandlers = (scene) => {
@@ -448,13 +454,10 @@ const BuildingViewer = () => {
       });
   };
 
-    const clearLabels = (scene) => {
+  const clearLabels = (scene) => {
     if (!scene || !scene.meshes) return;
     scene.meshes
-      .filter(
-        (mesh) =>
-          mesh.name.startsWith("label")
-      )
+      .filter((mesh) => mesh.name.startsWith("label"))
       .forEach((mesh) => {
         mesh.dispose();
       });
