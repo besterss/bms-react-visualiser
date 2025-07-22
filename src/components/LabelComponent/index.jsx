@@ -27,9 +27,6 @@ const LabelComponent = ({ scene, positionX, positionZ, text, floorIndex }) => {
     advancedTexture.addControl(textBlock);
 
     // Cleanup function to remove the plane when the component unmounts or dependencies change
-    return () => {
-      plane.dispose();
-    };
   }, [scene, positionX, positionZ, text, floorIndex]);
 
   return null;

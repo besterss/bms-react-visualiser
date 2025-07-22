@@ -146,7 +146,7 @@ const BuildingViewer = () => {
           text: label.label,
           floorIndex, // include the calculated floor index
         }));
-
+        clearLabels(scene);
         setLabelData(newLabelData);
       }
     } else {
