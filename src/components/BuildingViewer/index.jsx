@@ -316,15 +316,19 @@ const BuildingViewer = () => {
           }
         } else {
           mesh.setEnabled(isActiveFloor);
-          if (
-            isActiveFloor &&
-            mesh.name.includes("_room") &&
-            mesh.name.includes("_floor")
-          ) {
-            const roomIdx = mesh.metadata.roomIndex;
-            const floorNum = mesh.metadata.floorNumber;
-          } else if (isActiveFloor) {
-            mesh.material = generator.materials.wallOpaque;
+
+          if (isActiveFloor) {
+            if (mesh.name.includes("_room") && mesh.name.includes("_floor")) {
+              // Assign materials for active floor meshes
+              mesh.material = generator.materials.floorDefault;
+            } else if (
+              mesh.name.includes("_wall") ||
+              mesh.name.includes("_circular") ||
+              mesh.name.includes("_curved")
+            ) {
+              // Assign wall material for active wall meshes
+              mesh.material = generator.materials.wallOpaque;
+            }
           }
         }
         mesh.setEnabled(isActiveFloor);

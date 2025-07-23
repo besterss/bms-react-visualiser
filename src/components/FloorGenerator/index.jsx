@@ -25,7 +25,7 @@ export class FloorGenerator {
       "wallOpaqueMat",
       this.scene
     );
-    this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
+    this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1); // White
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.alpha = 1.0;
 
@@ -64,10 +64,11 @@ export class FloorGenerator {
       this.scene
     );
     this.materials.floorDefault.diffuseColor = new BABYLON.Color3(
-      0.83,
-      0.85,
-      0.85
-    );
+      0.73,
+      0.73,
+      0.73
+    ); // Gray
+    this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.floorDefault.backFaceCulling = false;
     this.materials.floorDefault.alpha = 1.0;
 
@@ -216,6 +217,7 @@ export class FloorGenerator {
         segmentMesh.position.y = yLevel;
         segmentMesh.position.z = position.z;
         segmentMesh.isPickable = true;
+        segmentMesh.material = this.materials.floorDefault;
         this.shadowGenerator.addShadowCaster(segmentMesh);
         floorMeshes.push(segmentMesh);
       });
@@ -246,6 +248,7 @@ export class FloorGenerator {
           roomFloorMesh.position.z = centerZ;
           roomFloorMesh.position.y = yLevel + roomFloorHeight / 2;
           roomFloorMesh.isPickable = true;
+          roomFloorMesh.material = this.materials.floorDefault;
           this.shadowGenerator.addShadowCaster(roomFloorMesh);
           this.roomHeatmapMaterialMap.set(
             `${floorConfig.id}_${roomIdx}_opaque`,

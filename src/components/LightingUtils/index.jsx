@@ -24,15 +24,15 @@ export const setupSceneLighting = (scene) => {
     new BABYLON.Vector3(0, -1, 0), // Light from above
     scene
   );
-  hemisphericLight.intensity = 1; // Ambient light for overall illumination
+  hemisphericLight.intensity = 1.7; // Ambient light for overall illumination
 
   // Omnidirectional light source to provide subtle fill from all directions
   const omniFillLight = new BABYLON.PointLight(
     "omniFillLight",
-    new BABYLON.Vector3(0, 150, 0), // Position higher up for even distribution
+    new BABYLON.Vector3(0, 400, 0), // Position higher up for even distribution
     scene
   );
-  omniFillLight.intensity = 0.8; // Low intensity to subtly illuminate shadowed spots
+  omniFillLight.intensity = 1; // Low intensity to subtly illuminate shadowed spots
 
   return {
     mainDirectionalLight,
