@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs";
+import { setupSceneLighting } from "../LightingUtils";
 
 export class FloorGenerator {
   constructor(scene, engine, configData) {
@@ -14,8 +15,8 @@ export class FloorGenerator {
     this.materials = {};
     this.initializeMaterials();
 
-    // Setup Shadows
-    this.setupShadows();
+    const { shadowGenerator } = setupSceneLighting(this.scene);
+    this.shadowGenerator = shadowGenerator;
   }
 
   initializeMaterials() {
@@ -25,7 +26,7 @@ export class FloorGenerator {
       this.scene
     );
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
-    this.materials.wallOpaque.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+    this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.alpha = 1.0;
 
     // Transparent materials
@@ -83,21 +84,6 @@ export class FloorGenerator {
     this.materials.floorDefaultTransparent.alpha = 0.35;
     this.materials.floorDefaultTransparent.transparencyMode =
       BABYLON.Material.MATERIAL_ALPHABLEND;
-  }
-
-  setupShadows() {
-    // Light source for shadow casting
-    const light = new BABYLON.DirectionalLight(
-      "dirLight",
-      new BABYLON.Vector3(1, -1, 1), // Change the direction for shadows to go the other way
-      this.scene
-    );
-    light.position = new BABYLON.Vector3(-100, -100, -100); // Position of the light
-    light.intensity = 0.05; // Reduce the intensity for less brightness
-
-    // Shadow generator
-    this.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
-    this.shadowGenerator.usePoissonSampling = true;
   }
 
   getColorFromTemperature(temp, alpha = 1.0) {

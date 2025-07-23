@@ -52,9 +52,7 @@ const BuildingViewer = () => {
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
 
-    // Camera and Lighting Setup
     setupCamera(babylonScene, result.floorData);
-    setupLighting(babylonScene);
     setupEventHandlers(babylonScene);
 
     // Show the first floor by default after engine and scene are ready
@@ -173,27 +171,6 @@ const BuildingViewer = () => {
     camera.lowerRadiusLimit = 10;
     camera.upperRadiusLimit = totalHeight * 10;
     camera.upperBetaLimit = Math.PI / 2.2;
-  };
-
-  const setupLighting = (scene) => {
-    const light1 = new BABYLON.HemisphericLight(
-      "light1",
-      new BABYLON.Vector3(-100, -100, -100),
-      scene
-    );
-    const light2 = new BABYLON.PointLight(
-      "light2",
-      new BABYLON.Vector3(0, 100, 0),
-      scene
-    );
-    const light3 = new BABYLON.HemisphericLight(
-      "light3",
-      new BABYLON.Vector3(100, -100, 100),
-      scene
-    );
-    light1.intensity = 0.4;
-    light2.intensity = 0.5;
-    light3.intensity = 0.3;
   };
 
   const setupEventHandlers = (scene) => {
