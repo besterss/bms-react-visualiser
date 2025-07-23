@@ -214,6 +214,9 @@ export class FloorGenerator {
         segmentMesh.position.z = position.z;
         segmentMesh.isPickable = true;
         segmentMesh.material = this.materials.floorDefault;
+        segmentMesh.metadata = {
+          floorNumber: floorConfig.id,
+        };
         this.shadowGenerator.addShadowCaster(segmentMesh);
         floorMeshes.push(segmentMesh);
       });
@@ -247,10 +250,7 @@ export class FloorGenerator {
           roomFloorMesh.material = this.materials.floorDefault;
           this.shadowGenerator.addShadowCaster(roomFloorMesh);
           roomFloorMesh.metadata = {
-            temperature: roomTemp,
-            wifiSignal: roomWifiSignal,
             floorNumber: floorConfig.id,
-            roomIndex: roomIdx,
           };
           floorMeshes.push(roomFloorMesh);
           roomIdx++;
