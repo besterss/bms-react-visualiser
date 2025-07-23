@@ -152,25 +152,90 @@ const BuildingViewer = () => {
     }
   }, [engine, scene, currentActiveFloor, CONFIG_DATA]);
 
-  const setupCamera = (scene, floors) => {
+  const setupCamera = (scene, floors, currentActiveFloor) => {
+    if (!scene || !floors) return;
+
     const totalHeight =
       floors.length *
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-    const camera = new BABYLON.ArcRotateCamera(
-      "camera",
-      -Math.PI / 2,
-      Math.PI / 4,
-      totalHeight * 6.0,
-      new BABYLON.Vector3(0, totalHeight / 2, 0),
-      scene
+
+    const activeFloorIndex = floors.findIndex(
+      (floor) => floor.id === currentActiveFloor
     );
-    camera.attachControl(canvasRef.current, true);
-    camera.panningSensibility = 1000;
-    camera.lowerRadiusLimit = 10;
-    camera.upperRadiusLimit = totalHeight * 10;
-    camera.upperBetaLimit = Math.PI / 2.2;
+    const activeFloorHeight =
+      activeFloorIndex >= 0
+        ? activeFloorIndex *
+          (CONFIG_DATA.visualization.wall_height +
+            CONFIG_DATA.visualization.floor_thickness)
+        : totalHeight / 2;
+
+    let camera = scene.getCameraByName("camera");
+
+    if (camera) {
+      camera.setPosition(
+        new BABYLON.Vector3(
+          0,
+          activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2,
+          0
+        )
+      );
+      camera.alpha = -Math.PI / 2;
+      camera.beta = Math.PI / 4;
+      camera.radius = totalHeight * 1.5;
+    } else {
+      camera = new BABYLON.ArcRotateCamera(
+        "camera",
+        -Math.PI / 2,
+        -Math.PI / 4,
+        totalHeight * 1.5,
+        new BABYLON.Vector3(
+          0,
+          activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2,
+          0
+        ),
+        scene
+      );
+      camera.attachControl(canvasRef.current, true);
+      camera.panningSensibility = 1000;
+      camera.lowerRadiusLimit = 10;
+      camera.upperRadiusLimit = totalHeight * 10;
+      camera.upperBetaLimit = Math.PI / 2.2;
+    }
+  };
+
+  const updateCameraHeight = (
+    camera,
+    activeFloorIndex,
+    isAllFloors = false,
+    totalHeight
+  ) => {
+    if (!camera || activeFloorIndex === undefined) return;
+
+    if (isAllFloors) {
+      // Reset the camera to show all floors
+      camera.setTarget(BABYLON.Vector3.Zero());
+      camera.radius = totalHeight * 3; // Ensure the radius allows a full view of all floors
+      camera.beta = Math.PI / 4; // Standard viewing angle
+    } else {
+      const floorHeight =
+        CONFIG_DATA.visualization.wall_height +
+        CONFIG_DATA.visualization.floor_thickness;
+      const activeFloorHeight = activeFloorIndex * floorHeight;
+      camera.target.y =
+        activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2;
+    }
+  };
+
+  const resetCameraForAllFloors = (camera, totalHeight) => {
+    if (!camera) return;
+
+    camera.setTarget(BABYLON.Vector3.Zero()); // Center the target
+    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0)); // Default position
+    camera.alpha = -Math.PI / 2; // Initial rotation angle
+    camera.beta = Math.PI / 4; // Tilt angle to view all floors
+    camera.radius = totalHeight * 3; // Set radius to view all floors completely
   };
 
   const setupEventHandlers = (scene) => {
@@ -212,11 +277,31 @@ const BuildingViewer = () => {
     if (!generator) return;
     setCurrentActiveFloor(floorId);
 
+    const activeFloorIndex = floors.findIndex(
+      (floor) => floor.floorNumber === floorId
+    );
+    const totalHeight =
+      floors.length *
+      (CONFIG_DATA.visualization.wall_height +
+        CONFIG_DATA.visualization.floor_thickness +
+        CONFIG_DATA.visualization.floor_spacing);
+
+    if (scene) {
+      const camera = scene.getCameraByName("camera");
+      if (camera) {
+        if (floorId === "all") {
+          resetCameraForAllFloors(camera, totalHeight); // Reset camera for all floors
+        } else {
+          updateCameraHeight(camera, activeFloorIndex); // Update only height for specific floors
+        }
+      }
+    }
+
+    // Existing logic to show/hide floors
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       const isActiveFloor =
         floorId === "all" || floorInfo.floorNumber === floorId;
-
       floorMeshes.forEach((mesh) => {
         if (floorId === "all") {
           mesh.setEnabled(true);
@@ -231,7 +316,6 @@ const BuildingViewer = () => {
           }
         } else {
           mesh.setEnabled(isActiveFloor);
-
           if (
             isActiveFloor &&
             mesh.name.includes("_room") &&
@@ -243,7 +327,6 @@ const BuildingViewer = () => {
             mesh.material = generator.materials.wallOpaque;
           }
         }
-
         mesh.setEnabled(isActiveFloor);
       });
     });
