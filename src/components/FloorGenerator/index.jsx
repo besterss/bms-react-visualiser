@@ -8,10 +8,6 @@ export class FloorGenerator {
     this.config = configData;
     this.allFloorMeshes = [];
     this.floorData = [];
-    this.roomHeatmapMaterialMap = new Map();
-    this.roomTransparentHeatmapMaterialMap = new Map();
-    this.roomWifiMaterialMap = new Map();
-    this.roomTransparentWifiMaterialMap = new Map();
     this.materials = {};
     this.initializeMaterials();
 
@@ -250,34 +246,6 @@ export class FloorGenerator {
           roomFloorMesh.isPickable = true;
           roomFloorMesh.material = this.materials.floorDefault;
           this.shadowGenerator.addShadowCaster(roomFloorMesh);
-          this.roomHeatmapMaterialMap.set(
-            `${floorConfig.id}_${roomIdx}_opaque`,
-            this.createRoomMaterial(
-              this.getColorFromTemperature(roomTemp, 1.0),
-              false
-            )
-          );
-          this.roomTransparentHeatmapMaterialMap.set(
-            `${floorConfig.id}_${roomIdx}_trans`,
-            this.createRoomMaterial(
-              this.getColorFromTemperature(roomTemp, 0.35),
-              true
-            )
-          );
-          this.roomWifiMaterialMap.set(
-            `${floorConfig.id}_${roomIdx}_opaque_wifi`,
-            this.createRoomMaterial(
-              this.getColorFromWifiSignal(roomWifiSignal, 1.0),
-              false
-            )
-          );
-          this.roomTransparentWifiMaterialMap.set(
-            `${floorConfig.id}_${roomIdx}_trans_wifi`,
-            this.createRoomMaterial(
-              this.getColorFromWifiSignal(roomWifiSignal, 0.35),
-              true
-            )
-          );
           roomFloorMesh.metadata = {
             temperature: roomTemp,
             wifiSignal: roomWifiSignal,
