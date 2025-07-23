@@ -300,38 +300,41 @@ const BuildingViewer = () => {
     // Existing logic to show/hide floors
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
-      const isActiveFloor =
-        floorId === "all" || floorInfo.floorNumber === floorId;
+      const isActiveFloor = floorInfo.floorNumber === floorId;
+      const isViewingAllFloors = floorId === "all";
+
       floorMeshes.forEach((mesh) => {
-        if (floorId === "all") {
-          mesh.setEnabled(true);
-          if (mesh.name.includes("_room") && mesh.name.includes("_floor")) {
-            const roomIdx = mesh.metadata.roomIndex;
-            const floorNum = mesh.metadata.floorNumber;
-          } else {
+        mesh.setEnabled(isViewingAllFloors || isActiveFloor);
+
+        if (isViewingAllFloors) {
+          // Pro "all floors" použij průhledné zdi a neprůhledné podlahy
+          if (
+            mesh.name.includes("_wall") ||
+            mesh.name.includes("_circular") ||
+            mesh.name.includes("_curved")
+          ) {
             mesh.material =
               floorInfo.floorNumber < 0
                 ? generator.materials.undergroundTransparent
-                : generator.materials.allFloorsTransparent;
+                : generator.materials.allFloorsTransparent; // Transparent walls
+          } else if (
+            mesh.name.includes("_room") &&
+            mesh.name.includes("_floor")
+          ) {
+            mesh.material = generator.materials.floorDefault; // Opaque floors
           }
-        } else {
-          mesh.setEnabled(isActiveFloor);
-
-          if (isActiveFloor) {
-            if (mesh.name.includes("_room") && mesh.name.includes("_floor")) {
-              // Assign materials for active floor meshes
-              mesh.material = generator.materials.floorDefault;
-            } else if (
-              mesh.name.includes("_wall") ||
-              mesh.name.includes("_circular") ||
-              mesh.name.includes("_curved")
-            ) {
-              // Assign wall material for active wall meshes
-              mesh.material = generator.materials.wallOpaque;
-            }
+        } else if (isActiveFloor) {
+          // Pro konkrétní patro použij neprůhledné materiály
+          if (mesh.name.includes("_room") || mesh.name.includes("segments")) {
+            mesh.material = generator.materials.floorDefault; // Opaque floors
+          } else if (
+            mesh.name.includes("_wall") ||
+            mesh.name.includes("_circular") ||
+            mesh.name.includes("_curved")
+          ) {
+            mesh.material = generator.materials.wallOpaque; // Opaque walls
           }
         }
-        mesh.setEnabled(isActiveFloor);
       });
     });
 
