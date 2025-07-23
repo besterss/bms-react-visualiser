@@ -378,6 +378,7 @@ const BuildingViewer = () => {
       190 / 255,
       142 / 255
     );
+    freeMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 
     const reservedMaterial = new BABYLON.StandardMaterial(
       "reservedMaterial",
@@ -388,6 +389,7 @@ const BuildingViewer = () => {
       150 / 255,
       150 / 255
     );
+    reservedMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 
     const occupiedMaterial = new BABYLON.StandardMaterial(
       "occupiedMaterial",
@@ -398,6 +400,7 @@ const BuildingViewer = () => {
       125 / 255,
       115 / 255
     );
+    occupiedMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 
     const borderMaterial = new BABYLON.StandardMaterial(
       "borderMaterial",
