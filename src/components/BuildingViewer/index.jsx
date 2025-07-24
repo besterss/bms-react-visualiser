@@ -6,9 +6,9 @@ import FloorControls from "../FloorControls";
 import LabelComponent from "../LabelComponent";
 import InfoBox from "../InfoBox";
 import "./buildingviewer.css";
-import * as GUI from "@babylonjs/gui";
 import { showBubblesOnActiveFloor } from "../BubbleUtils";
 import RoomBoxes from "../RoomBoxes";
+import ParkingSpots from "../ParkingSpots"; // Import the new component
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -29,7 +29,6 @@ const BuildingViewer = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    // Engine and Scene Initialization
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
       preserveDrawingBuffer: true,
       stencil: true,
@@ -50,7 +49,7 @@ const BuildingViewer = () => {
     setAllFloorMeshes(result.allFloorMeshes);
     setupCamera(babylonScene, result.floorData);
     setupEventHandlers(babylonScene);
-    // Show the first floor by default after engine and scene are ready
+
     if (result.floorData.length > 0) {
       showFloor(
         result.floorData[0].floorNumber,
@@ -98,24 +97,19 @@ const BuildingViewer = () => {
 
   const handleOptionToggle = (option) => {
     if (activeDisplayOption === option) {
-      setActiveDisplayOption(null); // If the same option is clicked, uncheck it (toggle off)
+      setActiveDisplayOption(null);
     } else {
-      setActiveDisplayOption(option); // Set the clicked option to be active
+      setActiveDisplayOption(option);
     }
   };
 
   useEffect(() => {
-    if (!engine || !scene) return; // Ensure engine and scene are both available
+    if (!engine || !scene) return;
     const floors = CONFIG_DATA.floors;
-    if (!floors || currentActiveFloor === null) return; // Ensure floors data is available and an active floor is set
-    const targetFloor = floors[1]; // Adjust this index according to your data structure
-    if (!targetFloor) return; // Ensure the target floor exists
-    if (currentActiveFloor === targetFloor.id && targetFloor.parking) {
-      clearParkingSpots(scene); // Clear existing parking spots if any
-      addParkingSpots(scene, targetFloor.parking); // Add new parking spots for the target floor
-    } else {
-      clearParkingSpots(scene); // Clear parking spots if not on the target floor
-    }
+    if (!floors || currentActiveFloor === null) return;
+    const targetFloor = floors[1];
+    if (!targetFloor) return;
+
     if (currentActiveFloor !== "all") {
       const currentFloor = floors.find(
         (floor) => floor.id === currentActiveFloor
@@ -335,144 +329,6 @@ const BuildingViewer = () => {
     }));
   };
 
-  const addParkingSpots = (scene, parkingConfig) => {
-    if (!scene || !parkingConfig) return;
-    const freeMaterial = new BABYLON.StandardMaterial("freeMaterial", scene);
-    freeMaterial.diffuseColor = new BABYLON.Color3(
-      120 / 255,
-      190 / 255,
-      142 / 255
-    );
-    freeMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    const reservedMaterial = new BABYLON.StandardMaterial(
-      "reservedMaterial",
-      scene
-    );
-    reservedMaterial.diffuseColor = new BABYLON.Color3(
-      150 / 255,
-      150 / 255,
-      150 / 255
-    );
-    reservedMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    const occupiedMaterial = new BABYLON.StandardMaterial(
-      "occupiedMaterial",
-      scene
-    );
-    occupiedMaterial.diffuseColor = new BABYLON.Color3(
-      230 / 255,
-      125 / 255,
-      115 / 255
-    );
-    occupiedMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    const borderMaterial = new BABYLON.StandardMaterial(
-      "borderMaterial",
-      scene
-    );
-    borderMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
-    parkingConfig.forEach((spot, index) => {
-      const width = Math.abs(spot.end.x - spot.start.x);
-      const depth = Math.abs(spot.end.z - spot.start.z);
-      const positionX = (spot.start.x + spot.end.x) / 2;
-      const positionZ = (spot.start.z + spot.end.z) / 2;
-      const height = 0.2;
-      const parkingSpot = BABYLON.MeshBuilder.CreateBox(
-        `spot${index}`,
-        { height, width, depth },
-        scene
-      );
-      parkingSpot.position = new BABYLON.Vector3(positionX, 3.5, positionZ);
-      let baseMaterial;
-      switch (spot.status) {
-        case "occupied":
-          baseMaterial = occupiedMaterial;
-          break;
-        case "reserved":
-          baseMaterial = reservedMaterial;
-          break;
-        default:
-          baseMaterial = freeMaterial;
-          break;
-      }
-      parkingSpot.material = baseMaterial;
-      const borderThickness = 0.1;
-      const borderHeight = 0.1;
-      const createBorder = (w, h, d, x, y, z, idx) => {
-        const border = BABYLON.MeshBuilder.CreateBox(
-          `spotBorder${index}_${idx}`,
-          { height: h, width: w, depth: d },
-          scene
-        );
-        border.position = new BABYLON.Vector3(x, y, z);
-        border.material = borderMaterial;
-      };
-      createBorder(
-        width,
-        borderHeight,
-        borderThickness,
-        positionX,
-        3.5 + height / 2,
-        positionZ + depth / 2,
-        0
-      );
-      createBorder(
-        width,
-        borderHeight,
-        borderThickness,
-        positionX,
-        3.5 + height / 2,
-        positionZ - depth / 2,
-        1
-      );
-      createBorder(
-        borderThickness,
-        borderHeight,
-        depth,
-        positionX - width / 2,
-        3.5 + height / 2,
-        positionZ,
-        2
-      );
-      createBorder(
-        borderThickness,
-        borderHeight,
-        depth,
-        positionX + width / 2,
-        3.5 + height / 2,
-        positionZ,
-        3
-      );
-      // Create a plane for the number
-      const numberPlane = BABYLON.MeshBuilder.CreatePlane(
-        `spotNumber${index}`,
-        { size: 2 },
-        scene
-      );
-      numberPlane.position = new BABYLON.Vector3(positionX, 3.7, positionZ);
-      // Align the plane to face upwards
-      numberPlane.rotation.x = Math.PI / 2;
-      const advancedTexture =
-        GUI.AdvancedDynamicTexture.CreateForMesh(numberPlane);
-      const textBlock = new GUI.TextBlock();
-      textBlock.text = `${index + 1}`;
-      textBlock.color = "white";
-      textBlock.fontSize = 800;
-      textBlock.fontWeight = 900;
-      advancedTexture.addControl(textBlock);
-    });
-  };
-
-  const clearParkingSpots = (scene) => {
-    if (!scene || !scene.meshes) return;
-    scene.meshes
-      .filter(
-        (mesh) =>
-          mesh.name.startsWith("spot") || mesh.name.startsWith("spotBorder")
-      )
-      .forEach((mesh) => {
-        mesh.dispose();
-      });
-  };
-
   const clearLabels = (scene) => {
     if (!scene || !scene.meshes) return;
     scene.meshes
@@ -488,6 +344,9 @@ const BuildingViewer = () => {
   const activeRooms =
     CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
       ?.rooms || [];
+  const currentFloorParking =
+    CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+      ?.parking || [];
 
   return (
     <div className="building-viewer">
@@ -511,6 +370,10 @@ const BuildingViewer = () => {
           floorIndex={activeFloorIndex}
           config={CONFIG_DATA}
         />
+      )}
+      {/* Include ParkingSpots component */}
+      {scene && currentFloorParking.length > 0 && (
+        <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}
       {labelData.map((label, index) => (
         <LabelComponent
