@@ -3932,7 +3932,7 @@ export const CONFIG_DATA = {
         {
           name: "ROZVADĚČE",
           bounds: { minX: -16.9, minZ: -9.9, maxX: -11.9, maxZ: -8.3 },
-          isOccupied: false ,
+          isOccupied: false,
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
@@ -4716,6 +4716,36 @@ export const CONFIG_DATA = {
           },
         ],
       },
+      rooms: [
+        {
+          name: "TŘÍDÍCÍ PROSTOR",
+          bounds: { minX: -16.8, minZ: 10.2, maxX: -10.2, maxZ: 16.8 },
+        },
+        {
+          name: "SCHODIŠTĚ (JÁDRO C)",
+          bounds: { minX: -9.7, minZ: 10.4, maxX: -7.2, maxZ: 16.8 },
+        },
+        {
+          name: "V4",
+          bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+        },
+        {
+          name: "V5",
+          bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+        },
+        {
+          name: "ROZVODNA SLP",
+          bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+        },
+        {
+          name: "WC ZAMĚSTNANCI",
+          bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+        },
+        {
+          name: "MANIPULAČNÍ PROSTOR",
+          bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+        },
+      ],
       temperature_data: [0],
       wifi_signal_data: [0],
       sensors: {
