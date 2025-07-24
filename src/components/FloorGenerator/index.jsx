@@ -16,45 +16,16 @@ export class FloorGenerator {
   }
 
   initializeMaterials() {
-    // Wall materials
+    // Wall material
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1); // White
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.wallOpaque.alpha = 1.0;
+    this.materials.wallOpaque.alpha = 1;
 
-    // Transparent materials
-    this.materials.allFloorsTransparent = new BABYLON.StandardMaterial(
-      "allFloorsTransparentMat",
-      this.scene
-    );
-    this.materials.allFloorsTransparent.diffuseColor = new BABYLON.Color3(
-      0.8,
-      0.8,
-      0.8
-    );
-    this.materials.allFloorsTransparent.backFaceCulling = false;
-    this.materials.allFloorsTransparent.alpha = 0.35;
-    this.materials.allFloorsTransparent.transparencyMode =
-      BABYLON.Material.MATERIAL_ALPHABLEND;
-
-    this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
-      "undergroundTransparentMat",
-      this.scene
-    );
-    this.materials.undergroundTransparent.diffuseColor = new BABYLON.Color3(
-      0.6,
-      0.8,
-      1
-    );
-    this.materials.undergroundTransparent.backFaceCulling = false;
-    this.materials.undergroundTransparent.alpha = 0.25;
-    this.materials.undergroundTransparent.transparencyMode =
-      BABYLON.Material.MATERIAL_ALPHABLEND;
-
-    // Default floor materials
+    // Default floor material
     this.materials.floorDefault = new BABYLON.StandardMaterial(
       "floorDefaultMat",
       this.scene
@@ -66,21 +37,62 @@ export class FloorGenerator {
     ); // Gray
     this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.floorDefault.backFaceCulling = false;
-    this.materials.floorDefault.alpha = 1.0;
+    this.materials.floorDefault.alpha = 1;
 
-    this.materials.floorDefaultTransparent = new BABYLON.StandardMaterial(
-      "floorDefaultTransparentMat",
+    // Above ground transparent material
+    this.materials.aboveGroundTransparent = new BABYLON.StandardMaterial(
+      "aboveGroundTransparentMat",
       this.scene
     );
-    this.materials.floorDefaultTransparent.diffuseColor = new BABYLON.Color3(
-      0.83,
-      0.85,
-      0.85
-    );
-    this.materials.floorDefaultTransparent.backFaceCulling = false;
-    this.materials.floorDefaultTransparent.alpha = 0.35;
-    this.materials.floorDefaultTransparent.transparencyMode =
+    this.materials.aboveGroundTransparent.diffuseColor = new BABYLON.Color3(
+      0.3,
+      0.3,
+      0.3
+    ); // Dark gray
+    this.materials.aboveGroundTransparent.backFaceCulling = false;
+    this.materials.aboveGroundTransparent.alpha = 0.7;
+    this.materials.aboveGroundTransparent.transparencyMode =
       BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.aboveGroundTransparent.needDepthPrePass = true;
+    this.materials.aboveGroundTransparent.specularColor = new BABYLON.Color3(
+      0,
+      0,
+      0
+    );
+
+    // Underground transparent material
+    this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
+      "undergroundTransparentMat",
+      this.scene
+    );
+    this.materials.undergroundTransparent.diffuseColor = new BABYLON.Color3(
+      0.6,
+      0.8,
+      1
+    ); // Bluish
+    this.materials.undergroundTransparent.backFaceCulling = false;
+    this.materials.undergroundTransparent.alpha = 0.7;
+    this.materials.undergroundTransparent.transparencyMode =
+      BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.undergroundTransparent.needDepthPrePass = true;
+    this.materials.undergroundTransparent.specularColor = new BABYLON.Color3(
+      0,
+      0,
+      0
+    );
+
+    // Ground-like material (grasTransparent renamed for clarity)
+    this.materials.ground = new BABYLON.StandardMaterial(
+      "groundMat",
+      this.scene
+    );
+    this.materials.ground.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5); // Ground-like color
+    this.materials.ground.backFaceCulling = false;
+    this.materials.ground.alpha = 1; // Visibility with slight transparency
+    this.materials.ground.transparencyMode =
+      BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.ground.needDepthPrePass = true;
+    this.materials.ground.specularColor = new BABYLON.Color3(0, 0, 0);
   }
 
   getColorFromTemperature(temp, alpha = 1.0) {
@@ -149,58 +161,56 @@ export class FloorGenerator {
     return new BABYLON.Color4(r, g, b, alpha);
   }
 
-  createRoomMaterial(color, isTransparent) {
-    const material = new BABYLON.StandardMaterial(
-      `roomMat_${Math.random()}`,
-      this.scene
-    );
-    material.diffuseColor = new BABYLON.Color3(color.r, color.g, color.b);
-    material.alpha = color.a;
-    material.backFaceCulling = false;
-    material.transparencyMode = isTransparent
-      ? BABYLON.Material.MATERIAL_ALPHABLEND
-      : BABYLON.Material.MATERIAL_OPAQUE;
-    return material;
-  }
-
   generateFloors() {
-    // Process each floor from config
     this.config.floors.forEach((floorConfig, index) => {
       const yLevel =
         index *
         (this.config.visualization.wall_height +
           this.config.visualization.floor_thickness +
           this.config.visualization.floor_spacing);
-      const floorResult = this.createFloorFromConfig(floorConfig, yLevel);
+
+      // Correctly determining if the floor is underground
+      const isUnderground = floorConfig.type === "underground";
+
+      // Pass isUnderground to the createFloorFromConfig method
+      const floorResult = this.createFloorFromConfig(
+        floorConfig,
+        yLevel,
+        isUnderground
+      );
+
       // Register floors to receive shadows
       floorResult.meshes.forEach((mesh) => {
         if (mesh.name.includes("floor")) {
           mesh.receiveShadows = true;
         }
       });
+
       this.allFloorMeshes.push(floorResult.meshes);
       this.floorData.push({
         floorNumber: floorConfig.id,
         name: floorConfig.name,
         area: floorResult.area,
         type: floorConfig.type,
+        isUnderground, // Store underground info for later use
       });
     });
+
     return {
       allFloorMeshes: this.allFloorMeshes,
       floorData: this.floorData,
     };
   }
 
-  createFloorFromConfig(floorConfig, yLevel) {
+  createFloorFromConfig(floorConfig, yLevel, isUnderground) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
-    const isUnderground = floorConfig.type === "underground";
     const layout = floorConfig.layout;
     const wallHeight = this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
 
+    // Handle segments
     if (floorConfig.segments) {
       floorConfig.segments.forEach((segmentConfig) => {
         const { width, depth, position } = segmentConfig;
@@ -221,6 +231,7 @@ export class FloorGenerator {
         floorMeshes.push(segmentMesh);
       });
     } else if (floorConfig.dimensions) {
+      // Handle rooms grid
       const dimensions = floorConfig.dimensions;
       const roomsGrid = layout.rooms_grid;
       const roomWidth = dimensions.width / roomsGrid.columns;
@@ -258,6 +269,7 @@ export class FloorGenerator {
       }
     }
 
+    // Handle walls
     layout.walls.forEach((wall, index) => {
       let wallMesh;
       if (wall.type === "outline") {
@@ -359,11 +371,7 @@ export class FloorGenerator {
     const wallLength = BABYLON.Vector3.Distance(p1, p2);
     const wall = BABYLON.MeshBuilder.CreateBox(
       name,
-      {
-        width: wallThickness,
-        height: wallHeight,
-        depth: wallLength,
-      },
+      { width: wallThickness, height: wallHeight, depth: wallLength },
       this.scene
     );
 
@@ -377,9 +385,11 @@ export class FloorGenerator {
     const direction = p2.subtract(p1).normalize();
     const angle = Math.atan2(direction.x, direction.z);
     wall.rotation.y = angle;
+
     wall.material = this.materials.wallOpaque;
+
     wall.isPickable = false;
-    this.shadowGenerator.addShadowCaster(wall); // Ensure wall is set to cast shadows
+    this.shadowGenerator.addShadowCaster(wall);
     return wall;
   }
 
@@ -399,7 +409,7 @@ export class FloorGenerator {
     let startAngle = Math.atan2(start.z - center.z, start.x - center.x);
     let endAngle = Math.atan2(end.z - center.z, end.x - center.x);
 
-    // Ensure shortest path on the circle
+    // Ensure the shortest path on the circle
     if (endAngle < startAngle) {
       endAngle += 2 * Math.PI;
     }
@@ -434,23 +444,17 @@ export class FloorGenerator {
         shape,
         path: extrusionPath,
         sideOrientation: BABYLON.Mesh.DOUBLESIDE,
-        cap: BABYLON.Mesh.CAP_END, // Use CAP_END to flatten the top
+        cap: BABYLON.Mesh.CAP_END,
       },
       this.scene
     );
 
-    // Convert to flat shaded mesh to ensure a flat top
+    // Assign materials based on view and floor type
+    curvedWall.material = this.materials.wallOpaque;
     curvedWall.convertToFlatShadedMesh();
 
-    // Assign the appropriate material
-    curvedWall.material = isUnderground
-      ? this.materials.undergroundTransparent
-      : this.materials.wallOpaque;
-
-    // Optional: Disable receiving shadows for consistent appearance
-    curvedWall.receiveShadows = false;
     curvedWall.isPickable = false;
-    this.shadowGenerator.addShadowCaster(curvedWall); // Ensure curved wall casts shadows
+    this.shadowGenerator.addShadowCaster(curvedWall);
     return curvedWall;
   }
 
@@ -465,69 +469,40 @@ export class FloorGenerator {
   ) {
     let circularWall;
     if (radius === 0) {
-      // If radius is zero, create a solid cylinder/pillar
       circularWall = BABYLON.MeshBuilder.CreateCylinder(
         name,
-        {
-          height: wallHeight,
-          diameter: wallThickness,
-        },
+        { height: wallHeight, diameter: wallThickness },
         this.scene
       );
     } else {
-      // Create the outer cylinder mesh
       const outerCylinder = BABYLON.MeshBuilder.CreateCylinder(
         `${name}_outer`,
-        {
-          height: wallHeight,
-          diameter: 2 * (radius + wallThickness / 2),
-        },
+        { height: wallHeight, diameter: 2 * (radius + wallThickness / 2) },
         this.scene
       );
-
-      // Create the inner cylinder mesh (to subtract from outer)
       const innerCylinder = BABYLON.MeshBuilder.CreateCylinder(
         `${name}_inner`,
         {
-          height: wallHeight + 1, // Slightly taller to ensure correct boolean operation
+          height: wallHeight + 1,
           diameter: 2 * radius,
           updatable: false,
           sideOrientation: BABYLON.Mesh.DOUBLESIDE,
         },
         this.scene
       );
-
-      // Perform a boolean subtraction to create hollow circular wall
       circularWall = BABYLON.CSG.FromMesh(outerCylinder)
         .subtract(BABYLON.CSG.FromMesh(innerCylinder))
-        .toMesh(
-          name,
-          isUnderground
-            ? this.materials.undergroundTransparent
-            : this.materials.wallOpaque,
-          this.scene
-        );
-
-      // Clean up the temporary meshes
+        .toMesh(name, this.materials.wallOpaque, this.scene);
       outerCylinder.dispose();
       innerCylinder.dispose();
     }
-
-    // Positioning the circular wall
     circularWall.position.set(center.x, yLevel + wallHeight / 2, center.z);
 
-    // Ensure normals are recalculated correctly
+    circularWall.material = this.materials.wallOpaque;
     circularWall.convertToFlatShadedMesh();
 
-    // Apply the appropriate material with transparency
-    const material = isUnderground
-      ? this.materials.undergroundTransparent
-      : this.materials.wallOpaque;
-    material.alpha = 0.35; // Adjust transparency level
-    material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
-    circularWall.material = material;
     circularWall.isPickable = false;
-    this.shadowGenerator.addShadowCaster(circularWall); // Ensure circular wall casts shadows
+    this.shadowGenerator.addShadowCaster(circularWall);
     return circularWall;
   }
 }

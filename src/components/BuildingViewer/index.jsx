@@ -247,51 +247,54 @@ const BuildingViewer = () => {
   ) => {
     if (!generator) return;
     setCurrentActiveFloor(floorId);
+    const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.floorNumber === floorId
     );
-    const totalHeight =
-      floors.length *
-      (CONFIG_DATA.visualization.wall_height +
-        CONFIG_DATA.visualization.floor_thickness +
-        CONFIG_DATA.visualization.floor_spacing);
+
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
-        if (floorId === "all") {
-          resetCameraForAllFloors(camera, totalHeight);
+        if (isViewingAllFloors) {
+          resetCameraForAllFloors(camera, floors.length, generator);
         } else {
-          updateCameraHeight(camera, activeFloorIndex);
+          updateCameraHeight(camera, activeFloorIndex, false);
         }
       }
     }
+
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
-      const isActiveFloor = floorInfo.floorNumber === floorId;
-      const isViewingAllFloors = floorId === "all";
       floorMeshes.forEach((mesh) => {
-        mesh.setEnabled(isViewingAllFloors || isActiveFloor);
+        mesh.setEnabled(
+          isViewingAllFloors || floorInfo.floorNumber === floorId
+        );
         if (isViewingAllFloors) {
           if (
-            mesh.name.includes("_wall") ||
+            mesh.name.includes("_partition") ||
+            mesh.name.includes("_outline") ||
             mesh.name.includes("_circular") ||
             mesh.name.includes("_curved")
           ) {
-            mesh.material =
-              floorInfo.floorNumber < 0
-                ? generator.materials.undergroundTransparent
-                : generator.materials.allFloorsTransparent;
+            mesh.material = floorInfo.isUnderground
+              ? generator.materials.undergroundTransparent
+              : generator.materials.aboveGroundTransparent;
           } else if (
-            mesh.name.includes("_room") &&
-            mesh.name.includes("_floor")
+            (mesh.name.includes("_floor") || mesh.name.includes("_segment")) &&
+            !mesh.name.includes("floor_0")
           ) {
-            mesh.material = generator.materials.floorDefault;
+            mesh.material = floorInfo.isUnderground
+              ? generator.materials.undergroundTransparent
+              : generator.materials.aboveGroundTransparent;
+          } else if (mesh.name.includes("floor_0")) {
+            mesh.material = generator.materials.ground;
           }
-        } else if (isActiveFloor) {
-          if (mesh.name.includes("_room") || mesh.name.includes("segments")) {
+        } else if (floorInfo.floorNumber === floorId) {
+          if (mesh.name.includes("_floor") || mesh.name.includes("_segment")) {
             mesh.material = generator.materials.floorDefault;
           } else if (
-            mesh.name.includes("_wall") ||
+            mesh.name.includes("_partition") ||
+            mesh.name.includes("_outline") ||
             mesh.name.includes("_circular") ||
             mesh.name.includes("_curved")
           ) {
@@ -300,7 +303,8 @@ const BuildingViewer = () => {
         }
       });
     });
-    if (floorId !== "all") {
+
+    if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f.floorNumber === floorId);
       if (selectedFloor) {
         setRoomInfo((prev) => ({
@@ -371,7 +375,6 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       )}
-      {/* Include ParkingSpots component */}
       {scene && currentFloorParking.length > 0 && (
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}

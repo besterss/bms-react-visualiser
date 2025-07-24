@@ -4076,7 +4076,7 @@ export const CONFIG_DATA = {
     {
       id: 0,
       name: "1NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 120,
         depth: 120,
@@ -4754,7 +4754,7 @@ export const CONFIG_DATA = {
     {
       id: 1,
       name: "2NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -5355,7 +5355,7 @@ export const CONFIG_DATA = {
     {
       id: 2,
       name: "3NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -5858,7 +5858,7 @@ export const CONFIG_DATA = {
     {
       id: 3,
       name: "4NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -6501,7 +6501,7 @@ export const CONFIG_DATA = {
     {
       id: 4,
       name: "5NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -7163,7 +7163,7 @@ export const CONFIG_DATA = {
     {
       id: 5,
       name: "6NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -7808,7 +7808,7 @@ export const CONFIG_DATA = {
     {
       id: 6,
       name: "7NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -8507,7 +8507,7 @@ export const CONFIG_DATA = {
     {
       id: 7,
       name: "8NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
@@ -9235,7 +9235,7 @@ export const CONFIG_DATA = {
     {
       id: 8,
       name: "9NP",
-      type: "underground",
+      type: "aboveground",
       dimensions: {
         width: 35.82,
         depth: 35.82,
