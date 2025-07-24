@@ -8,6 +8,7 @@ import InfoBox from "../InfoBox";
 import "./buildingviewer.css";
 import * as GUI from "@babylonjs/gui";
 import { showBubblesOnActiveFloor } from "../BubbleUtils";
+import RoomBoxes from "../RoomBoxes";
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -28,33 +29,27 @@ const BuildingViewer = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
     // Engine and Scene Initialization
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
       preserveDrawingBuffer: true,
       stencil: true,
     });
-
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
-
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
       CONFIG_DATA
     );
     const result = generator.generateFloors();
-
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
-
     setupCamera(babylonScene, result.floorData);
     setupEventHandlers(babylonScene);
-
     // Show the first floor by default after engine and scene are ready
     if (result.floorData.length > 0) {
       showFloor(
@@ -70,16 +65,13 @@ const BuildingViewer = () => {
         floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
-
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
     });
-
     const handleResize = () => {
       babylonEngine.resize();
     };
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
@@ -114,35 +106,27 @@ const BuildingViewer = () => {
 
   useEffect(() => {
     if (!engine || !scene) return; // Ensure engine and scene are both available
-
     const floors = CONFIG_DATA.floors;
     if (!floors || currentActiveFloor === null) return; // Ensure floors data is available and an active floor is set
-
     const targetFloor = floors[1]; // Adjust this index according to your data structure
     if (!targetFloor) return; // Ensure the target floor exists
-
     if (currentActiveFloor === targetFloor.id && targetFloor.parking) {
       clearParkingSpots(scene); // Clear existing parking spots if any
       addParkingSpots(scene, targetFloor.parking); // Add new parking spots for the target floor
     } else {
       clearParkingSpots(scene); // Clear parking spots if not on the target floor
     }
-
     if (currentActiveFloor !== "all") {
       const currentFloor = floors.find(
         (floor) => floor.id === currentActiveFloor
       );
-
       if (currentFloor && currentFloor.roomLabels) {
-        // Retrieve the floor index appropriately
-        // This assumes that CONFIG_DATA.floors is an array and currentFloor has a valid index in it
         const floorIndex = floors.indexOf(currentFloor);
-
         const newLabelData = currentFloor.roomLabels.map((label) => ({
           positionX: label.x,
           positionZ: label.z,
           text: label.label,
-          floorIndex, // include the calculated floor index
+          floorIndex,
         }));
         clearLabels(scene);
         setLabelData(newLabelData);
@@ -154,13 +138,11 @@ const BuildingViewer = () => {
 
   const setupCamera = (scene, floors, currentActiveFloor) => {
     if (!scene || !floors) return;
-
     const totalHeight =
       floors.length *
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.id === currentActiveFloor
     );
@@ -170,9 +152,7 @@ const BuildingViewer = () => {
           (CONFIG_DATA.visualization.wall_height +
             CONFIG_DATA.visualization.floor_thickness)
         : totalHeight / 2;
-
     let camera = scene.getCameraByName("camera");
-
     if (camera) {
       camera.setPosition(
         new BABYLON.Vector3(
@@ -212,12 +192,10 @@ const BuildingViewer = () => {
     totalHeight
   ) => {
     if (!camera || activeFloorIndex === undefined) return;
-
     if (isAllFloors) {
-      // Reset the camera to show all floors
       camera.setTarget(BABYLON.Vector3.Zero());
-      camera.radius = totalHeight * 3; // Ensure the radius allows a full view of all floors
-      camera.beta = Math.PI / 4; // Standard viewing angle
+      camera.radius = totalHeight * 3;
+      camera.beta = Math.PI / 4;
     } else {
       const floorHeight =
         CONFIG_DATA.visualization.wall_height +
@@ -230,12 +208,11 @@ const BuildingViewer = () => {
 
   const resetCameraForAllFloors = (camera, totalHeight) => {
     if (!camera) return;
-
-    camera.setTarget(BABYLON.Vector3.Zero()); // Center the target
-    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0)); // Default position
-    camera.alpha = -Math.PI / 2; // Initial rotation angle
-    camera.beta = Math.PI / 4; // Tilt angle to view all floors
-    camera.radius = totalHeight * 3; // Set radius to view all floors completely
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0));
+    camera.alpha = -Math.PI / 2;
+    camera.beta = Math.PI / 4;
+    camera.radius = totalHeight * 3;
   };
 
   const setupEventHandlers = (scene) => {
@@ -276,7 +253,6 @@ const BuildingViewer = () => {
   ) => {
     if (!generator) return;
     setCurrentActiveFloor(floorId);
-
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.floorNumber === floorId
     );
@@ -285,29 +261,23 @@ const BuildingViewer = () => {
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
         if (floorId === "all") {
-          resetCameraForAllFloors(camera, totalHeight); // Reset camera for all floors
+          resetCameraForAllFloors(camera, totalHeight);
         } else {
-          updateCameraHeight(camera, activeFloorIndex); // Update only height for specific floors
+          updateCameraHeight(camera, activeFloorIndex);
         }
       }
     }
-
-    // Existing logic to show/hide floors
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       const isActiveFloor = floorInfo.floorNumber === floorId;
       const isViewingAllFloors = floorId === "all";
-
       floorMeshes.forEach((mesh) => {
         mesh.setEnabled(isViewingAllFloors || isActiveFloor);
-
         if (isViewingAllFloors) {
-          // Pro "all floors" použij průhledné zdi a neprůhledné podlahy
           if (
             mesh.name.includes("_wall") ||
             mesh.name.includes("_circular") ||
@@ -316,30 +286,27 @@ const BuildingViewer = () => {
             mesh.material =
               floorInfo.floorNumber < 0
                 ? generator.materials.undergroundTransparent
-                : generator.materials.allFloorsTransparent; // Transparent walls
+                : generator.materials.allFloorsTransparent;
           } else if (
             mesh.name.includes("_room") &&
             mesh.name.includes("_floor")
           ) {
-            mesh.material = generator.materials.floorDefault; // Opaque floors
+            mesh.material = generator.materials.floorDefault;
           }
         } else if (isActiveFloor) {
-          // Pro konkrétní patro použij neprůhledné materiály
           if (mesh.name.includes("_room") || mesh.name.includes("segments")) {
-            mesh.material = generator.materials.floorDefault; // Opaque floors
+            mesh.material = generator.materials.floorDefault;
           } else if (
             mesh.name.includes("_wall") ||
             mesh.name.includes("_circular") ||
             mesh.name.includes("_curved")
           ) {
-            mesh.material = generator.materials.wallOpaque; // Opaque walls
+            mesh.material = generator.materials.wallOpaque;
           }
         }
       });
     });
-
     if (floorId !== "all") {
-      // Update room information for a specific floor
       const selectedFloor = floors.find((f) => f.floorNumber === floorId);
       if (selectedFloor) {
         setRoomInfo((prev) => ({
@@ -349,7 +316,6 @@ const BuildingViewer = () => {
         }));
       }
     } else {
-      // Update room information for all floors
       setRoomInfo((prev) => ({
         ...prev,
         activeFloor: "All Floors",
@@ -371,7 +337,6 @@ const BuildingViewer = () => {
 
   const addParkingSpots = (scene, parkingConfig) => {
     if (!scene || !parkingConfig) return;
-
     const freeMaterial = new BABYLON.StandardMaterial("freeMaterial", scene);
     freeMaterial.diffuseColor = new BABYLON.Color3(
       120 / 255,
@@ -379,7 +344,6 @@ const BuildingViewer = () => {
       142 / 255
     );
     freeMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-
     const reservedMaterial = new BABYLON.StandardMaterial(
       "reservedMaterial",
       scene
@@ -390,7 +354,6 @@ const BuildingViewer = () => {
       150 / 255
     );
     reservedMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-
     const occupiedMaterial = new BABYLON.StandardMaterial(
       "occupiedMaterial",
       scene
@@ -401,27 +364,23 @@ const BuildingViewer = () => {
       115 / 255
     );
     occupiedMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-
     const borderMaterial = new BABYLON.StandardMaterial(
       "borderMaterial",
       scene
     );
     borderMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
-
     parkingConfig.forEach((spot, index) => {
       const width = Math.abs(spot.end.x - spot.start.x);
       const depth = Math.abs(spot.end.z - spot.start.z);
       const positionX = (spot.start.x + spot.end.x) / 2;
       const positionZ = (spot.start.z + spot.end.z) / 2;
       const height = 0.2;
-
       const parkingSpot = BABYLON.MeshBuilder.CreateBox(
         `spot${index}`,
         { height, width, depth },
         scene
       );
       parkingSpot.position = new BABYLON.Vector3(positionX, 3.5, positionZ);
-
       let baseMaterial;
       switch (spot.status) {
         case "occupied":
@@ -434,12 +393,9 @@ const BuildingViewer = () => {
           baseMaterial = freeMaterial;
           break;
       }
-
       parkingSpot.material = baseMaterial;
-
       const borderThickness = 0.1;
       const borderHeight = 0.1;
-
       const createBorder = (w, h, d, x, y, z, idx) => {
         const border = BABYLON.MeshBuilder.CreateBox(
           `spotBorder${index}_${idx}`,
@@ -449,7 +405,6 @@ const BuildingViewer = () => {
         border.position = new BABYLON.Vector3(x, y, z);
         border.material = borderMaterial;
       };
-
       createBorder(
         width,
         borderHeight,
@@ -486,7 +441,6 @@ const BuildingViewer = () => {
         positionZ,
         3
       );
-
       // Create a plane for the number
       const numberPlane = BABYLON.MeshBuilder.CreatePlane(
         `spotNumber${index}`,
@@ -494,26 +448,21 @@ const BuildingViewer = () => {
         scene
       );
       numberPlane.position = new BABYLON.Vector3(positionX, 3.7, positionZ);
-
       // Align the plane to face upwards
       numberPlane.rotation.x = Math.PI / 2;
-
       const advancedTexture =
         GUI.AdvancedDynamicTexture.CreateForMesh(numberPlane);
-
       const textBlock = new GUI.TextBlock();
       textBlock.text = `${index + 1}`;
       textBlock.color = "white";
-      textBlock.fontSize = 800; // Make sure this fits within your texture
+      textBlock.fontSize = 800;
       textBlock.fontWeight = 900;
-
       advancedTexture.addControl(textBlock);
     });
   };
 
   const clearParkingSpots = (scene) => {
     if (!scene || !scene.meshes) return;
-
     scene.meshes
       .filter(
         (mesh) =>
@@ -533,6 +482,13 @@ const BuildingViewer = () => {
       });
   };
 
+  const activeFloorIndex = floorData.findIndex(
+    (floor) => floor.floorNumber === currentActiveFloor
+  );
+  const activeRooms =
+    CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+      ?.rooms || [];
+
   return (
     <div className="building-viewer">
       <FloorControls
@@ -542,15 +498,20 @@ const BuildingViewer = () => {
         activeDisplayOption={activeDisplayOption}
         onOptionToggle={handleOptionToggle}
       />
-
       <InfoBox roomInfo={roomInfo} />
-
       <canvas
         ref={canvasRef}
         className="render-canvas"
         style={{ width: "100%", height: "100%" }}
       />
-
+      {scene && activeDisplayOption === "roomBoxes" && (
+        <RoomBoxes
+          rooms={activeRooms}
+          scene={scene}
+          floorIndex={activeFloorIndex}
+          config={CONFIG_DATA}
+        />
+      )}
       {labelData.map((label, index) => (
         <LabelComponent
           key={index}
@@ -558,7 +519,8 @@ const BuildingViewer = () => {
           positionX={label.positionX}
           positionZ={label.positionZ}
           text={label.text}
-          floorIndex={label.floorIndex} // Ensure this is set according to the floor logic
+          floorIndex={label.floorIndex}
+          config={CONFIG_DATA}
         />
       ))}
     </div>

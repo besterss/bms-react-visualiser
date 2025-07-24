@@ -378,6 +378,7 @@ export class FloorGenerator {
     const angle = Math.atan2(direction.x, direction.z);
     wall.rotation.y = angle;
     wall.material = this.materials.wallOpaque;
+    wall.isPickable = false;
     this.shadowGenerator.addShadowCaster(wall); // Ensure wall is set to cast shadows
     return wall;
   }
@@ -448,6 +449,7 @@ export class FloorGenerator {
 
     // Optional: Disable receiving shadows for consistent appearance
     curvedWall.receiveShadows = false;
+    curvedWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(curvedWall); // Ensure curved wall casts shadows
     return curvedWall;
   }
@@ -524,7 +526,7 @@ export class FloorGenerator {
     material.alpha = 0.35; // Adjust transparency level
     material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     circularWall.material = material;
-
+    circularWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(circularWall); // Ensure circular wall casts shadows
     return circularWall;
   }

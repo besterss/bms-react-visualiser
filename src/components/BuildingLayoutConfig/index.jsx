@@ -1250,6 +1250,62 @@ export const CONFIG_DATA = {
           },
         ],
       },
+      rooms: [
+        {
+          name: "SCHODIŠTĚ (JÁDRO C)",
+          bounds: { minX: -9.7, minZ: 10.4, maxX: -7.2, maxZ: 16.5 },
+        },
+        {
+          name: "ROZVADĚČE",
+          bounds: { minX: -16.9, minZ: -9.9, maxX: -11.9, maxZ: -8.3 },
+        },
+        {
+          name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
+          bounds: { minX: -11.9, minZ: -11.9, maxX: -10.3, maxZ: -8.5 },
+        },
+        {
+          name: "SCHODIŠTĚ",
+          bounds: { minX: -0.7, minZ: -4.9, maxX: 4.1, maxZ: 4.7 },
+        },
+        {
+          name: "TÝMOVÁ STUDOVNA PRO 4 OSOBY",
+          bounds: { minX: -5, minZ: -15.7, maxX: -2.6, maxZ: -11.5 },
+        },
+        {
+          name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
+          bounds: { minX: -10.3, minZ: -4.9, maxX: -6.1, maxZ: -0.7 },
+        },
+        {
+          name: "SCHODIŠTĚ (JÁDRO B)",
+          bounds: { minX: 6.7, minZ: -16.9, maxX: 10.3, maxZ: -10.3 },
+        },
+        {
+          name: "VÝSTAVA MARKERSPACE",
+          bounds: { minX: 5.9, minZ: 0.5, maxX: 8.3, maxZ: 4.7 },
+        },
+        {
+          name: "MANIPULAČNÍ PROSTOR",
+          bounds: { minX: -3.8, minZ: 9.9, maxX: -1.1, maxZ: 16.4 },
+        },
+
+        {
+          name: "KUCHYŇKA",
+          bounds: { minX: -0.7, minZ: 14.1, maxX: 3.3, maxZ: 16.4 },
+        },
+        {
+          name: "WC MUŽI",
+          bounds: { minX: 5, minZ: 9.9, maxX: 7.2, maxZ: 14.9 },
+        },
+        {
+          name: "WC ŽENY",
+          bounds: { minX: 7.4, minZ: 9.9, maxX: 9.6, maxZ: 14.9 },
+        },
+        {
+          name: "ÚKLID",
+          bounds: { minX: 3.3, minZ: 14.1, maxX: 4.5, maxZ: 16.4 },
+        },
+      ],
+
       temperature_data: [0],
       wifi_signal_data: [0],
       sensors: {
@@ -3865,6 +3921,63 @@ export const CONFIG_DATA = {
           start: { x: 30.61, z: 54.48 },
           end: { x: 35.61, z: 50.98 },
           status: "free",
+        },
+      ],
+      rooms: [
+        {
+          name: "SCHODIŠTĚ (JÁDRO C)",
+          bounds: { minX: -9.7, minZ: 10.4, maxX: -7.2, maxZ: 16.5 },
+          isOccupied: true,
+        },
+        {
+          name: "ROZVADĚČE",
+          bounds: { minX: -16.9, minZ: -9.9, maxX: -11.9, maxZ: -8.3 },
+          isOccupied: false ,
+        },
+        {
+          name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
+          bounds: { minX: -11.9, minZ: -11.9, maxX: -10.3, maxZ: -8.5 },
+        },
+        {
+          name: "SCHODIŠTĚ",
+          bounds: { minX: -0.7, minZ: -4.9, maxX: 4.1, maxZ: 4.7 },
+        },
+        {
+          name: "TÝMOVÁ STUDOVNA PRO 4 OSOBY",
+          bounds: { minX: -5, minZ: -15.7, maxX: -2.6, maxZ: -11.5 },
+        },
+        {
+          name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
+          bounds: { minX: -10.3, minZ: -4.9, maxX: -6.1, maxZ: -0.7 },
+        },
+        {
+          name: "SCHODIŠTĚ (JÁDRO B)",
+          bounds: { minX: 6.7, minZ: -16.9, maxX: 10.3, maxZ: -10.3 },
+        },
+        {
+          name: "VÝSTAVA MARKERSPACE",
+          bounds: { minX: 5.9, minZ: 0.5, maxX: 8.3, maxZ: 4.7 },
+        },
+        {
+          name: "MANIPULAČNÍ PROSTOR",
+          bounds: { minX: -3.8, minZ: 9.9, maxX: -1.1, maxZ: 16.4 },
+        },
+
+        {
+          name: "KUCHYŇKA",
+          bounds: { minX: -0.7, minZ: 14.1, maxX: 3.3, maxZ: 16.4 },
+        },
+        {
+          name: "WC MUŽI",
+          bounds: { minX: 5, minZ: 9.9, maxX: 7.2, maxZ: 14.9 },
+        },
+        {
+          name: "WC ŽENY",
+          bounds: { minX: 7.4, minZ: 9.9, maxX: 9.6, maxZ: 14.9 },
+        },
+        {
+          name: "ÚKLID",
+          bounds: { minX: 3.3, minZ: 14.1, maxX: 4.5, maxZ: 16.4 },
         },
       ],
       temperature_data: [0],

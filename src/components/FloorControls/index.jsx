@@ -55,6 +55,14 @@ const FloorControls = ({
           />
           Show Air Quality
         </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={activeDisplayOption === 'roomBoxes'}
+            onChange={() => onOptionToggle('roomBoxes')}
+          />
+          Show Room Boxes
+        </label>
       </div>
     </div>
   );
