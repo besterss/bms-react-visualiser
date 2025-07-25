@@ -34,18 +34,16 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       const height = 2.95;
 
       const box = BABYLON.MeshBuilder.CreateBox(
-        `box-${index}`,
+        `box-${index}-floor-${floorIndex}`,
         { width, depth, height },
         scene
       );
-
       box.position.x = (minX + maxX) / 2;
       box.position.y = yLevel + height / 2;
       box.position.z = (minZ + maxZ) / 2;
 
       const boxMaterial = baseMaterial.clone();
       box.material = boxMaterial;
-
       box.isPickable = true;
       box.actionManager = new BABYLON.ActionManager(scene);
 
@@ -81,7 +79,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
               name: room.name,
               status: room.isOccupied ? "Occupied" : "Available",
             });
-
             setSelectedBoxName(box.name);
           }
         )
@@ -109,11 +106,17 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
 
     scene.onPointerDown = onPointerDown;
 
+    // Cleanup and reset selected room info if floorIndex changes
     return () => {
       boxes.forEach((box) => box.dispose());
       scene.onPointerDown = null;
     };
   }, [rooms, scene, floorIndex, config, selectedBoxName]);
+
+  // Reset selectedRoomInfo when floorIndex changes
+  useEffect(() => {
+    setSelectedRoomInfo(null);
+  }, [floorIndex]);
 
   return (
     <>
