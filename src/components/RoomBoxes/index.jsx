@@ -66,7 +66,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           BABYLON.ActionManager.OnPointerOutTrigger,
           () => {
             if (box.name !== selectedBoxName) {
-              box.material.alpha = 0.5;
+              box.material.alpha = 0.3;
             }
           }
         )
