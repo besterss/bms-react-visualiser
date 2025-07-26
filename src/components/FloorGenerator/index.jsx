@@ -93,6 +93,25 @@ export class FloorGenerator {
       BABYLON.Material.MATERIAL_ALPHABLEND;
     this.materials.ground.needDepthPrePass = true;
     this.materials.ground.specularColor = new BABYLON.Color3(0, 0, 0);
+
+    this.materials.glass = new BABYLON.StandardMaterial("glassMat", this.scene);
+
+    // Light gray color for frosted effect
+    this.materials.glass.diffuseColor = new BABYLON.Color3(0, 0, 0);
+
+    // Higher transparency for more frosted look
+    this.materials.glass.alpha = 0.2; // Adjust as needed
+
+    // Ensure backface culling to improve render efficiency
+    this.materials.glass.backFaceCulling = true;
+
+    // Low specular intensity for minimal shininess
+    this.materials.glass.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+
+    // Transparency mode settings
+    this.materials.glass.transparencyMode =
+      BABYLON.Material.MATERIAL_ALPHABLEND;
+    this.materials.glass.needDepthPrePass = true;
   }
 
   getColorFromTemperature(temp, alpha = 1.0) {
@@ -286,8 +305,9 @@ export class FloorGenerator {
             `${floorName}_outline_${i}`,
             yLevel,
             wallHeight,
-            wallThickness,
-            isUnderground
+            0.05,
+            isUnderground,
+            "glass"
           );
           floorMeshes.push(wallMesh);
         }
@@ -295,14 +315,16 @@ export class FloorGenerator {
         const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
         const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
         const partitionThickness = wall.partitionWidth || wallThickness;
+        const materialType = wall.materialType || "opaque";
         wallMesh = this.createWallSegment(
           p1,
           p2,
-          `${floorName}_partition_${index}`,
+          `${floorName}_partition_${index}_${materialType}`,
           yLevel,
           wallHeight,
           partitionThickness,
-          isUnderground
+          isUnderground,
+          materialType
         );
         floorMeshes.push(wallMesh);
       } else if (wall.type === "circular") {
@@ -366,7 +388,8 @@ export class FloorGenerator {
     yLevel,
     wallHeight,
     wallThickness,
-    isUnderground
+    isUnderground,
+    materialType
   ) {
     const wallLength = BABYLON.Vector3.Distance(p1, p2);
     const wall = BABYLON.MeshBuilder.CreateBox(
@@ -386,7 +409,8 @@ export class FloorGenerator {
     const angle = Math.atan2(direction.x, direction.z);
     wall.rotation.y = angle;
 
-    wall.material = this.materials.wallOpaque;
+    if (materialType === "glass") wall.material = this.materials.glass;
+    else wall.material = this.materials.wallOpaque;
 
     wall.isPickable = false;
     this.shadowGenerator.addShadowCaster(wall);

@@ -269,36 +269,19 @@ const BuildingViewer = () => {
         mesh.setEnabled(
           isViewingAllFloors || floorInfo.floorNumber === floorId
         );
-        if (isViewingAllFloors) {
-          if (
-            mesh.name.includes("_partition") ||
-            mesh.name.includes("_outline") ||
-            mesh.name.includes("_circular") ||
-            mesh.name.includes("_curved")
-          ) {
-            mesh.material = floorInfo.isUnderground
-              ? generator.materials.undergroundTransparent
-              : generator.materials.aboveGroundTransparent;
-          } else if (
-            (mesh.name.includes("_floor") || mesh.name.includes("_segment")) &&
-            !mesh.name.includes("floor_0")
-          ) {
-            mesh.material = floorInfo.isUnderground
-              ? generator.materials.undergroundTransparent
-              : generator.materials.aboveGroundTransparent;
-          } else if (mesh.name.includes("floor_0")) {
-            mesh.material = generator.materials.ground;
-          }
-        } else if (floorInfo.floorNumber === floorId) {
+        if (floorInfo.floorNumber === floorId) {
           if (mesh.name.includes("_floor") || mesh.name.includes("_segment")) {
             mesh.material = generator.materials.floorDefault;
+          } else if (mesh.name.includes("_glass")) {
+            mesh.material = generator.materials.glass;
           } else if (
             mesh.name.includes("_partition") ||
-            mesh.name.includes("_outline") ||
             mesh.name.includes("_circular") ||
             mesh.name.includes("_curved")
           ) {
             mesh.material = generator.materials.wallOpaque;
+          } else if (mesh.name.includes("_outline")) {
+            mesh.material = generator.materials.glass;
           }
         }
       });
