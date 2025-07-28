@@ -15513,6 +15513,78 @@ export const CONFIG_DATA = {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
         },
+        {
+          name: "CENTRUM VZDĚLÁVÁNÍ A REGIONÁLNÍCH SLUŽEB",
+          bounds: { minX: -16.8, minZ: 6.7, maxX: -10.2, maxZ: 16.8 },
+        },
+        {
+          name: "CENTRUM VZDĚLÁVÁNÍ A REGIONÁLNÍCH SLUŽEB - JEDNACÍ PROSTOR",
+          bounds: { minX: -16.8, minZ: 3.1, maxX: -10.275, maxZ: 6.5 },
+        },
+        {
+          name: "KANCELÁŘ PROJEKTOVÉHO MANAŽERA",
+          bounds: { minX: -16.8, minZ: -0.5, maxX: -10.275, maxZ: 2.9 },
+        },
+        {
+          name: "PRACOVIŠTĚ PR A ORGANIZACE AKCÍ PRO VEŘEJNOST",
+          bounds: { minX: -16.8, minZ: -4.1, maxX: -10.275, maxZ: -0.7 },
+        },
+        {
+          name: "GRAFICKÉ STUDIO",
+          bounds: { minX: -16.8, minZ: -7.7, maxX: -10.275, maxZ: -4.3 },
+        },
+        {
+          name: "ŘEDITELNA",
+          bounds: { minX: -16.8, minZ: -16.8, maxX: -7.8, maxZ: -10.2 },
+        },
+        {
+          name: "SEKRETARIÁT",
+          bounds: { minX: -7.7, minZ: -16.8, maxX: -4.2, maxZ: -10.2 },
+        },
+        {
+          name: "KANCELÁŘ ZÁSTUPCE ŘEDITELE",
+          bounds: { minX: -4.1, minZ: -16.8, maxX: 0.6, maxZ: -10.2 },
+        },
+        {
+          name: "KANCELÁŘ SPRÁVY BUDOVY",
+          bounds: { minX: 0.7, minZ: -16.8, maxX: 4.2, maxZ: -10.2 },
+        },
+        {
+          name: "PŘÍRUČNÍ SKLAD",
+          bounds: { minX: 4.3, minZ: -16.8, maxX: 6.875, maxZ: -10.2 },
+        },
+        {
+          name: "ÚČTÁRNA",
+          bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -7.8 },
+        },
+        {
+          name: "PŘÍRUČNÍ SKLAD PRO ÚČTÁRNU",
+          bounds: { minX: 10.2, minZ: -7.7, maxX: 16.8, maxZ: -4.2 },
+        },
+        {
+          name: "KANCELÁŘ VEDOUCÍ ODDĚLENÍ EKONOMIKY A PROVOZU",
+          bounds: { minX: 10.2, minZ: -4.1, maxX: 16.8, maxZ: -0.6 },
+        },
+        {
+          name: "ODBORNÉ PRACOVIŠTĚ PRO VZDĚLÁVÁNÍ UČITELŮ",
+          bounds: { minX: 10.2, minZ: -0.5, maxX: 16.8, maxZ: 3 },
+        },
+        {
+          name: "ODBORNÉ PRACOVIŠTĚ PRO VĚDU, VÝZKUM A VÝVOJ",
+          bounds: { minX: 10.2, minZ: 3.1, maxX: 16.8, maxZ: 6.6 },
+        },
+        {
+          name: "MULTIMEDIÁLNÍ UČEBNA",
+          bounds: { minX: 10.2, minZ: 6.7, maxX: 16.8, maxZ: 16.8 },
+        },
+        {
+          name: "SÍŤOVÁ TISKÁRNA",
+          bounds: { minX: -7.62, minZ: 1.02, maxX: -3.24, maxZ: 3.08 },
+        },
+        {
+          name: "SPISOVNA",
+          bounds: { minX: -7.62, minZ: -7.69, maxX: -3.24, maxZ: 0.92 },
+        },
       ],
       temperature_data: [0],
       wifi_signal_data: [0],
@@ -16730,6 +16802,54 @@ export const CONFIG_DATA = {
         { x: 0, z: 10.8, label: "V1" },
         { x: 2, z: 10.8, label: "9.11" },
         { x: 7, z: 13, label: "9.09" },
+        { x: -4, z: 12, label: "9.03" },
+      ],
+      rooms: [
+        {
+          // rozvaděče
+          name: "ROZVADĚČE",
+          bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+        },
+        {
+          name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
+          bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+        },
+        {
+          name: "SCHODIŠTĚ (JÁDRO B)",
+          bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+        },
+        {
+          name: "SCHODIŠTĚ (JÁDRO C)",
+          bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.8 },
+        },
+        {
+          name: "WC ZAMĚSTNANCI",
+          bounds: { minX: -6.9, minZ: 14.5, maxX: -4.875, maxZ: 16.55 },
+        },
+        {
+          name: "WC ŽENY",
+          bounds: { minX: -4.785, minZ: 14.5, maxX: -1.125, maxZ: 16.55 },
+        },
+        {
+          name: "WC MUŽI",
+          bounds: { minX: -1.025, minZ: 14.5, maxX: 4.2875, maxZ: 16.55 },
+        },
+        {
+          name: "PROSTOR PRO TECHNOLOGIE VZT + CHLAD",
+          bounds: { minX: 10.2, minZ: -5.47, maxX: 16.8, maxZ: 16.55 },
+        },
+        {
+          name: "SKLAD NÁBYTKU",
+          bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -5.67 },
+        },
+        {
+          name: "SKLAD NÁBYTKU",
+          bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -5.67 },
+        },
+        {
+          name: "ROZVADĚČ FVE",
+          bounds: { minX: 1, minZ: 9.92, maxX: 2.94, maxZ: 12.05 },
+        },
       ],
     },
   ],

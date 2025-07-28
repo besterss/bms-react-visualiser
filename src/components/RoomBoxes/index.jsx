@@ -28,77 +28,125 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
     highlightMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
 
     const boxes = rooms.map((room, index) => {
-      const { minX, minZ, maxX, maxZ } = room.bounds;
-      const width = maxX - minX;
-      const depth = maxZ - minZ;
-      const height = 2.95;
+      const isComplex = room.baseBounds && room.extensionBounds;
+      let combinedMesh;
 
-      const box = BABYLON.MeshBuilder.CreateBox(
-        `box-${index}-floor-${floorIndex}`,
-        { width, depth, height },
-        scene
-      );
-      box.position.x = (minX + maxX) / 2;
-      box.position.y = yLevel + height / 2;
-      box.position.z = (minZ + maxZ) / 2;
+      if (isComplex) {
+        const parentNode = new BABYLON.TransformNode(
+          `parentNode-${index}`,
+          scene
+        );
 
-      const boxMaterial = baseMaterial.clone();
-      box.material = boxMaterial;
-      box.isPickable = true;
-      box.actionManager = new BABYLON.ActionManager(scene);
+        const { baseBounds, extensionBounds } = room;
 
-      // Add hover effect
-      box.actionManager.registerAction(
+        const baseBox = BABYLON.MeshBuilder.CreateBox(
+          `baseBox-${index}`,
+          {
+            width: baseBounds.maxX - baseBounds.minX,
+            depth: baseBounds.maxZ - baseBounds.minZ,
+            height: 2.95,
+          },
+          scene
+        );
+        baseBox.position.x = (baseBounds.minX + baseBounds.maxX) / 2;
+        baseBox.position.y = yLevel + 2.95 / 2;
+        baseBox.position.z = (baseBounds.minZ + baseBounds.maxZ) / 2;
+        baseBox.material = baseMaterial.clone();
+        baseBox.isPickable = true;
+        baseBox.actionManager = new BABYLON.ActionManager(scene);
+        setupActions(baseBox, room.name);
+
+        baseBox.parent = parentNode;
+
+        const extensionBox = BABYLON.MeshBuilder.CreateBox(
+          `extensionBox-${index}`,
+          {
+            width: extensionBounds.maxX - extensionBounds.minX,
+            depth: extensionBounds.maxZ - extensionBounds.minZ,
+            height: 2.95,
+          },
+          scene
+        );
+        extensionBox.position.x =
+          (extensionBounds.minX + extensionBounds.maxX) / 2;
+        extensionBox.position.y = yLevel + 2.95 / 2;
+        extensionBox.position.z =
+          (extensionBounds.minZ + extensionBounds.maxZ) / 2;
+        extensionBox.material = baseMaterial.clone();
+        extensionBox.isPickable = true;
+        extensionBox.actionManager = new BABYLON.ActionManager(scene);
+        setupActions(extensionBox, room.name);
+
+        extensionBox.parent = parentNode;
+        combinedMesh = parentNode;
+      } else {
+        const { minX, minZ, maxX, maxZ } = room.bounds;
+        const width = maxX - minX;
+        const depth = maxZ - minZ;
+
+        combinedMesh = BABYLON.MeshBuilder.CreateBox(
+          `box-${index}-floor-${floorIndex}`,
+          { width, depth, height: 2.95 },
+          scene
+        );
+        combinedMesh.position.x = (minX + maxX) / 2;
+        combinedMesh.position.y = yLevel + 2.95 / 2;
+        combinedMesh.position.z = (minZ + maxZ) / 2;
+        combinedMesh.material = baseMaterial.clone();
+        combinedMesh.isPickable = true;
+        combinedMesh.actionManager = new BABYLON.ActionManager(scene);
+        setupActions(combinedMesh, room.name);
+      }
+
+      return combinedMesh;
+    });
+
+    function setupActions(mesh, roomName) {
+      mesh.actionManager.registerAction(
         new BABYLON.ExecuteCodeAction(
           BABYLON.ActionManager.OnPointerOverTrigger,
           () => {
-            if (box.name !== selectedBoxName) {
-              box.material.alpha = 0.7;
+            if (mesh.name !== selectedBoxName) {
+              mesh.material.alpha = 0.7;
             }
           }
         )
       );
-
-      box.actionManager.registerAction(
+      mesh.actionManager.registerAction(
         new BABYLON.ExecuteCodeAction(
           BABYLON.ActionManager.OnPointerOutTrigger,
           () => {
-            if (box.name !== selectedBoxName) {
-              box.material.alpha = 0.3;
+            if (mesh.name !== selectedBoxName) {
+              mesh.material.alpha = 0.3;
             }
           }
         )
       );
-
-      // Set info box on click
-      box.actionManager.registerAction(
+      mesh.actionManager.registerAction(
         new BABYLON.ExecuteCodeAction(
           BABYLON.ActionManager.OnPickTrigger,
           () => {
             setSelectedRoomInfo({
-              name: room.name,
-              status: room.isOccupied ? "Occupied" : "Available",
+              name: roomName,
+              status: selectedRoomInfo?.status || "Available",
             });
-            setSelectedBoxName(box.name);
+            setSelectedBoxName(mesh.name);
           }
         )
       );
+    }
 
-      return box;
-    });
-
-    // Update box materials based on the selected box when selectedBoxName changes
     boxes.forEach((box) => {
-      if (box.name === selectedBoxName) {
+      const meshActionName = box.name;
+      if (meshActionName === selectedBoxName) {
         box.material = highlightMaterial.clone();
       } else {
         box.material = baseMaterial.clone();
       }
     });
 
-    // Scene-wide click event
     const onPointerDown = (evt, pickResult) => {
-      if (!pickResult.hit || boxes.indexOf(pickResult.pickedMesh) === -1) {
+      if (!pickResult.hit || !pickResult.pickedMesh) {
         setSelectedBoxName(null);
         setSelectedRoomInfo(null);
       }
@@ -106,14 +154,12 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
 
     scene.onPointerDown = onPointerDown;
 
-    // Cleanup and reset selected room info if floorIndex changes
     return () => {
       boxes.forEach((box) => box.dispose());
       scene.onPointerDown = null;
     };
   }, [rooms, scene, floorIndex, config, selectedBoxName]);
 
-  // Reset selectedRoomInfo when floorIndex changes
   useEffect(() => {
     setSelectedRoomInfo(null);
   }, [floorIndex]);
