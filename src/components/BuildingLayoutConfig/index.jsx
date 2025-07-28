@@ -1250,6 +1250,122 @@ export const CONFIG_DATA = {
           },
         ],
       },
+      rooms: [
+        {
+          //vrsek
+          name: "SCHODIŠTĚ (JÁDRO C)",
+          bounds: { minX: -9.7, minZ: 10.4, maxX: -7.2, maxZ: 16.8 },
+        },
+        {
+          name: "V4",
+          bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+        },
+        {
+          name: "V5",
+          bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+        },
+        {
+          name: "ROZVODNA SLP",
+          bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+        },
+        {
+          name: "ÚKLID",
+          bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+        },
+        {
+          name: "MANIPULAČNÍ PROSTOR",
+          bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+        },
+        {
+          name: "ŠATNA A ZÁZEMÍ ZAMĚSTNANCI",
+          bounds: { minX: -0.75, minZ: 14.2, maxX: 1.9, maxZ: 16.6 },
+        },
+        {
+          name: "KOUPELNA",
+          bounds: { minX: 2.02, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+        },
+        {
+          name: "PROSTOR PRO VEDENÍ INSTALACÍ",
+          bounds: { minX: -0.75, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+        },
+        {
+          // rozvaděče
+          name: "ROZVADĚČE",
+          bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+        },
+        {
+          name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
+          bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+        },
+        {
+          name: "SCHODIŠTĚ (JÁDRO B)",
+          bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.6 },
+        },
+        {
+          name: "HLAVNÍ ROZVADĚČ ELEKTRO",
+          bounds: { minX: -16.5, minZ: -13.075, maxX: -10.35, maxZ: -10.2 },
+        },
+        {
+          name: "MÍSTNOST CBS",
+          bounds: { minX: -16.5, minZ: -15.925, maxX: -13.4, maxZ: -13.15 },
+        },
+        {
+          name: "ROZVODNA RPO ",
+          bounds: { minX: -13.35, minZ: -15.925, maxX: -10.275, maxZ: -13.15 },
+        },
+        {
+          name: "NÁDRŽ SHZ ",
+          bounds: { minX: 13.4, minZ: -17.87, maxX: 17.87, maxZ: -4.185 },
+        },
+        {
+          name: "ŠACHTA Š10",
+          bounds: { minX: 11.775, minZ: -5.375, maxX: 13.37, maxZ: -4.265 },
+        },
+        {
+          name: "STROJOVNA CHLAZENÍ",
+          bounds: { minX: -1.7, minZ: -8.7, maxX: 4, maxZ: -0.5 },
+        },
+        {
+          name: "ANGLICKÝ DVOREK",
+          bounds: { minX: -17.87, minZ: 3.6, maxX: -16.8, maxZ: 9.2 },
+        },
+        {
+          name: "ANGLICKÝ DVOREK",
+          bounds: { minX: -17.87, minZ: 0.2, maxX: -16.8, maxZ: 3.4 },
+        },
+        {
+          name: "ANGLICKÝ DVOREK",
+          bounds: { minX: -17.87, minZ: -3.6, maxX: -16.8, maxZ: -0.2 },
+        },
+        {
+          name: "ANGLICKÝ DVOREK",
+          bounds: { minX: -17.87, minZ: -7.8, maxX: -16.8, maxZ: -3.8 },
+        },
+        {
+          name: "TREZOROVÁ MÍSTNOST",
+          bounds: { minX: -38.85, minZ: 8, maxX: -32.325, maxZ: 11.75 },
+        },
+        {
+          name: "ODVĚTRACÍ ŠACHTA Š6",
+          bounds: { minX: -32.4, minZ: 51.03, maxX: -29.435, maxZ: 54.485 },
+        },
+        {
+          name: "MANIPULAČNÍ PROSTOR",
+          bounds: { minX: -30.825, minZ: 48.91, maxX: -29.26, maxZ: 50.76 },
+        },
+        {
+          name: "SKLAD (JÁDRO B1)",
+          bounds: { minX: -32.4, minZ: 40.44, maxX: -30.9, maxZ: 44.845 },
+        },
+        {
+          name: "ODVĚTRACÍ ŠACHTA Š7",
+          bounds: { minX: 35.9, minZ: 50.9, maxX: 38.85, maxZ: 54.48 },
+        },
+        {
+          name: "SKLAD (JÁDRO B2)",
+          bounds: { minX: 37.325, minZ: 40.76, maxX: 38.85, maxZ: 44.215 },
+        },
+      ],
       temperature_data: [0],
       wifi_signal_data: [0],
       sensors: {
@@ -3867,6 +3983,7 @@ export const CONFIG_DATA = {
           status: "free",
         },
       ],
+
       temperature_data: [0],
       wifi_signal_data: [0],
       sensors: {
