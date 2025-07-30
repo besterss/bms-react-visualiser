@@ -13,44 +13,46 @@ const LabelComponent = ({
   useEffect(() => {
     if (!scene || typeof floorIndex !== "number" || !config) return;
 
-    // Calculate y position based on floorIndex and config parameters
-    const yPosition =
-      floorIndex *
-        (config.visualization.wall_height +
-          config.visualization.floor_thickness +
-          config.visualization.floor_spacing) +
-      config.visualization.room_floor_height +
-      0.25; // Offset above the floor
+    const wall_height = config.visualization.wall_height;
+    const floor_thickness = config.visualization.floor_thickness;
+    const floor_spacing = config.visualization.floor_spacing;
+    const room_floor_height = config.visualization.room_floor_height;
 
-    // Create a plane to hold the label
-    const planeSize = 50;
+    const yOffset = wall_height + floor_thickness + floor_spacing;
+
+    const yPosition = Math.max(
+      0,
+      floorIndex * yOffset + room_floor_height + 0.25
+    );
+
+    const planeSize = 20;
     const plane = BABYLON.MeshBuilder.CreatePlane(
-      "label",
+      `label-${text}`,
       { size: planeSize },
       scene
     );
 
-    // Position the plane correctly
-    plane.position = new BABYLON.Vector3(positionX, yPosition, positionZ);
+    plane.position.set(positionX, yPosition, positionZ);
     plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
     plane.isPickable = false;
 
-    // Create texture and attach text
-    const textureResolution = 2048;
+    const smallerTextureResolution = 512;
     const advancedTexture = GUI.AdvancedDynamicTexture.CreateForMesh(
       plane,
-      textureResolution,
-      textureResolution
+      smallerTextureResolution,
+      smallerTextureResolution
     );
-    const textBlock = new GUI.TextBlock();
+
+    const textBlock = new GUI.TextBlock("textBlock");
     textBlock.text = text;
     textBlock.color = "black";
-    textBlock.fontSize = 18;
-    textBlock.fontWeight = 500;
+    textBlock.fontSize = "16px";
+    textBlock.fontWeight = "normal";
     advancedTexture.addControl(textBlock);
 
-    // Cleanup function to remove the plane when the component unmounts or dependencies change
+    // Cleanup function
     return () => {
+      advancedTexture.dispose();
       plane.dispose();
     };
   }, [scene, positionX, positionZ, text, floorIndex, config]);

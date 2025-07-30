@@ -14,135 +14,102 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         config.visualization.floor_thickness +
         config.visualization.floor_spacing);
 
-    const baseMaterial = new BABYLON.StandardMaterial("baseMaterial", scene);
-    baseMaterial.alpha = 0.3;
-    baseMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
-    baseMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-
-    const highlightMaterial = new BABYLON.StandardMaterial(
-      "highlightMaterial",
-      scene
-    );
-    highlightMaterial.alpha = 0.7;
-    highlightMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 1);
-    highlightMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-
     const boxes = rooms.map((room, index) => {
-      const isComplex = room.baseBounds && room.extensionBounds;
-      let combinedMesh;
+      const parentNode = new BABYLON.TransformNode(
+        `parentNode-${index}`,
+        scene
+      );
 
-      if (isComplex) {
-        const parentNode = new BABYLON.TransformNode(
-          `parentNode-${index}`,
+      const createMesh = (name, bounds) => {
+        const width = bounds.maxX - bounds.minX;
+        const depth = bounds.maxZ - bounds.minZ;
+        const height = 2.95;
+
+        const box = BABYLON.MeshBuilder.CreateBox(
+          name,
+          { width, depth, height },
           scene
         );
+        box.position.x = (bounds.minX + bounds.maxX) / 2;
+        box.position.y = yLevel + height / 2;
+        box.position.z = (bounds.minZ + bounds.maxZ) / 2;
 
-        const { baseBounds, extensionBounds } = room;
-
-        const baseBox = BABYLON.MeshBuilder.CreateBox(
-          `baseBox-${index}`,
-          {
-            width: baseBounds.maxX - baseBounds.minX,
-            depth: baseBounds.maxZ - baseBounds.minZ,
-            height: 2.95,
-          },
+        const material = new BABYLON.StandardMaterial(
+          `material-${name}`,
           scene
         );
-        baseBox.position.x = (baseBounds.minX + baseBounds.maxX) / 2;
-        baseBox.position.y = yLevel + 2.95 / 2;
-        baseBox.position.z = (baseBounds.minZ + baseBounds.maxZ) / 2;
-        baseBox.material = baseMaterial.clone();
-        baseBox.isPickable = true;
-        baseBox.actionManager = new BABYLON.ActionManager(scene);
-        setupActions(baseBox, room.name);
+        material.alpha = 0.3;
+        material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
+        material.specularColor = new BABYLON.Color3(0, 0, 0);
+        box.material = material;
+        box.isPickable = true;
+        box.actionManager = new BABYLON.ActionManager(scene);
+        box.parent = parentNode;
+        return box;
+      };
 
-        baseBox.parent = parentNode;
-
-        const extensionBox = BABYLON.MeshBuilder.CreateBox(
-          `extensionBox-${index}`,
-          {
-            width: extensionBounds.maxX - extensionBounds.minX,
-            depth: extensionBounds.maxZ - extensionBounds.minZ,
-            height: 2.95,
-          },
-          scene
+      let meshes = [];
+      if (room.baseBounds) {
+        meshes.push(createMesh(`baseBox-${index}`, room.baseBounds));
+      }
+      if (room.extensionBoundsList) {
+        room.extensionBoundsList.forEach((eb, idx) => {
+          meshes.push(createMesh(`extensionBox-${index}-${idx}`, eb));
+        });
+      }
+      if (room.bounds && !room.baseBounds && !room.extensionBoundsList) {
+        meshes.push(
+          createMesh(`box-${index}-floor-${floorIndex}`, room.bounds)
         );
-        extensionBox.position.x =
-          (extensionBounds.minX + extensionBounds.maxX) / 2;
-        extensionBox.position.y = yLevel + 2.95 / 2;
-        extensionBox.position.z =
-          (extensionBounds.minZ + extensionBounds.maxZ) / 2;
-        extensionBox.material = baseMaterial.clone();
-        extensionBox.isPickable = true;
-        extensionBox.actionManager = new BABYLON.ActionManager(scene);
-        setupActions(extensionBox, room.name);
-
-        extensionBox.parent = parentNode;
-        combinedMesh = parentNode;
-      } else {
-        const { minX, minZ, maxX, maxZ } = room.bounds;
-        const width = maxX - minX;
-        const depth = maxZ - minZ;
-
-        combinedMesh = BABYLON.MeshBuilder.CreateBox(
-          `box-${index}-floor-${floorIndex}`,
-          { width, depth, height: 2.95 },
-          scene
-        );
-        combinedMesh.position.x = (minX + maxX) / 2;
-        combinedMesh.position.y = yLevel + 2.95 / 2;
-        combinedMesh.position.z = (minZ + maxZ) / 2;
-        combinedMesh.material = baseMaterial.clone();
-        combinedMesh.isPickable = true;
-        combinedMesh.actionManager = new BABYLON.ActionManager(scene);
-        setupActions(combinedMesh, room.name);
       }
 
-      return combinedMesh;
+      setupActions(room.name, meshes);
+      return { parentNode, roomName: room.name, meshes };
     });
 
-    function setupActions(mesh, roomName) {
-      mesh.actionManager.registerAction(
-        new BABYLON.ExecuteCodeAction(
-          BABYLON.ActionManager.OnPointerOverTrigger,
-          () => {
-            if (mesh.name !== selectedBoxName) {
-              mesh.material.alpha = 0.7;
+    function setupActions(roomName, meshes) {
+      meshes.forEach((mesh) => {
+        mesh.actionManager.registerAction(
+          new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPointerOverTrigger,
+            () => {
+              if (selectedBoxName !== roomName) {
+                meshes.forEach((m) => (m.material.alpha = 0.7));
+              }
             }
-          }
-        )
-      );
-      mesh.actionManager.registerAction(
-        new BABYLON.ExecuteCodeAction(
-          BABYLON.ActionManager.OnPointerOutTrigger,
-          () => {
-            if (mesh.name !== selectedBoxName) {
-              mesh.material.alpha = 0.3;
+          )
+        );
+        mesh.actionManager.registerAction(
+          new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPointerOutTrigger,
+            () => {
+              if (selectedBoxName !== roomName) {
+                meshes.forEach((m) => (m.material.alpha = 0.3));
+              }
             }
-          }
-        )
-      );
-      mesh.actionManager.registerAction(
-        new BABYLON.ExecuteCodeAction(
-          BABYLON.ActionManager.OnPickTrigger,
-          () => {
-            setSelectedRoomInfo({
-              name: roomName,
-              status: selectedRoomInfo?.status || "Available",
-            });
-            setSelectedBoxName(mesh.name);
-          }
-        )
-      );
+          )
+        );
+        mesh.actionManager.registerAction(
+          new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPickTrigger,
+            () => {
+              setSelectedRoomInfo({
+                name: roomName,
+                status: selectedRoomInfo?.status || "Available",
+              });
+              setSelectedBoxName(roomName);
+            }
+          )
+        );
+      });
     }
 
-    boxes.forEach((box) => {
-      const meshActionName = box.name;
-      if (meshActionName === selectedBoxName) {
-        box.material = highlightMaterial.clone();
-      } else {
-        box.material = baseMaterial.clone();
-      }
+    // Update highlight state
+    boxes.forEach(({ roomName, meshes }) => {
+      const isSelected = selectedBoxName === roomName;
+      meshes.forEach((mesh) => {
+        mesh.material.alpha = isSelected ? 0.7 : 0.3;
+      });
     });
 
     const onPointerDown = (evt, pickResult) => {
@@ -151,11 +118,10 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         setSelectedRoomInfo(null);
       }
     };
-
     scene.onPointerDown = onPointerDown;
 
     return () => {
-      boxes.forEach((box) => box.dispose());
+      boxes.forEach(({ parentNode }) => parentNode.dispose());
       scene.onPointerDown = null;
     };
   }, [rooms, scene, floorIndex, config, selectedBoxName]);
