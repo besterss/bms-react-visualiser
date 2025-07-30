@@ -1,6 +1,6 @@
 // FloorControls.jsx
 
-import React from 'react';
+import React from "react";
 
 const FloorControls = ({
   floors,
@@ -16,15 +16,15 @@ const FloorControls = ({
         {floors.toReversed().map((floor) => (
           <button
             key={floor.floorNumber}
-            className={activeFloor === floor.floorNumber ? 'active' : ''}
+            className={activeFloor === floor.floorNumber ? "active" : ""}
             onClick={() => onFloorChange(floor.floorNumber)}
           >
             {floor.name}
           </button>
         ))}
         <button
-          className={activeFloor === 'all' ? 'active' : ''}
-          onClick={() => onFloorChange('all')}
+          className={activeFloor === "all" ? "active" : ""}
+          onClick={() => onFloorChange("all")}
         >
           All Floors
         </button>
@@ -34,32 +34,32 @@ const FloorControls = ({
         <label>
           <input
             type="checkbox"
-            checked={activeDisplayOption === 'heatmap'}
-            onChange={() => onOptionToggle('heatmap')}
+            checked={activeDisplayOption === "heatmap"}
+            onChange={() => onOptionToggle("heatmap")}
           />
           Show Temperature
         </label>
         <label>
           <input
             type="checkbox"
-            checked={activeDisplayOption === 'wifi'}
-            onChange={() => onOptionToggle('wifi')}
+            checked={activeDisplayOption === "wifi"}
+            onChange={() => onOptionToggle("wifi")}
           />
           Show WiFi Signal Quality
         </label>
         <label>
           <input
             type="checkbox"
-            checked={activeDisplayOption === 'airQuality'}
-            onChange={() => onOptionToggle('airQuality')}
+            checked={activeDisplayOption === "airQuality"}
+            onChange={() => onOptionToggle("airQuality")}
           />
           Show Air Quality
         </label>
         <label>
           <input
             type="checkbox"
-            checked={activeDisplayOption === 'roomBoxes'}
-            onChange={() => onOptionToggle('roomBoxes')}
+            checked={activeDisplayOption === "roomBoxes"}
+            onChange={() => onOptionToggle("roomBoxes")}
           />
           Show Room Boxes
         </label>

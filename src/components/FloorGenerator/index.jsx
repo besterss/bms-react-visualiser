@@ -297,7 +297,6 @@ export class FloorGenerator {
               segmentConfig.position.z === -3.2)) // Pro novou nadrz
         ) {
           segmentMesh.material = this.materials.water;
-          console.log("Water material applied to retencni nadrz");
         }
 
         this.shadowGenerator.addShadowCaster(segmentMesh);

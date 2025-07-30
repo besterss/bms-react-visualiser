@@ -277,22 +277,17 @@ const BuildingViewer = () => {
           const shouldEnable =
             isViewingAllFloors || floorInfo.floorNumber === floorId;
           mesh.setEnabled(shouldEnable);
-
           // Nastavení materiálů pro viditelné meshe
           if (shouldEnable && floorInfo.floorNumber === floorId) {
-            // Předchozí kód, který nahrazoval materiály pro podlahy/segmenty/zdi
-            // Dodatečné podmínění pro "retencni nadrz"
             if (
               mesh.name.includes("_segment") &&
               mesh.material === generator.materials.water
             ) {
-              // pokud je již nastaven jako water, ponechán tak
-              console.log("Water material remains on retencni nadrz");
             } else if (
               mesh.name.includes("_floor") ||
               mesh.name.includes("_segment")
             ) {
-              mesh.material = generator.materials.floorDefault; // Může přepsat, ale použito podmínění
+              mesh.material = generator.materials.floorDefault;
             } else if (mesh.name.includes("_glass")) {
               mesh.material = generator.materials.glass;
             } else if (
@@ -333,9 +328,6 @@ const BuildingViewer = () => {
   const handleFloorChange = (floorId) => {
     const isViewingAllFloors = floorId === "all";
     const shouldShowGrass = isViewingAllFloors || floorId === 0;
-    console.log(`Aktuální podlaží: ${floorId}`);
-    console.log(`Zobrazuji všechny podlaží: ${isViewingAllFloors}`);
-    console.log(`shouldShowGrass: ${shouldShowGrass}`);
     showFloor(floorId);
     setRoomInfo((prev) => ({
       ...prev,
