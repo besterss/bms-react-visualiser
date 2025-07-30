@@ -10,9 +10,17 @@ export class FloorGenerator {
     this.floorData = [];
     this.materials = {};
     this.initializeMaterials();
-
+    this.materials.grass = this.initializeGrassMaterial();
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
+  }
+
+  initializeGrassMaterial() {
+    const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
+    grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.45, 0.0);
+    grassMaterial.alpha = 0.7;
+    grassMaterial.backFaceCulling = false;
+    return grassMaterial;
   }
 
   initializeMaterials() {
@@ -180,6 +188,17 @@ export class FloorGenerator {
     return new BABYLON.Color4(r, g, b, alpha);
   }
 
+  createGrassArea(dimensions, yLevel) {
+    const grassMesh = BABYLON.MeshBuilder.CreateGround(
+      "grassArea",
+      { width: dimensions.width, height: dimensions.depth },
+      this.scene
+    );
+    grassMesh.position.y = yLevel;
+    grassMesh.material = this.materials.grass;
+    return grassMesh;
+  }
+
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
       const yLevel =
@@ -188,17 +207,13 @@ export class FloorGenerator {
           this.config.visualization.floor_thickness +
           this.config.visualization.floor_spacing);
 
-      // Correctly determining if the floor is underground
       const isUnderground = floorConfig.type === "underground";
-
-      // Pass isUnderground to the createFloorFromConfig method
       const floorResult = this.createFloorFromConfig(
         floorConfig,
         yLevel,
         isUnderground
       );
 
-      // Register floors to receive shadows
       floorResult.meshes.forEach((mesh) => {
         if (mesh.name.includes("floor")) {
           mesh.receiveShadows = true;
@@ -211,9 +226,28 @@ export class FloorGenerator {
         name: floorConfig.name,
         area: floorResult.area,
         type: floorConfig.type,
-        isUnderground, // Store underground info for later use
+        isUnderground,
       });
     });
+
+    // Find the yLevel for 1NP specifically to draw the grass there
+    const firstAboveGroundIndex = this.config.floors.findIndex(
+      (floorConfig) => floorConfig.id === 0
+    );
+
+    if (firstAboveGroundIndex !== -1) {
+      const firstAboveGroundLevel =
+        firstAboveGroundIndex *
+        (this.config.visualization.wall_height +
+          this.config.visualization.floor_thickness +
+          this.config.visualization.floor_spacing);
+      // Create grass on 1NP level
+      const grassMesh = this.createGrassArea(
+        { width: 120, depth: 120 },
+        firstAboveGroundLevel + 0.01
+      );
+      this.allFloorMeshes[firstAboveGroundIndex].push(grassMesh);
+    }
 
     return {
       allFloorMeshes: this.allFloorMeshes,
@@ -224,7 +258,7 @@ export class FloorGenerator {
   createFloorFromConfig(floorConfig, yLevel, isUnderground) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
-    const layout = floorConfig.layout;
+    const layout = floorConfig.layout; // Ujistěte se, že layout je správně získán z floorConfig
     const wallHeight = this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
@@ -232,24 +266,24 @@ export class FloorGenerator {
     // Handle segments
     if (floorConfig.segments) {
       floorConfig.segments.forEach((segmentConfig) => {
-        const { width, depth, position } = segmentConfig;
+        const { width, depth, position, material } = segmentConfig;
         const segmentMesh = BABYLON.MeshBuilder.CreateBox(
           `${floorName}_segment`,
           { width: width - 0.1, height: roomFloorHeight, depth: depth - 0.1 },
           this.scene
         );
         segmentMesh.position.x = position.x;
-        segmentMesh.position.y = yLevel;
+        segmentMesh.position.y = yLevel + roomFloorHeight / 2;
         segmentMesh.position.z = position.z;
         segmentMesh.isPickable = true;
-        segmentMesh.material = this.materials.floorDefault;
         segmentMesh.metadata = {
           floorNumber: floorConfig.id,
         };
         this.shadowGenerator.addShadowCaster(segmentMesh);
         floorMeshes.push(segmentMesh);
       });
-    } else if (floorConfig.dimensions) {
+    } else if (floorConfig.dimensions && layout) {
+      // Potřebujete kontrolovat i layout při práci s dimensions
       // Handle rooms grid
       const dimensions = floorConfig.dimensions;
       const roomsGrid = layout.rooms_grid;
@@ -258,12 +292,11 @@ export class FloorGenerator {
       const startX = -dimensions.width / 2 + roomWidth / 2;
       const startZ = -dimensions.depth / 2 + roomDepth / 2;
       let roomIdx = 0;
+
       for (let row = 0; row < roomsGrid.rows; row++) {
         for (let col = 0; col < roomsGrid.columns; col++) {
           const centerX = startX + col * roomWidth;
           const centerZ = startZ + row * roomDepth;
-          const roomTemp = floorConfig.temperature_data[roomIdx] || 20;
-          const roomWifiSignal = floorConfig.wifi_signal_data[roomIdx] || 2;
           const roomFloorMesh = BABYLON.MeshBuilder.CreateBox(
             `${floorName}_room${roomIdx}_floor`,
             {
@@ -289,90 +322,95 @@ export class FloorGenerator {
     }
 
     // Handle walls
-    layout.walls.forEach((wall, index) => {
-      let wallMesh;
-      if (wall.type === "outline") {
-        for (let i = 0; i < wall.points.length; i++) {
-          const p1 = new BABYLON.Vector3(wall.points[i].x, 0, wall.points[i].z);
-          const p2 = new BABYLON.Vector3(
-            wall.points[(i + 1) % wall.points.length].x,
-            0,
-            wall.points[(i + 1) % wall.points.length].z
-          );
+    if (layout && layout.walls) {
+      // Zkontrolujte, zda layout i layout.walls jsou definovány
+      layout.walls.forEach((wall, index) => {
+        let wallMesh;
+        if (wall.type === "outline") {
+          for (let i = 0; i < wall.points.length; i++) {
+            const p1 = new BABYLON.Vector3(
+              wall.points[i].x,
+              0,
+              wall.points[i].z
+            );
+            const p2 = new BABYLON.Vector3(
+              wall.points[(i + 1) % wall.points.length].x,
+              0,
+              wall.points[(i + 1) % wall.points.length].z
+            );
+            wallMesh = this.createWallSegment(
+              p1,
+              p2,
+              `${floorName}_outline_${i}`,
+              yLevel,
+              wallHeight,
+              0.05,
+              isUnderground,
+              "glass"
+            );
+            floorMeshes.push(wallMesh);
+          }
+        } else if (wall.type === "partition") {
+          const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
+          const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
+          const partitionThickness = wall.partitionWidth || wallThickness;
+          const materialType = wall.materialType || "opaque";
           wallMesh = this.createWallSegment(
             p1,
             p2,
-            `${floorName}_outline_${i}`,
+            `${floorName}_partition_${index}_${materialType}`,
             yLevel,
             wallHeight,
-            0.05,
+            partitionThickness,
             isUnderground,
-            "glass"
+            materialType
+          );
+          floorMeshes.push(wallMesh);
+        } else if (wall.type === "circular") {
+          const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
+          const radius = wall.radius;
+          const circularThickness = wall.circularWidth || wallThickness;
+          wallMesh = this.createCircularWall(
+            center,
+            radius,
+            wallHeight,
+            circularThickness,
+            `${floorName}_circular_${index}`,
+            yLevel,
+            isUnderground
+          );
+          floorMeshes.push(wallMesh);
+        } else if (wall.type === "curved") {
+          const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
+          const start = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
+          const end = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
+          const radius = wall.radius;
+          const width = wall.width;
+          wallMesh = this.createCurvedWall(
+            center,
+            radius,
+            start,
+            end,
+            wallHeight,
+            wallThickness,
+            width,
+            `${floorName}_curved_${index}`,
+            yLevel,
+            isUnderground
           );
           floorMeshes.push(wallMesh);
         }
-      } else if (wall.type === "partition") {
-        const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
-        const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
-        const partitionThickness = wall.partitionWidth || wallThickness;
-        const materialType = wall.materialType || "opaque";
-        wallMesh = this.createWallSegment(
-          p1,
-          p2,
-          `${floorName}_partition_${index}_${materialType}`,
-          yLevel,
-          wallHeight,
-          partitionThickness,
-          isUnderground,
-          materialType
-        );
-        floorMeshes.push(wallMesh);
-      } else if (wall.type === "circular") {
-        const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
-        const radius = wall.radius;
-        const circularThickness = wall.circularWidth || wallThickness;
-        wallMesh = this.createCircularWall(
-          center,
-          radius,
-          wallHeight,
-          circularThickness,
-          `${floorName}_circular_${index}`,
-          yLevel,
-          isUnderground
-        );
-        floorMeshes.push(wallMesh);
-      } else if (wall.type === "curved") {
-        const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
-        const start = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
-        const end = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
-        const radius = wall.radius;
-        const width = wall.width;
-        wallMesh = this.createCurvedWall(
-          center,
-          radius,
-          start,
-          end,
-          wallHeight,
-          wallThickness,
-          width,
-          `${floorName}_curved_${index}`,
-          yLevel,
-          isUnderground
-        );
-        floorMeshes.push(wallMesh);
-      }
-      if (wallMesh) {
-        this.shadowGenerator.addShadowCaster(wallMesh);
-      }
-    });
+        if (wallMesh) {
+          this.shadowGenerator.addShadowCaster(wallMesh);
+        }
+      });
+    }
 
     const area = floorConfig.segments
       ? floorConfig.segments.reduce(
           (total, segment) => total + segment.width * segment.depth,
           0
         )
-      : floorConfig.dimensions
-      ? floorConfig.dimensions.width * floorConfig.dimensions.depth
       : 0;
 
     return {

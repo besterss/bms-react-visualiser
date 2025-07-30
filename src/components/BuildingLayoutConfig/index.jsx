@@ -6,8 +6,16 @@ export const CONFIG_DATA = {
       type: "underground",
       segments: [
         { width: 35.82, depth: 35.82, position: { x: 0, z: 0 } }, // kostka hlavni
-        { width: 78, depth: 46.9, position: { x: 0, z: 31.46 } }, //sklad
-        { width: 8, depth: 29, position: { x: -40, z: 40.3 } }, //retencni nadrz
+        {
+          width: 78,
+          depth: 46.9,
+          position: { x: 0, z: 31.46 },
+        }, //sklad
+        {
+          width: 8,
+          depth: 29,
+          position: { x: -40, z: 40.3 },
+        },
       ],
       layout: {
         rooms_grid: {
@@ -4377,8 +4385,8 @@ export const CONFIG_DATA = {
       name: "1NP",
       type: "aboveground",
       dimensions: {
-        width: 120,
-        depth: 120,
+        width: 35.82,
+        depth: 35.82,
       },
       layout: {
         rooms_grid: {

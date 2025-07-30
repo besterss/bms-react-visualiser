@@ -246,10 +246,18 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
+
     setCurrentActiveFloor(floorId);
     const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
-      (floor) => floor.floorNumber === floorId
+      (floor) => floor && floor.floorNumber === floorId
+    );
+
+    // Determine if grass should be visible
+    const shouldShowGrass = isViewingAllFloors || floorId === 0; // Tráva je viditelná pouze pro všechna podlaží nebo 1NP
+
+    console.log(
+      `Aktuální podlaží: ${floorId}, isViewingAllFloors: ${isViewingAllFloors}, shouldShowGrass: ${shouldShowGrass}`
     );
 
     if (scene) {
@@ -265,30 +273,42 @@ const BuildingViewer = () => {
 
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
+      if (!floorInfo) return; // Skip if floorInfo is undefined
       floorMeshes.forEach((mesh) => {
-        mesh.setEnabled(
-          isViewingAllFloors || floorInfo.floorNumber === floorId
-        );
-        if (floorInfo.floorNumber === floorId) {
-          if (mesh.name.includes("_floor") || mesh.name.includes("_segment")) {
-            mesh.material = generator.materials.floorDefault;
-          } else if (mesh.name.includes("_glass")) {
-            mesh.material = generator.materials.glass;
-          } else if (
-            mesh.name.includes("_partition") ||
-            mesh.name.includes("_circular") ||
-            mesh.name.includes("_curved")
-          ) {
-            mesh.material = generator.materials.wallOpaque;
-          } else if (mesh.name.includes("_outline")) {
-            mesh.material = generator.materials.glass;
+        const isGrassMesh = mesh.name.includes("grassArea");
+        if (isGrassMesh) {
+          mesh.setEnabled(shouldShowGrass);
+        } else {
+          const shouldEnable =
+            isViewingAllFloors || floorInfo.floorNumber === floorId;
+          mesh.setEnabled(shouldEnable);
+
+          // Nastavení materiálů pro viditelné meshe
+          if (shouldEnable && floorInfo.floorNumber === floorId) {
+            if (
+              mesh.name.includes("_floor") ||
+              mesh.name.includes("_segment")
+            ) {
+              mesh.material = generator.materials.floorDefault;
+            } else if (mesh.name.includes("_glass")) {
+              mesh.material = generator.materials.glass;
+            } else if (
+              mesh.name.includes("_partition") ||
+              mesh.name.includes("_circular") ||
+              mesh.name.includes("_curved")
+            ) {
+              mesh.material = generator.materials.wallOpaque;
+            } else if (mesh.name.includes("_outline")) {
+              mesh.material = generator.materials.glass;
+            }
           }
         }
       });
     });
 
+    // Nastavení informačního panelu
     if (!isViewingAllFloors) {
-      const selectedFloor = floors.find((f) => f.floorNumber === floorId);
+      const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {
         setRoomInfo((prev) => ({
           ...prev,
@@ -301,13 +321,18 @@ const BuildingViewer = () => {
         ...prev,
         activeFloor: "All Floors",
         floorArea: `${floors
-          .reduce((sum, f) => sum + f.area, 0)
+          .reduce((sum, f) => sum + (f ? f.area : 0), 0)
           .toFixed(2)} m²`,
       }));
     }
   };
 
   const handleFloorChange = (floorId) => {
+    const isViewingAllFloors = floorId === "all";
+    const shouldShowGrass = isViewingAllFloors || floorId === 0;
+    console.log(`Aktuální podlaží: ${floorId}`);
+    console.log(`Zobrazuji všechny podlaží: ${isViewingAllFloors}`);
+    console.log(`shouldShowGrass: ${shouldShowGrass}`);
     showFloor(floorId);
     setRoomInfo((prev) => ({
       ...prev,
