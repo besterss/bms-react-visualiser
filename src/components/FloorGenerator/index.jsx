@@ -18,6 +18,7 @@ export class FloorGenerator {
   initializeGrassMaterial() {
     const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
     grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.45, 0.0);
+    grassMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     grassMaterial.alpha = 0.7;
     grassMaterial.backFaceCulling = false;
     return grassMaterial;
