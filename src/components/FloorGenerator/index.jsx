@@ -11,6 +11,7 @@ export class FloorGenerator {
     this.materials = {};
     this.initializeMaterials();
     this.materials.grass = this.initializeGrassMaterial();
+    this.materials.water = this.initializeWaterMaterial();
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
   }
@@ -22,6 +23,14 @@ export class FloorGenerator {
     grassMaterial.alpha = 0.7;
     grassMaterial.backFaceCulling = false;
     return grassMaterial;
+  }
+
+  initializeWaterMaterial() {
+    const waterMaterial = new BABYLON.StandardMaterial("waterMat", this.scene);
+    waterMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.3, 1.0); // výraznější modrá
+    waterMaterial.specularColor = new BABYLON.Color3(0.8, 0.8, 0.8); // více lesklé
+    waterMaterial.backFaceCulling = false;
+    return waterMaterial;
   }
 
   initializeMaterials() {
@@ -215,6 +224,17 @@ export class FloorGenerator {
         isUnderground
       );
 
+      // Testovací objekt pro zobrazení materiálu
+      const testBox = BABYLON.MeshBuilder.CreateBox(
+        "testBox",
+        { size: 5 },
+        this.scene
+      );
+      testBox.position = new BABYLON.Vector3(0, 10, 0); // Ujistěte se, že je nad zemí a viditelný
+      testBox.material = this.materials.water; // Aplikujte vodní materiál
+
+      this.scene.addMesh(testBox); // Přidejte do scény (pokud je potřeba)
+
       floorResult.meshes.forEach((mesh) => {
         if (mesh.name.includes("floor")) {
           mesh.receiveShadows = true;
@@ -264,10 +284,9 @@ export class FloorGenerator {
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
 
-    // Handle segments
     if (floorConfig.segments) {
       floorConfig.segments.forEach((segmentConfig) => {
-        const { width, depth, position, material } = segmentConfig;
+        const { width, depth, position } = segmentConfig;
         const segmentMesh = BABYLON.MeshBuilder.CreateBox(
           `${floorName}_segment`,
           { width: width - 0.1, height: roomFloorHeight, depth: depth - 0.1 },
@@ -280,6 +299,18 @@ export class FloorGenerator {
         segmentMesh.metadata = {
           floorNumber: floorConfig.id,
         };
+
+        if (
+          segmentConfig.position &&
+          segmentConfig.position.x === -41.4 &&
+          segmentConfig.position.z === 40.3
+        ) {
+          segmentMesh.material = this.materials.water;
+          console.log("Water material applied to retencni nadrz");
+        } else {
+          segmentMesh.material = this.materials.floorDefault;
+        }
+
         this.shadowGenerator.addShadowCaster(segmentMesh);
         floorMeshes.push(segmentMesh);
       });

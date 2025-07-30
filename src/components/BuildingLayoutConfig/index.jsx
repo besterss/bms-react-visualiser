@@ -12,10 +12,10 @@ export const CONFIG_DATA = {
           position: { x: 0, z: 31.46 },
         }, //sklad
         {
-          width: 8,
+          width: 5.1,
           depth: 29,
-          position: { x: -40, z: 40.3 },
-        },
+          position: { x: -41.4, z: 40.3 },
+        }, //retencni nadrz
       ],
       layout: {
         rooms_grid: {

@@ -246,7 +246,6 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
-
     setCurrentActiveFloor(floorId);
     const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
@@ -254,11 +253,7 @@ const BuildingViewer = () => {
     );
 
     // Determine if grass should be visible
-    const shouldShowGrass = isViewingAllFloors || floorId === 0; // Tráva je viditelná pouze pro všechna podlaží nebo 1NP
-
-    console.log(
-      `Aktuální podlaží: ${floorId}, isViewingAllFloors: ${isViewingAllFloors}, shouldShowGrass: ${shouldShowGrass}`
-    );
+    const shouldShowGrass = isViewingAllFloors || floorId === 0;
 
     if (scene) {
       const camera = scene.getCameraByName("camera");
@@ -285,11 +280,19 @@ const BuildingViewer = () => {
 
           // Nastavení materiálů pro viditelné meshe
           if (shouldEnable && floorInfo.floorNumber === floorId) {
+            // Předchozí kód, který nahrazoval materiály pro podlahy/segmenty/zdi
+            // Dodatečné podmínění pro "retencni nadrz"
             if (
+              mesh.name.includes("_segment") &&
+              mesh.material === generator.materials.water
+            ) {
+              // pokud je již nastaven jako water, ponechán tak
+              console.log("Water material remains on retencni nadrz");
+            } else if (
               mesh.name.includes("_floor") ||
               mesh.name.includes("_segment")
             ) {
-              mesh.material = generator.materials.floorDefault;
+              mesh.material = generator.materials.floorDefault; // Může přepsat, ale použito podmínění
             } else if (mesh.name.includes("_glass")) {
               mesh.material = generator.materials.glass;
             } else if (
@@ -306,7 +309,7 @@ const BuildingViewer = () => {
       });
     });
 
-    // Nastavení informačního panelu
+    // Update informace
     if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {
