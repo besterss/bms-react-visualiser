@@ -291,13 +291,13 @@ export class FloorGenerator {
 
         if (
           segmentConfig.position &&
-          segmentConfig.position.x === -41.4 &&
-          segmentConfig.position.z === 40.3
+          ((segmentConfig.position.x === -41.4 &&
+            segmentConfig.position.z === 40.3) || // Pro existující nadrz
+            (segmentConfig.position.x === -41.85 &&
+              segmentConfig.position.z === -3.2)) // Pro novou nadrz
         ) {
           segmentMesh.material = this.materials.water;
           console.log("Water material applied to retencni nadrz");
-        } else {
-          segmentMesh.material = this.materials.floorDefault;
         }
 
         this.shadowGenerator.addShadowCaster(segmentMesh);

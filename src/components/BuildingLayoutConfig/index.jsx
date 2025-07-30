@@ -1470,6 +1470,7 @@ export const CONFIG_DATA = {
         { width: 78, depth: 47, position: { x: 0, z: 31.2 } }, //parkoviste
         { width: 3.5, depth: 31, position: { x: -39, z: 39 } },
         { width: 6, depth: 14.55, position: { x: -41, z: 18.05 } },
+        { width: 5, depth: 20.1, position: { x: -41.85, z: -3.2 } }, // retencni nadrz2
       ],
       layout: {
         rooms_grid: {
@@ -2415,6 +2416,34 @@ export const CONFIG_DATA = {
             start: { x: -39.35, z: 11.03 },
             end: { x: -44.2, z: 11.03 },
             partitionWidth: 0.4,
+          },
+          {
+            //retencni nadrz vrchni
+            type: "partition",
+            start: { x: -39.375, z: 6.905 },
+            end: { x: -44.325, z: 6.905 },
+            partitionWidth: 0.25,
+          },
+          {
+            //retencni nadrz spodni
+            type: "partition",
+            start: { x: -39.375, z: -13.22 },
+            end: { x: -44.325, z: -13.22 },
+            partitionWidth: 0.25,
+          },
+          {
+            //retencni nadrz leva
+            type: "partition",
+            start: { x: -44.2, z: 6.905 },
+            end: { x: -44.2, z: -13.22 },
+            partitionWidth: 0.25,
+          },
+          {
+            //retencni nadrz prava
+            type: "partition",
+            start: { x: -39.5, z: 6.905 },
+            end: { x: -39.5, z: -13.22 },
+            partitionWidth: 0.25,
           },
           {
             //01.48 - leva
@@ -4378,6 +4407,7 @@ export const CONFIG_DATA = {
         { x: -30.7, z: 36.7, label: "01.34" },
         { x: -31.8, z: 34.6, label: "01.37c" },
         { x: -30.2, z: 34.6, label: "01.37b" },
+        { x: -41.7, z: -3, label: "01.77" },
       ],
     },
     {
