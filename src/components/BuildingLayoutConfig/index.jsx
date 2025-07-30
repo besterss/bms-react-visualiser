@@ -11441,27 +11441,27 @@ export const CONFIG_DATA = {
           bounds: { minX: 0.8, minZ: -10, maxX: 5, maxZ: -5.825 },
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA",
+          name: "INDIVIDUÁLNÍ STUDOVNA - F",
           bounds: { minX: 4.425, minZ: -1.775, maxX: 6.45, maxZ: -0.425 },
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA",
+          name: "INDIVIDUÁLNÍ STUDOVNA - E ",
           bounds: { minX: 4.425, minZ: -3.175, maxX: 6.45, maxZ: -1.825 },
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA",
+          name: "INDIVIDUÁLNÍ STUDOVNA - D",
           bounds: { minX: 4.425, minZ: -4.575, maxX: 6.45, maxZ: -3.225 },
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA",
+          name: "INDIVIDUÁLNÍ STUDOVNA - A",
           bounds: { minX: 6.55, minZ: -1.775, maxX: 8.575, maxZ: -0.425 },
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA",
+          name: "INDIVIDUÁLNÍ STUDOVNA - B",
           bounds: { minX: 6.55, minZ: -3.175, maxX: 8.575, maxZ: -1.825 },
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA",
+          name: "INDIVIDUÁLNÍ STUDOVNA - C",
           bounds: { minX: 6.55, minZ: -4.575, maxX: 8.575, maxZ: -3.225 },
         },
       ],

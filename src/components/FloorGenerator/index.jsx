@@ -343,7 +343,6 @@ export class FloorGenerator {
 
     // Handle walls
     if (layout && layout.walls) {
-      // Zkontrolujte, zda layout i layout.walls jsou definovány
       layout.walls.forEach((wall, index) => {
         let wallMesh;
         if (wall.type === "outline") {
