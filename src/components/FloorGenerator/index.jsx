@@ -224,17 +224,6 @@ export class FloorGenerator {
         isUnderground
       );
 
-      // Testovací objekt pro zobrazení materiálu
-      const testBox = BABYLON.MeshBuilder.CreateBox(
-        "testBox",
-        { size: 5 },
-        this.scene
-      );
-      testBox.position = new BABYLON.Vector3(0, 10, 0); // Ujistěte se, že je nad zemí a viditelný
-      testBox.material = this.materials.water; // Aplikujte vodní materiál
-
-      this.scene.addMesh(testBox); // Přidejte do scény (pokud je potřeba)
-
       floorResult.meshes.forEach((mesh) => {
         if (mesh.name.includes("floor")) {
           mesh.receiveShadows = true;
