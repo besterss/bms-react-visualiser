@@ -9,6 +9,7 @@ import "./buildingviewer.css";
 import { showBubblesOnActiveFloor } from "../BubbleUtils";
 import RoomBoxes from "../RoomBoxes";
 import ParkingSpots from "../ParkingSpots"; // Import the new component
+import IconComponent from "../IconComponent";
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -19,6 +20,7 @@ const BuildingViewer = () => {
   const [allFloorMeshes, setAllFloorMeshes] = useState([]);
   const [currentActiveFloor, setCurrentActiveFloor] = useState(null);
   const [activeDisplayOption, setActiveDisplayOption] = useState(null);
+  const [selectedIconInfo, setSelectedIconInfo] = useState(null);
   const [labelData, setLabelData] = useState([]);
   const [roomInfo, setRoomInfo] = useState({
     temperature: "N/A",
@@ -36,6 +38,7 @@ const BuildingViewer = () => {
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
+
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
@@ -47,6 +50,7 @@ const BuildingViewer = () => {
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
+
     setupCamera(babylonScene, result.floorData);
     setupEventHandlers(babylonScene);
 
@@ -64,13 +68,17 @@ const BuildingViewer = () => {
         floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
+
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
     });
+
     const handleResize = () => {
       babylonEngine.resize();
     };
     window.addEventListener("resize", handleResize);
+
+    // Cleanup on unmount
     return () => {
       window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
@@ -95,19 +103,10 @@ const BuildingViewer = () => {
     }
   }, [engine, scene, currentActiveFloor, allFloorMeshes, activeDisplayOption]);
 
-  const handleOptionToggle = (option) => {
-    if (activeDisplayOption === option) {
-      setActiveDisplayOption(null);
-    } else {
-      setActiveDisplayOption(option);
-    }
-  };
-
   useEffect(() => {
     if (!engine || !scene || currentActiveFloor === null) return;
     const floors = CONFIG_DATA.floors;
     if (!floors) return;
-
     const currentFloor = floors.find(
       (floor) => floor.id === currentActiveFloor
     );
@@ -119,7 +118,6 @@ const BuildingViewer = () => {
         text: label.label,
         floorIndex,
       }));
-
       clearLabels(scene);
       setLabelData(newLabelData);
     } else {
@@ -128,7 +126,11 @@ const BuildingViewer = () => {
     }
   }, [engine, scene, currentActiveFloor, CONFIG_DATA]);
 
-  const setupCamera = (scene, floors, currentActiveFloor) => {
+  const handleOptionToggle = (option) => {
+    setActiveDisplayOption((prev) => (prev === option ? null : option));
+  };
+
+  const setupCamera = (scene, floors) => {
     if (!scene || !floors) return;
     const totalHeight =
       floors.length *
@@ -209,15 +211,12 @@ const BuildingViewer = () => {
 
   const setupEventHandlers = (scene) => {
     scene.onPointerObservable.add((pointerInfo) => {
-      if (pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
-        const mesh = pointerInfo.pickInfo.pickedMesh;
-        if (mesh.metadata && mesh.metadata.temperature !== undefined) {
-          setRoomInfo((prev) => ({
-            ...prev,
-            temperature: `${mesh.metadata.temperature.toFixed(1)}°C`,
-            wifiSignal: getWifiSignalLabel(mesh.metadata.wifiSignal),
-          }));
-        }
+      if (
+        pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK &&
+        (!pointerInfo.pickInfo.hit || !pointerInfo.pickInfo.pickedMesh.metadata)
+      ) {
+        // Pokud kliknete mimo objekt nebo objekt nemá metadata, zruší se vybraná ikona a info box
+        setSelectedIconInfo(null);
       }
     });
   };
@@ -250,9 +249,7 @@ const BuildingViewer = () => {
       (floor) => floor && floor.floorNumber === floorId
     );
 
-    // Determine if grass should be visible
     const shouldShowGrass = isViewingAllFloors || floorId === 0;
-
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
@@ -263,7 +260,6 @@ const BuildingViewer = () => {
         }
       }
     }
-
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       if (!floorInfo) return; // Skip if floorInfo is undefined
@@ -275,7 +271,6 @@ const BuildingViewer = () => {
           const shouldEnable =
             isViewingAllFloors || floorInfo.floorNumber === floorId;
           mesh.setEnabled(shouldEnable);
-          // Nastavení materiálů pro viditelné meshe
           if (shouldEnable && floorInfo.floorNumber === floorId) {
             if (
               mesh.name.includes("_segment") &&
@@ -302,7 +297,6 @@ const BuildingViewer = () => {
       });
     });
 
-    // Update informace
     if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {
@@ -324,8 +318,6 @@ const BuildingViewer = () => {
   };
 
   const handleFloorChange = (floorId) => {
-    const isViewingAllFloors = floorId === "all";
-    const shouldShowGrass = isViewingAllFloors || floorId === 0;
     showFloor(floorId);
     setRoomInfo((prev) => ({
       ...prev,
@@ -352,6 +344,9 @@ const BuildingViewer = () => {
   const currentFloorParking =
     CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
       ?.parking || [];
+  const activeIcons =
+    CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+      ?.icons || [];
 
   return (
     <div className="building-viewer">
@@ -362,12 +357,14 @@ const BuildingViewer = () => {
         activeDisplayOption={activeDisplayOption}
         onOptionToggle={handleOptionToggle}
       />
+
       <InfoBox roomInfo={roomInfo} />
       <canvas
         ref={canvasRef}
         className="render-canvas"
         style={{ width: "100%", height: "100%" }}
       />
+
       {scene && activeDisplayOption === "roomBoxes" && (
         <RoomBoxes
           rooms={activeRooms}
@@ -376,9 +373,12 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       )}
+
       {scene && currentFloorParking.length > 0 && (
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}
+
+      {/* Neomezené zobrazení labelů bez ohledu na stav */}
       {labelData.map((label, index) => (
         <LabelComponent
           key={index}
@@ -390,6 +390,49 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       ))}
+
+      {/* Ikony se zobrazí pouze pokud je aktivní volba "icons" */}
+      {scene &&
+        activeDisplayOption === "icons" &&
+        activeIcons.map((icon, index) => (
+          <IconComponent
+            key={index}
+            scene={scene}
+            positionX={icon.x}
+            positionZ={icon.z}
+            text={
+              icon.type === "camera"
+                ? "\uf030"
+                : icon.type === "thermometer"
+                ? "\uf2c7"
+                : "\uf111"
+            }
+            label={icon.label}
+            status={icon.status}
+            floorIndex={activeFloorIndex}
+            config={CONFIG_DATA}
+            onSelect={() => {
+              setSelectedIconInfo({
+                label: icon.label,
+                status: icon.status,
+              });
+            }}
+            isSelected={
+              selectedIconInfo && selectedIconInfo.label === icon.label
+            }
+          />
+        ))}
+
+      {selectedIconInfo && (
+        <div className="hover-info-box">
+          <p>
+            Icon: <span>{selectedIconInfo.label}</span>
+          </p>
+          <p>
+            Status: <span>{selectedIconInfo.status}</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 };

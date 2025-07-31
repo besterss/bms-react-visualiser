@@ -1,5 +1,3 @@
-// FloorControls.jsx
-
 import React from "react";
 
 const FloorControls = ({
@@ -62,6 +60,15 @@ const FloorControls = ({
             onChange={() => onOptionToggle("roomBoxes")}
           />
           Show Room Boxes
+        </label>
+        {/* New option for showing icons */}
+        <label>
+          <input
+            type="checkbox"
+            checked={activeDisplayOption === "icons"}
+            onChange={() => onOptionToggle("icons")}
+          />
+          Show Objects
         </label>
       </div>
     </div>
