@@ -104,29 +104,27 @@ const BuildingViewer = () => {
   };
 
   useEffect(() => {
-    if (!engine || !scene) return;
+    if (!engine || !scene || currentActiveFloor === null) return;
     const floors = CONFIG_DATA.floors;
-    if (!floors || currentActiveFloor === null) return;
-    const targetFloor = floors[1];
-    if (!targetFloor) return;
+    if (!floors) return;
 
-    if (currentActiveFloor !== "all") {
-      const currentFloor = floors.find(
-        (floor) => floor.id === currentActiveFloor
-      );
-      if (currentFloor && currentFloor.roomLabels) {
-        const floorIndex = floors.indexOf(currentFloor);
-        const newLabelData = currentFloor.roomLabels.map((label) => ({
-          positionX: label.x,
-          positionZ: label.z,
-          text: label.label,
-          floorIndex,
-        }));
-        clearLabels(scene);
-        setLabelData(newLabelData);
-      }
+    const currentFloor = floors.find(
+      (floor) => floor.id === currentActiveFloor
+    );
+    if (currentFloor && currentFloor.roomLabels) {
+      const floorIndex = floors.indexOf(currentFloor);
+      const newLabelData = currentFloor.roomLabels.map((label) => ({
+        positionX: label.x,
+        positionZ: label.z,
+        text: label.label,
+        floorIndex,
+      }));
+
+      clearLabels(scene);
+      setLabelData(newLabelData);
     } else {
       clearLabels(scene);
+      setLabelData([]);
     }
   }, [engine, scene, currentActiveFloor, CONFIG_DATA]);
 
