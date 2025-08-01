@@ -21,7 +21,7 @@ const BuildingViewer = () => {
   const [currentActiveFloor, setCurrentActiveFloor] = useState(null);
   const [activeDisplayOption, setActiveDisplayOption] = useState(null);
   const [selectedIconInfo, setSelectedIconInfo] = useState(null);
-  const [selectedThermometer, setSelectedThermometer] = useState(null); // New state for thermometer
+  const [selectedWifi, setSelectedWifi] = useState(null);
   const [labelData, setLabelData] = useState([]);
   const [roomInfo, setRoomInfo] = useState({
     temperature: "N/A",
@@ -224,9 +224,8 @@ const BuildingViewer = () => {
         pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK &&
         (!pointerInfo.pickInfo.hit || !pointerInfo.pickInfo.pickedMesh.metadata)
       ) {
-        // Reset selected icon and thermometer
         setSelectedIconInfo(null);
-        setSelectedThermometer(null); // Reset the thermometer when clicking outside
+        setSelectedWifi(null);
       }
     });
   };
@@ -396,6 +395,8 @@ const BuildingViewer = () => {
                 ? "\uf030"
                 : icon.type === "thermometer"
                 ? "\uf2c7"
+                : icon.type === "wifi"
+                ? "\uf1eb"
                 : "\uf111"
             }
             type={icon.type}
@@ -408,16 +409,16 @@ const BuildingViewer = () => {
                 label: icon.label,
                 status: icon.status,
               });
-              if (icon.type === "thermometer") {
-                setSelectedThermometer(icon.label);
+              if (icon.type === "wifi") {
+                setSelectedWifi(icon.label);
               } else {
-                setSelectedThermometer(null);
+                setSelectedWifi(null);
               }
             }}
             isSelected={
               selectedIconInfo && selectedIconInfo.label === icon.label
             }
-            showCircle={selectedThermometer === icon.label} // Control circle display
+            showCircle={selectedWifi === icon.label} // Control circle display
           />
         ))}
 

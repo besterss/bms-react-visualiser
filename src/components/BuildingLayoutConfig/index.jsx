@@ -5891,15 +5891,15 @@ export const CONFIG_DATA = {
         {
           x: -6,
           z: 3,
-          type: "thermometer",
-          label: "Teploměr - 1.10 / 2",
+          type: "wifi",
+          label: "Router - 1",
           status: "Aktivní",
         },
         {
           x: -6.5,
           z: -6,
-          type: "thermometer",
-          label: "Teploměr - 1.10 / 3",
+          type: "wifi",
+          label: "Router /  2",
           status: "Aktivní",
         },
         {

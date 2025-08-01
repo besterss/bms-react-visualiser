@@ -52,7 +52,7 @@ const IconComponent = ({
     });
 
     let circle;
-    if (type === "thermometer" && showCircle) {
+    if (type === "wifi" && showCircle) {
       const circleRange = 7.5;
       circle = BABYLON.MeshBuilder.CreateCylinder(
         `range-circle-${text}`,
