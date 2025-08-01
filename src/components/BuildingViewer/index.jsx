@@ -8,8 +8,9 @@ import InfoBox from "../InfoBox";
 import "./buildingviewer.css";
 import { showBubblesOnActiveFloor } from "../BubbleUtils";
 import RoomBoxes from "../RoomBoxes";
-import ParkingSpots from "../ParkingSpots"; // Import the new component
+import ParkingSpots from "../ParkingSpots";
 import IconComponent from "../IconComponent";
+import CircleDisplayBox from "../CircleDisplayBox";
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -29,6 +30,7 @@ const BuildingViewer = () => {
     floorArea: "N/A",
     activeFloor: "N/A",
   });
+  const [circleDisplayMode, setCircleDisplayMode] = useState("click");
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -39,6 +41,7 @@ const BuildingViewer = () => {
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
+
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
@@ -50,7 +53,6 @@ const BuildingViewer = () => {
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
-
     setupCamera(babylonScene, result.floorData);
 
     if (result.floorData.length > 0) {
@@ -68,7 +70,7 @@ const BuildingViewer = () => {
       }));
     }
 
-    setupEventHandlers(babylonScene); // Moved after scene is set
+    setupEventHandlers(babylonScene);
 
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
@@ -79,7 +81,6 @@ const BuildingViewer = () => {
     };
     window.addEventListener("resize", handleResize);
 
-    // Cleanup on unmount
     return () => {
       window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
@@ -112,12 +113,11 @@ const BuildingViewer = () => {
       (floor) => floor.id === currentActiveFloor
     );
     if (currentFloor && currentFloor.roomLabels) {
-      const floorIndex = floors.indexOf(currentFloor);
       const newLabelData = currentFloor.roomLabels.map((label) => ({
         positionX: label.x,
         positionZ: label.z,
         text: label.label,
-        floorIndex,
+        floorIndex: floors.indexOf(currentFloor),
       }));
       clearLabels(scene);
       setLabelData(newLabelData);
@@ -133,13 +133,11 @@ const BuildingViewer = () => {
 
   const setupCamera = (scene, floors, currentActiveFloor) => {
     if (!scene || !floors) return;
-
     const totalHeight =
       floors.length *
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.id === currentActiveFloor
     );
@@ -149,9 +147,7 @@ const BuildingViewer = () => {
           (CONFIG_DATA.visualization.wall_height +
             CONFIG_DATA.visualization.floor_thickness)
         : totalHeight / 2;
-
     let camera = scene.getCameraByName("camera");
-
     if (camera) {
       camera.setPosition(
         new BABYLON.Vector3(
@@ -191,12 +187,10 @@ const BuildingViewer = () => {
     totalHeight
   ) => {
     if (!camera || activeFloorIndex === undefined) return;
-
     if (isAllFloors) {
-      // Reset the camera to show all floors
       camera.setTarget(BABYLON.Vector3.Zero());
-      camera.radius = totalHeight * 3; // Ensure the radius allows a full view of all floors
-      camera.beta = Math.PI / 4; // Standard viewing angle
+      camera.radius = totalHeight * 3;
+      camera.beta = Math.PI / 4;
     } else {
       const floorHeight =
         CONFIG_DATA.visualization.wall_height +
@@ -209,12 +203,11 @@ const BuildingViewer = () => {
 
   const resetCameraForAllFloors = (camera, totalHeight) => {
     if (!camera) return;
-
-    camera.setTarget(BABYLON.Vector3.Zero()); // Center the target
-    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0)); // Default position
-    camera.alpha = -Math.PI / 2; // Initial rotation angle
-    camera.beta = Math.PI / 4; // Tilt angle to view all floors
-    camera.radius = totalHeight * 3; // Set radius to view all floors completely
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0));
+    camera.alpha = -Math.PI / 2;
+    camera.beta = Math.PI / 4;
+    camera.radius = totalHeight * 3;
   };
 
   const setupEventHandlers = (scene) => {
@@ -255,7 +248,7 @@ const BuildingViewer = () => {
     }
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
-      if (!floorInfo) return; // Skip if floorInfo is undefined
+      if (!floorInfo) return;
       floorMeshes.forEach((mesh) => {
         const isGrassMesh = mesh.name.includes("grassArea");
         if (isGrassMesh) {
@@ -327,6 +320,28 @@ const BuildingViewer = () => {
       });
   };
 
+  useEffect(() => {
+    if (scene && activeDisplayOption === "icons") {
+      const iconsForActiveFloor =
+        CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+          ?.icons || [];
+
+      if (circleDisplayMode === "all") {
+        iconsForActiveFloor.forEach((icon) => {
+          const circleName = `range-circle-${icon.label}`;
+          const circleMesh = scene.getMeshByName(circleName);
+          if (circleMesh) {
+            circleMesh.setEnabled(true); // Enable mesh if mode is "all"
+          }
+        });
+      } else {
+        scene.meshes
+          .filter((mesh) => mesh.name.startsWith("range-circle"))
+          .forEach((circleMesh) => circleMesh.setEnabled(false)); // Disable otherwise
+      }
+    }
+  }, [scene, activeDisplayOption, circleDisplayMode, currentActiveFloor]);
+
   const activeFloorIndex = floorData.findIndex(
     (floor) => floor.floorNumber === currentActiveFloor
   );
@@ -349,14 +364,13 @@ const BuildingViewer = () => {
         onFloorChange={handleFloorChange}
         activeDisplayOption={activeDisplayOption}
         onOptionToggle={handleOptionToggle}
+        onCircleDisplayModeChange={setCircleDisplayMode}
       />
-      <InfoBox roomInfo={roomInfo} />
       <canvas
         ref={canvasRef}
         className="render-canvas"
         style={{ width: "100%", height: "100%" }}
       />
-
       {scene && activeDisplayOption === "roomBoxes" && (
         <RoomBoxes
           rooms={activeRooms}
@@ -365,11 +379,9 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       )}
-
       {scene && currentFloorParking.length > 0 && (
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}
-
       {labelData.map((label, index) => (
         <LabelComponent
           key={index}
@@ -381,7 +393,6 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       ))}
-
       {scene &&
         activeDisplayOption === "icons" &&
         activeIcons.map((icon, index) => (
@@ -418,10 +429,13 @@ const BuildingViewer = () => {
             isSelected={
               selectedIconInfo && selectedIconInfo.label === icon.label
             }
-            showCircle={selectedWifi === icon.label} // Control circle display
+            showCircle={
+              circleDisplayMode === "click"
+                ? selectedWifi === icon.label
+                : circleDisplayMode === "all"
+            }
           />
         ))}
-
       {selectedIconInfo && (
         <div className="hover-info-box">
           <p>
@@ -431,6 +445,19 @@ const BuildingViewer = () => {
             Status: <span>{selectedIconInfo.status}</span>
           </p>
         </div>
+      )}
+      <InfoBox roomInfo={roomInfo} />
+      {/* Show the CircleDisplayBox only when "Show Objects" is active */}
+      {activeDisplayOption === "icons" && (
+        <CircleDisplayBox
+          currentMode={circleDisplayMode}
+          onModeChange={(mode) => {
+            setCircleDisplayMode(mode);
+            if (mode === "click") {
+              setSelectedWifi(null);
+            }
+          }}
+        />
       )}
     </div>
   );

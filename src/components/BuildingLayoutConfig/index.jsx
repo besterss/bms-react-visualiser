@@ -5897,9 +5897,23 @@ export const CONFIG_DATA = {
         },
         {
           x: -6.5,
-          z: -6,
+          z: -8,
           type: "wifi",
           label: "Router /  2",
+          status: "Aktivní",
+        },
+        {
+          x: 11,
+          z: -8,
+          type: "wifi",
+          label: "Router /  3",
+          status: "Aktivní",
+        },
+        {
+          x: 11,
+          z: 3,
+          type: "wifi",
+          label: "Router /  4",
           status: "Aktivní",
         },
         {
