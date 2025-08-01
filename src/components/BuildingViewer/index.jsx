@@ -213,16 +213,21 @@ const BuildingViewer = () => {
   const setupEventHandlers = (scene) => {
     if (!scene) return;
     scene.onPointerObservable.add((pointerInfo) => {
-      if (
-        pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK &&
-        (!pointerInfo.pickInfo.hit || !pointerInfo.pickInfo.pickedMesh.metadata)
-      ) {
-        setSelectedIconInfo(null);
-        setSelectedWifi(null);
+      if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
+        const pickedMesh = pointerInfo.pickInfo.pickedMesh;
+
+        if (
+          !pointerInfo.pickInfo.hit ||
+          !pickedMesh ||
+          !pickedMesh.metadata ||
+          !pickedMesh.metadata.icon
+        ) {
+          setSelectedIconInfo(null);
+          setSelectedWifi(null);
+        }
       }
     });
   };
-
   const showFloor = (
     floorId,
     meshes = allFloorMeshes,
@@ -235,7 +240,7 @@ const BuildingViewer = () => {
     const activeFloorIndex = floors.findIndex(
       (floor) => floor && floor.floorNumber === floorId
     );
-    const shouldShowGrass = isViewingAllFloors || floorId === 0;
+    const shouldShowGrass = isViewingAllFloors;
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
@@ -394,7 +399,7 @@ const BuildingViewer = () => {
         />
       ))}
       {scene &&
-        activeDisplayOption === "icons" &&
+        activeDisplayOption === "icons" && // Ensure the condition is correct
         activeIcons.map((icon, index) => (
           <IconComponent
             key={index}
@@ -419,6 +424,7 @@ const BuildingViewer = () => {
               setSelectedIconInfo({
                 label: icon.label,
                 status: icon.status,
+                healthStatus: icon.healthStatus,
               });
               if (icon.type === "wifi") {
                 setSelectedWifi(icon.label);
@@ -434,8 +440,10 @@ const BuildingViewer = () => {
                 ? selectedWifi === icon.label
                 : circleDisplayMode === "all"
             }
+            healthStatus={icon.healthStatus}
           />
         ))}
+
       {selectedIconInfo && (
         <div className="hover-info-box">
           <p>
@@ -444,10 +452,17 @@ const BuildingViewer = () => {
           <p>
             Status: <span>{selectedIconInfo.status}</span>
           </p>
+          {selectedIconInfo.healthStatus && (
+            <p>
+              Health Status: <span>{selectedIconInfo.healthStatus}</span>
+            </p>
+          )}
         </div>
       )}
+
       <InfoBox roomInfo={roomInfo} />
-      {/* Show the CircleDisplayBox only when "Show Objects" is active */}
+
+      {/* Kontrola zobrazení CircleDisplayBox */}
       {activeDisplayOption === "icons" && (
         <CircleDisplayBox
           currentMode={circleDisplayMode}
