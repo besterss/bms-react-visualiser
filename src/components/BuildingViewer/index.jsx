@@ -21,6 +21,7 @@ const BuildingViewer = () => {
   const [currentActiveFloor, setCurrentActiveFloor] = useState(null);
   const [activeDisplayOption, setActiveDisplayOption] = useState(null);
   const [selectedIconInfo, setSelectedIconInfo] = useState(null);
+  const [selectedThermometer, setSelectedThermometer] = useState(null); // New state for thermometer
   const [labelData, setLabelData] = useState([]);
   const [roomInfo, setRoomInfo] = useState({
     temperature: "N/A",
@@ -38,7 +39,6 @@ const BuildingViewer = () => {
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
-
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
@@ -52,7 +52,6 @@ const BuildingViewer = () => {
     setAllFloorMeshes(result.allFloorMeshes);
 
     setupCamera(babylonScene, result.floorData);
-    setupEventHandlers(babylonScene);
 
     if (result.floorData.length > 0) {
       showFloor(
@@ -68,6 +67,8 @@ const BuildingViewer = () => {
         floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
+
+    setupEventHandlers(babylonScene); // Moved after scene is set
 
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
@@ -130,13 +131,15 @@ const BuildingViewer = () => {
     setActiveDisplayOption((prev) => (prev === option ? null : option));
   };
 
-  const setupCamera = (scene, floors) => {
+  const setupCamera = (scene, floors, currentActiveFloor) => {
     if (!scene || !floors) return;
+
     const totalHeight =
       floors.length *
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
+
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.id === currentActiveFloor
     );
@@ -146,7 +149,9 @@ const BuildingViewer = () => {
           (CONFIG_DATA.visualization.wall_height +
             CONFIG_DATA.visualization.floor_thickness)
         : totalHeight / 2;
+
     let camera = scene.getCameraByName("camera");
+
     if (camera) {
       camera.setPosition(
         new BABYLON.Vector3(
@@ -186,10 +191,12 @@ const BuildingViewer = () => {
     totalHeight
   ) => {
     if (!camera || activeFloorIndex === undefined) return;
+
     if (isAllFloors) {
+      // Reset the camera to show all floors
       camera.setTarget(BABYLON.Vector3.Zero());
-      camera.radius = totalHeight * 3;
-      camera.beta = Math.PI / 4;
+      camera.radius = totalHeight * 3; // Ensure the radius allows a full view of all floors
+      camera.beta = Math.PI / 4; // Standard viewing angle
     } else {
       const floorHeight =
         CONFIG_DATA.visualization.wall_height +
@@ -202,38 +209,26 @@ const BuildingViewer = () => {
 
   const resetCameraForAllFloors = (camera, totalHeight) => {
     if (!camera) return;
-    camera.setTarget(BABYLON.Vector3.Zero());
-    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0));
-    camera.alpha = -Math.PI / 2;
-    camera.beta = Math.PI / 4;
-    camera.radius = totalHeight * 3;
+
+    camera.setTarget(BABYLON.Vector3.Zero()); // Center the target
+    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0)); // Default position
+    camera.alpha = -Math.PI / 2; // Initial rotation angle
+    camera.beta = Math.PI / 4; // Tilt angle to view all floors
+    camera.radius = totalHeight * 3; // Set radius to view all floors completely
   };
 
   const setupEventHandlers = (scene) => {
+    if (!scene) return;
     scene.onPointerObservable.add((pointerInfo) => {
       if (
         pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK &&
         (!pointerInfo.pickInfo.hit || !pointerInfo.pickInfo.pickedMesh.metadata)
       ) {
-        // Pokud kliknete mimo objekt nebo objekt nemá metadata, zruší se vybraná ikona a info box
+        // Reset selected icon and thermometer
         setSelectedIconInfo(null);
+        setSelectedThermometer(null); // Reset the thermometer when clicking outside
       }
     });
-  };
-
-  const getWifiSignalLabel = (signal) => {
-    switch (signal) {
-      case 0:
-        return "No Signal";
-      case 1:
-        return "Weak";
-      case 2:
-        return "Normal";
-      case 3:
-        return "Strong";
-      default:
-        return "Unknown";
-    }
   };
 
   const showFloor = (
@@ -248,7 +243,6 @@ const BuildingViewer = () => {
     const activeFloorIndex = floors.findIndex(
       (floor) => floor && floor.floorNumber === floorId
     );
-
     const shouldShowGrass = isViewingAllFloors || floorId === 0;
     if (scene) {
       const camera = scene.getCameraByName("camera");
@@ -296,7 +290,6 @@ const BuildingViewer = () => {
         }
       });
     });
-
     if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {
@@ -338,6 +331,7 @@ const BuildingViewer = () => {
   const activeFloorIndex = floorData.findIndex(
     (floor) => floor.floorNumber === currentActiveFloor
   );
+
   const activeRooms =
     CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
       ?.rooms || [];
@@ -357,7 +351,6 @@ const BuildingViewer = () => {
         activeDisplayOption={activeDisplayOption}
         onOptionToggle={handleOptionToggle}
       />
-
       <InfoBox roomInfo={roomInfo} />
       <canvas
         ref={canvasRef}
@@ -378,7 +371,6 @@ const BuildingViewer = () => {
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}
 
-      {/* Neomezené zobrazení labelů bez ohledu na stav */}
       {labelData.map((label, index) => (
         <LabelComponent
           key={index}
@@ -391,7 +383,6 @@ const BuildingViewer = () => {
         />
       ))}
 
-      {/* Ikony se zobrazí pouze pokud je aktivní volba "icons" */}
       {scene &&
         activeDisplayOption === "icons" &&
         activeIcons.map((icon, index) => (
@@ -407,6 +398,7 @@ const BuildingViewer = () => {
                 ? "\uf2c7"
                 : "\uf111"
             }
+            type={icon.type}
             label={icon.label}
             status={icon.status}
             floorIndex={activeFloorIndex}
@@ -416,10 +408,16 @@ const BuildingViewer = () => {
                 label: icon.label,
                 status: icon.status,
               });
+              if (icon.type === "thermometer") {
+                setSelectedThermometer(icon.label);
+              } else {
+                setSelectedThermometer(null);
+              }
             }}
             isSelected={
               selectedIconInfo && selectedIconInfo.label === icon.label
             }
+            showCircle={selectedThermometer === icon.label} // Control circle display
           />
         ))}
 

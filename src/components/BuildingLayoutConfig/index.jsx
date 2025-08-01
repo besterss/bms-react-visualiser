@@ -5864,7 +5864,7 @@ export const CONFIG_DATA = {
           x: 15.5,
           z: 15.5,
           type: "thermometer",
-          label: "Teploměr - 1.10",
+          label: "Teploměr - 1.10 / 1",
           status: "Aktivní",
         },
         {
@@ -5886,6 +5886,20 @@ export const CONFIG_DATA = {
           z: -17,
           type: "thermometer",
           label: "Teploměr - 1.14",
+          status: "Aktivní",
+        },
+        {
+          x: -6,
+          z: 3,
+          type: "thermometer",
+          label: "Teploměr - 1.10 / 2",
+          status: "Aktivní",
+        },
+        {
+          x: -6.5,
+          z: -6,
+          type: "thermometer",
+          label: "Teploměr - 1.10 / 3",
           status: "Aktivní",
         },
         {
