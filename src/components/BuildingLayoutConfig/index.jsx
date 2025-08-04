@@ -144,6 +144,14 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
+            //01.67 - prava 2
+            type: "partition",
+            start: { x: -3.95, z: 10.15 },
+            end: { x: -3.95, z: 16.145 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
             //01.67 - spodni
             type: "partition",
             start: { x: -6.6, z: 9.7 },

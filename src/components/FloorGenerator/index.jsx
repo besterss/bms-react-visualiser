@@ -387,13 +387,24 @@ export class FloorGenerator {
           const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
           const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
           const partitionThickness = wall.partitionWidth || wallThickness;
+
+          const baseYLevel = yLevel;
+
+          let partitionYLevel = baseYLevel;
+          let partitionHeight = wallHeight;
+
+          if (wall.yLevel) {
+            partitionYLevel = baseYLevel + wall.yLevel;
+            partitionHeight = wallHeight - wall.yLevel;
+          }
+
           const materialType = wall.materialType || "opaque";
           wallMesh = this.createWallSegment(
             p1,
             p2,
             `${floorName}_partition_${index}_${materialType}`,
-            yLevel,
-            wallHeight,
+            partitionYLevel,
+            partitionHeight,
             partitionThickness,
             isUnderground,
             materialType
