@@ -14,6 +14,8 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         config.visualization.floor_thickness +
         config.visualization.floor_spacing);
 
+    let roomMeshes = [];
+
     const boxes = rooms.map((room, index) => {
       const parentNode = new BABYLON.TransformNode(
         `parentNode-${index}`,
@@ -24,7 +26,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         const width = bounds.maxX - bounds.minX;
         const depth = bounds.maxZ - bounds.minZ;
         const height = 2.95;
-
         const box = BABYLON.MeshBuilder.CreateBox(
           name,
           { width, depth, height },
@@ -33,7 +34,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         box.position.x = (bounds.minX + bounds.maxX) / 2;
         box.position.y = yLevel + height / 2;
         box.position.z = (bounds.minZ + bounds.maxZ) / 2;
-
         const material = new BABYLON.StandardMaterial(
           `material-${name}`,
           scene
@@ -63,7 +63,9 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         );
       }
 
+      roomMeshes = [...roomMeshes, ...meshes];
       setupActions(room.name, meshes);
+
       return { parentNode, roomName: room.name, meshes };
     });
 
@@ -113,11 +115,12 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
     });
 
     const onPointerDown = (evt, pickResult) => {
-      if (!pickResult.hit || !pickResult.pickedMesh) {
+      if (!pickResult.hit || !roomMeshes.includes(pickResult.pickedMesh)) {
         setSelectedBoxName(null);
         setSelectedRoomInfo(null);
       }
     };
+
     scene.onPointerDown = onPointerDown;
 
     return () => {
@@ -127,7 +130,9 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
   }, [rooms, scene, floorIndex, config, selectedBoxName]);
 
   useEffect(() => {
+    // Reset selection when floor index changes
     setSelectedRoomInfo(null);
+    setSelectedBoxName(null);
   }, [floorIndex]);
 
   return (
