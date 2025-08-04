@@ -21,7 +21,7 @@ const IconComponent = ({
     const floor_thickness = config.visualization.floor_thickness;
     const yOffset = wall_height + floor_thickness;
     const yPosition = Math.max(0, floorIndex * yOffset + 1);
-    const planeSize = 8;
+    const planeSize = 1;
 
     const plane = BABYLON.MeshBuilder.CreatePlane(
       `icon-${text}`,
@@ -36,7 +36,7 @@ const IconComponent = ({
     const iconBlock = new GUI.TextBlock();
     iconBlock.text = text;
     iconBlock.color = isSelected ? "#7F7FFF" : "white";
-    iconBlock.fontSize = "100px";
+    iconBlock.fontSize = "800px";
     iconBlock.fontFamily = "FontAwesome";
     iconTexture.addControl(iconBlock);
 
