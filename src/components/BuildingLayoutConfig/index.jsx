@@ -8310,6 +8310,13 @@ export const CONFIG_DATA = {
             partitionWidth: 0.55,
           },
           {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: 10.05, z: 9.6 },
+            end: { x: 10.05, z: -10.1 },
+            railingHeight: 1.2, // Specifikovat výšku zábradlí
+          },
+          {
             //sachta2 - spodni
             type: "partition",
             start: { x: 5.05, z: 15.2 },
@@ -8717,6 +8724,20 @@ export const CONFIG_DATA = {
               { x: 17.15, z: 17.15 },
               { x: -17.15, z: 17.15 },
             ],
+          },
+          {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: -10.2, z: -10.05 },
+            end: { x: 6.55, z: -10.05 },
+            railingHeight: 1.2, // Specifikovat výšku zábradlí
+          },
+          {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: 10.2, z: -10.05 },
+            end: { x: 17.15, z: -10.05 },
+            railingHeight: 1.2, // Specifikovat výšku zábradlí
           },
           {
             //okna
@@ -10177,6 +10198,21 @@ export const CONFIG_DATA = {
               { x: -17.15, z: 17.15 },
             ],
           },
+          {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: -10.05, z: -10.2 },
+            end: { x: -10.05, z: -17.15 },
+            railingHeight: 1.2, // Specifikovat výšku zábradlí
+          },
+          {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: -10.05, z: 9.6 },
+            end: { x: -10.05, z: -7.8 },
+            railingHeight: 1.2, // Specifikovat výšku zábradlí
+          },
+
           {
             //okna
             type: "partition",
@@ -12879,15 +12915,17 @@ export const CONFIG_DATA = {
           },
           {
             //Y osa - vlevo
-            type: "partition",
+            type: "railing",
             start: { x: -10.2, z: -16.8 },
             end: { x: -10.2, z: 16.8 },
+            railingHeight: 3,
           },
           {
             //Y osa - vlevo
-            type: "partition",
+            type: "railing",
             start: { x: 10.2, z: -16.8 },
             end: { x: 10.2, z: 16.8 },
+            railingHeight: 3,
           },
           {
             // Technické hnízdo - vlevo

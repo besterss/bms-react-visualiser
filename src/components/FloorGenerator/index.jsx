@@ -12,6 +12,7 @@ export class FloorGenerator {
     this.initializeMaterials();
     this.materials.grass = this.initializeGrassMaterial();
     this.materials.water = this.initializeWaterMaterial();
+    this.materials.railing = this.initializeRailingMaterial();
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
   }
@@ -23,6 +24,21 @@ export class FloorGenerator {
     grassMaterial.alpha = 0.7;
     grassMaterial.backFaceCulling = false;
     return grassMaterial;
+  }
+
+  initializeRailingMaterial() {
+    const railingMaterial = new BABYLON.StandardMaterial(
+      "railingMat",
+      this.scene
+    );
+    railingMaterial.diffuseColor = new BABYLON.Color3(
+      203 / 255,
+      211 / 255,
+      225 / 255
+    ); // Světle modrý odstín
+    railingMaterial.alpha = 0.5; // Průhlednost
+    railingMaterial.backFaceCulling = false;
+    return railingMaterial;
   }
 
   initializeWaterMaterial() {
@@ -115,10 +131,14 @@ export class FloorGenerator {
     this.materials.glass = new BABYLON.StandardMaterial("glassMat", this.scene);
 
     // Light gray color for frosted effect
-    this.materials.glass.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.glass.diffuseColor = new BABYLON.Color3(
+      203 / 255,
+      211 / 255,
+      225 / 255
+    );
 
     // Higher transparency for more frosted look
-    this.materials.glass.alpha = 0.2; // Adjust as needed
+    this.materials.glass.alpha = 0.5; // Adjust as needed
 
     // Ensure backface culling to improve render efficiency
     this.materials.glass.backFaceCulling = true;
@@ -268,7 +288,7 @@ export class FloorGenerator {
   createFloorFromConfig(floorConfig, yLevel, isUnderground) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
-    const layout = floorConfig.layout; // Ujistěte se, že layout je správně získán z floorConfig
+    const layout = floorConfig.layout;
     const wallHeight = this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
@@ -288,23 +308,19 @@ export class FloorGenerator {
         segmentMesh.metadata = {
           floorNumber: floorConfig.id,
         };
-
         if (
           segmentConfig.position &&
           ((segmentConfig.position.x === -41.4 &&
-            segmentConfig.position.z === 40.3) || // Pro existující nadrz
+            segmentConfig.position.z === 40.3) ||
             (segmentConfig.position.x === -41.85 &&
-              segmentConfig.position.z === -3.2)) // Pro novou nadrz
+              segmentConfig.position.z === -3.2))
         ) {
           segmentMesh.material = this.materials.water;
         }
-
         this.shadowGenerator.addShadowCaster(segmentMesh);
         floorMeshes.push(segmentMesh);
       });
     } else if (floorConfig.dimensions && layout) {
-      // Potřebujete kontrolovat i layout při práci s dimensions
-      // Handle rooms grid
       const dimensions = floorConfig.dimensions;
       const roomsGrid = layout.rooms_grid;
       const roomWidth = dimensions.width / roomsGrid.columns;
@@ -312,7 +328,6 @@ export class FloorGenerator {
       const startX = -dimensions.width / 2 + roomWidth / 2;
       const startZ = -dimensions.depth / 2 + roomDepth / 2;
       let roomIdx = 0;
-
       for (let row = 0; row < roomsGrid.rows; row++) {
         for (let col = 0; col < roomsGrid.columns; col++) {
           const centerX = startX + col * roomWidth;
@@ -341,7 +356,6 @@ export class FloorGenerator {
       }
     }
 
-    // Handle walls
     if (layout && layout.walls) {
       layout.walls.forEach((wall, index) => {
         let wallMesh;
@@ -418,7 +432,22 @@ export class FloorGenerator {
             isUnderground
           );
           floorMeshes.push(wallMesh);
+        } else if (wall.type === "railing") {
+          // Nový typ "|za"
+          const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
+          const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
+          const railingHeight = wall.railingHeight || 1.2;
+          wallMesh = this.createRailingSegment(
+            p1,
+            p2,
+            `${floorName}_railing_${index}`,
+            yLevel,
+            railingHeight,
+            isUnderground
+          );
+          floorMeshes.push(wallMesh);
         }
+
         if (wallMesh) {
           this.shadowGenerator.addShadowCaster(wallMesh);
         }
@@ -585,5 +614,27 @@ export class FloorGenerator {
     circularWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(circularWall);
     return circularWall;
+  }
+  createRailingSegment(p1, p2, name, yLevel, railingHeight, isUnderground) {
+    const railingLength = BABYLON.Vector3.Distance(p1, p2);
+    const railing = BABYLON.MeshBuilder.CreateBox(
+      name,
+      { width: 0.1, height: railingHeight, depth: railingLength },
+      this.scene
+    );
+    // Pozice zábradlí
+    const midPoint = BABYLON.Vector3.Center(p1, p2);
+    railing.position.x = midPoint.x;
+    railing.position.z = midPoint.z;
+    railing.position.y = yLevel + railingHeight / 2;
+    // Rotace zábradlí pro zarovnání s body
+    const direction = p2.subtract(p1).normalize();
+    const angle = Math.atan2(direction.x, direction.z);
+    railing.rotation.y = angle;
+
+    railing.material = this.materials.railing;
+    railing.isPickable = false;
+    this.shadowGenerator.addShadowCaster(railing);
+    return railing;
   }
 }
