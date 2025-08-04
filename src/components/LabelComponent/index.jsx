@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as BABYLON from "babylonjs";
-import * as GUI from "@babylonjs/gui";
+import "babylonjs-loaders";
 
 const LabelComponent = ({
   scene,
@@ -9,7 +9,7 @@ const LabelComponent = ({
   text,
   floorIndex,
   config,
-}) => {
+}) =>
   useEffect(() => {
     if (!scene || typeof floorIndex !== "number" || !config) return;
 
@@ -19,45 +19,46 @@ const LabelComponent = ({
     const room_floor_height = config.visualization.room_floor_height;
 
     const yOffset = wall_height + floor_thickness + floor_spacing;
-
     const yPosition = Math.max(
       0,
-      floorIndex * yOffset + room_floor_height + 0.25
+      floorIndex * yOffset + room_floor_height + 0.2
     );
 
-    const planeSize = 20;
-    const plane = BABYLON.MeshBuilder.CreatePlane(
-      `label-${text}`,
-      { size: planeSize },
+    // Nastav rozlišení textury a poměr
+    const textureWidth = 1024;
+    const textureHeight = 256;
+    const dynamicTexture = new BABYLON.DynamicTexture(
+      "DynamicTexture",
+      { width: textureWidth, height: textureHeight },
       scene
     );
+    dynamicTexture.hasAlpha = true;
+    dynamicTexture.drawText(text, null, 140, "600 46px Roboto", true);
 
+    const material = new BABYLON.StandardMaterial("TextMaterial", scene);
+    material.diffuseTexture = dynamicTexture;
+    material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    material.specularColor = new BABYLON.Color3(0, 0, 0);
+
+    // Vytvořte rovinu s odpovídajícími rozměry
+    const planeWidth = 12;
+    const planeHeight = planeWidth * (textureHeight / textureWidth);
+    const plane = BABYLON.MeshBuilder.CreatePlane(
+      "TextPlane",
+      { width: planeWidth, height: planeHeight },
+      scene
+    );
+    plane.material = material;
     plane.position.set(positionX, yPosition, positionZ);
     plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
     plane.isPickable = false;
 
-    const smallerTextureResolution = 512;
-    const advancedTexture = GUI.AdvancedDynamicTexture.CreateForMesh(
-      plane,
-      smallerTextureResolution,
-      smallerTextureResolution
-    );
-
-    const textBlock = new GUI.TextBlock("textBlock");
-    textBlock.text = text;
-    textBlock.color = "black";
-    textBlock.fontSize = "16px";
-    textBlock.fontWeight = "normal";
-    advancedTexture.addControl(textBlock);
-
-    // Cleanup function
+    // Funkce pro vyčištění
     return () => {
-      advancedTexture.dispose();
       plane.dispose();
+      dynamicTexture.dispose();
+      material.dispose();
     };
   }, [scene, positionX, positionZ, text, floorIndex, config]);
-
-  return null;
-};
 
 export default LabelComponent;
