@@ -7374,10 +7374,7 @@ export const CONFIG_DATA = {
       id: 2,
       name: "3NP",
       type: "aboveground",
-      dimensions: {
-        width: 35.82,
-        depth: 35.82,
-      },
+      segments: [{ width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -8692,10 +8689,10 @@ export const CONFIG_DATA = {
       id: 3,
       name: "4NP",
       type: "aboveground",
-      dimensions: {
-        width: 35.82,
-        depth: 35.82,
-      },
+      segments: [
+        { width: 35.82, depth: 28.19, position: { x: 0, z: 3.855 } },
+        { width: 3, depth: 10, position: { x: 8.5, z: -12 } }, // kostka hlavni
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -10152,10 +10149,10 @@ export const CONFIG_DATA = {
       id: 4,
       name: "5NP",
       type: "aboveground",
-      dimensions: {
-        width: 35.82,
-        depth: 35.82,
-      },
+      segments: [
+        { width: 9, depth: 2, position: { x: -12, z: -9 } },
+        { width: 28.19, depth: 35.82, position: { x: 3.855, z: 0 } }, // kostka hlavni
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -11647,10 +11644,10 @@ export const CONFIG_DATA = {
       id: 5,
       name: "6NP",
       type: "aboveground",
-      dimensions: {
-        width: 35.82,
-        depth: 35.82,
-      },
+      segments: [
+        { width: 9, depth: 2, position: { x: -12, z: -9 } },
+        { width: 20.56, depth: 35.82, position: { x: 0, z: 0 } },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
