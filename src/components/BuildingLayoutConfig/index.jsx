@@ -4443,6 +4443,28 @@ export const CONFIG_DATA = {
         },
         walls: [
           {
+            type: "stairs",
+            position: { x: 2.95, z: -2.222 },
+            stepWidth: 2.1,
+            stepDepth: 0.296,
+            isSecondPart: false,
+            numSteps: 16,
+            totalSteps: 32,
+            floorP1: { x: -0.4, z: 4.6 },
+            floorP2: { x: 4, z: 2.37 },
+            direction: "top",
+          },
+          {
+            type: "stairs",
+            position: { x: 0.65, z: 2.218 },
+            stepWidth: 2.1,
+            stepDepth: 0.296,
+            isSecondPart: true,
+            numSteps: 16,
+            totalSteps: 32,
+            direction: "bottom",
+          },
+          {
             //okna
             type: "partition",
             start: { x: 17.15, z: 17.15 },
@@ -5216,34 +5238,6 @@ export const CONFIG_DATA = {
             materialType: "glass",
           },
           {
-            //schodiste11 vnejsi leva
-            type: "partition",
-            start: { x: -0.6, z: 4.8 },
-            end: { x: -0.6, z: -4.8 },
-            partitionWidth: 0.05,
-          },
-          {
-            //schodiste11 vnejsi prava
-            type: "partition",
-            start: { x: 4.2, z: -4.8 },
-            end: { x: 4.2, z: 4.8 },
-            partitionWidth: 0.05,
-          },
-          {
-            //schodiste11 vnejsi vrchni
-            type: "partition",
-            start: { x: 4.225, z: 4.8 },
-            end: { x: -0.625, z: 4.8 },
-            partitionWidth: 0.05,
-          },
-          {
-            //schodiste11 vnitrni
-            type: "partition",
-            start: { x: 1.8, z: 2.37 },
-            end: { x: 1.8, z: -2.37 },
-            partitionWidth: 0.2,
-          },
-          {
             //1.13 spodni stena
             type: "partition",
             start: { x: -16.8, z: 10.2 },
@@ -6014,6 +6008,28 @@ export const CONFIG_DATA = {
               { x: 17.15, z: 17.15 },
               { x: -17.15, z: 17.15 },
             ],
+          },
+          {
+            type: "stairs",
+            position: { x: 2.95, z: 2.272 },
+            stepWidth: 2.1,
+            stepDepth: 0.296,
+            isSecondPart: false,
+            numSteps: 16,
+            totalSteps: 32,
+            floorP1: { x: -0.4, z: -2.316 },
+            floorP2: { x: 4, z: -4.546 },
+            direction: "bottom",
+          },
+          {
+            type: "stairs",
+            position: { x: 0.65, z: -2.168 },
+            stepWidth: 2.1,
+            stepDepth: 0.296,
+            isSecondPart: true,
+            numSteps: 16,
+            totalSteps: 32,
+            direction: "top",
           },
           {
             //okna
@@ -6868,44 +6884,6 @@ export const CONFIG_DATA = {
             end: { x: -10.25, z: -0.4 },
             partitionWidth: 0.1,
           },
-          {
-            //schodiste11 vnejsi leva
-            type: "partition",
-            start: { x: -0.6, z: 4.8 },
-            end: { x: -0.6, z: -4.8 },
-            partitionWidth: 0.05,
-          },
-          {
-            //schodiste11 vnejsi spodni
-            type: "partition",
-            start: { x: -0.625, z: -4.8 },
-            end: { x: 4.225, z: -4.8 },
-            partitionWidth: 0.05,
-          },
-
-          {
-            //schodiste11 vnejsi prava
-            type: "partition",
-            start: { x: 4.2, z: -4.8 },
-            end: { x: 4.2, z: 4.8 },
-            partitionWidth: 0.05,
-          },
-          {
-            //schodiste11 vnejsi prava
-            type: "partition",
-            start: { x: 2.025, z: 4.8 },
-            end: { x: -0.625, z: 4.8 },
-            partitionWidth: 0.05,
-          },
-
-          {
-            //schodiste11 vnitrni leva
-            type: "partition",
-            start: { x: 1.8, z: 2.37 },
-            end: { x: 1.8, z: -2.37 },
-            partitionWidth: 0.2,
-          },
-
           //2.18 vlevo
           {
             type: "partition",
