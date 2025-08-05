@@ -235,39 +235,52 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
+
     setCurrentActiveFloor(floorId);
+
     const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
       (floor) => floor && floor.floorNumber === floorId
     );
-    const shouldShowGrass = isViewingAllFloors;
+
+    const totalHeight =
+      floors.length *
+      (CONFIG_DATA.visualization.wall_height +
+        CONFIG_DATA.visualization.floor_thickness +
+        CONFIG_DATA.visualization.floor_spacing);
+
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
-        if (isViewingAllFloors) {
-          resetCameraForAllFloors(camera, floors.length, generator);
-        } else {
-          updateCameraHeight(camera, activeFloorIndex, false);
-        }
+        updateCameraHeight(
+          camera,
+          activeFloorIndex,
+          isViewingAllFloors,
+          totalHeight
+        );
       }
     }
+
+    // Iterate over all floor meshes
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       if (!floorInfo) return;
+
       floorMeshes.forEach((mesh) => {
         const isGrassMesh = mesh.name.includes("grassArea");
+
+        // Grass should be visible for 1NP and higher
         if (isGrassMesh) {
-          mesh.setEnabled(shouldShowGrass);
+          mesh.setEnabled(!isViewingAllFloors && floorId >= 0);
         } else {
+          // Show the current floor and all floors below
           const shouldEnable =
-            isViewingAllFloors || floorInfo.floorNumber === floorId;
+            isViewingAllFloors || floorInfo.floorNumber <= floorId;
           mesh.setEnabled(shouldEnable);
-          if (shouldEnable && floorInfo.floorNumber === floorId) {
+
+          // Ensure material is always applied when setting visibility
+          if (shouldEnable) {
             if (
-              mesh.name.includes("_segment") &&
-              mesh.material === generator.materials.water
-            ) {
-            } else if (
               mesh.name.includes("_floor") ||
               mesh.name.includes("_segment")
             ) {
@@ -287,6 +300,8 @@ const BuildingViewer = () => {
         }
       });
     });
+
+    // Update room info to reflect the current floor and its details
     if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {
