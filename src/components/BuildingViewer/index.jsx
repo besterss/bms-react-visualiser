@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as BABYLON from "babylonjs";
 import { FloorGenerator } from "../FloorGenerator";
 import { CONFIG_DATA } from "../BuildingLayoutConfig";
@@ -38,16 +32,8 @@ const BuildingViewer = () => {
   });
   const [circleDisplayMode, setCircleDisplayMode] = useState("click");
 
-  // Memoized to prevent unnecessary recalculations
-  const activeFloor = useMemo(() => {
-    return (
-      CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor) || {}
-    );
-  }, [currentActiveFloor]);
-
   useEffect(() => {
     if (!canvasRef.current) return;
-
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
       preserveDrawingBuffer: true,
       stencil: true,
@@ -62,7 +48,6 @@ const BuildingViewer = () => {
       CONFIG_DATA
     );
     const result = generator.generateFloors();
-
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
@@ -70,35 +55,42 @@ const BuildingViewer = () => {
     setAllFloorMeshes(result.allFloorMeshes);
     setupCamera(babylonScene, result.floorData);
 
-    if (result.floorData.length) {
-      const initialFloor = result.floorData[0];
+    if (result.floorData.length > 0) {
       showFloor(
-        initialFloor.floorNumber,
+        result.floorData[0].floorNumber,
         result.allFloorMeshes,
         result.floorData,
         generator
       );
-      setCurrentActiveFloor(initialFloor.floorNumber);
-      updateRoomInfo(initialFloor);
+      setCurrentActiveFloor(result.floorData[0].floorNumber);
+      setRoomInfo((prev) => ({
+        ...prev,
+        activeFloor: result.floorData[0].name,
+        floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
+      }));
     }
 
     setupEventHandlers(babylonScene);
 
-    const handleResize = () => babylonEngine.resize();
-    window.addEventListener("resize", handleResize);
+    babylonEngine.runRenderLoop(() => {
+      babylonScene.render();
+    });
 
-    babylonEngine.runRenderLoop(() => babylonScene.render());
+    const handleResize = () => {
+      babylonEngine.resize();
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
     };
-  }, [canvasRef]);
+  }, []);
 
   useEffect(() => {
     if (
-      scene &&
       engine &&
+      scene &&
       currentActiveFloor !== null &&
       allFloorMeshes.length
     ) {
@@ -111,229 +103,278 @@ const BuildingViewer = () => {
         activeDisplayOption === "airQuality"
       );
     }
-  }, [scene, engine, currentActiveFloor, allFloorMeshes, activeDisplayOption]);
+  }, [engine, scene, currentActiveFloor, allFloorMeshes, activeDisplayOption]);
 
   useEffect(() => {
-    if (!scene || !CONFIG_DATA.floors) return;
+    if (!engine || !scene || currentActiveFloor === null) return;
+    const floors = CONFIG_DATA.floors;
+    if (!floors) return;
+    const currentFloor = floors.find(
+      (floor) => floor.id === currentActiveFloor
+    );
+    if (currentFloor && currentFloor.roomLabels) {
+      const newLabelData = currentFloor.roomLabels.map((label) => ({
+        positionX: label.x,
+        positionZ: label.z,
+        text: label.label,
+        floorIndex: floors.indexOf(currentFloor),
+      }));
+      clearLabels(scene);
+      setLabelData(newLabelData);
+    } else {
+      clearLabels(scene);
+      setLabelData([]);
+    }
+  }, [engine, scene, currentActiveFloor, CONFIG_DATA]);
 
-    const newLabelData = (activeFloor?.roomLabels || []).map((label) => ({
-      positionX: label.x,
-      positionZ: label.z,
-      text: label.label,
-      floorIndex: CONFIG_DATA.floors.indexOf(activeFloor),
-    }));
-    clearLabels(scene);
-    setLabelData(newLabelData);
-  }, [scene, activeFloor]);
+  const handleOptionToggle = (option) => {
+    setActiveDisplayOption((prev) => (prev === option ? null : option));
+  };
 
-  const setupCamera = useCallback(
-    (scene, floors) => {
-      if (!scene || !floors) return;
-
-      const totalHeight =
-        floors.length *
-        (CONFIG_DATA.visualization.wall_height +
-          CONFIG_DATA.visualization.floor_thickness +
-          CONFIG_DATA.visualization.floor_spacing);
-
-      const activeFloorIndex = floors.findIndex(
-        (floor) => floor.id === currentActiveFloor
+  const setupCamera = (scene, floors, currentActiveFloor) => {
+    if (!scene || !floors) return;
+    const totalHeight =
+      floors.length *
+      (CONFIG_DATA.visualization.wall_height +
+        CONFIG_DATA.visualization.floor_thickness +
+        CONFIG_DATA.visualization.floor_spacing);
+    const activeFloorIndex = floors.findIndex(
+      (floor) => floor.id === currentActiveFloor
+    );
+    const activeFloorHeight =
+      activeFloorIndex >= 0
+        ? activeFloorIndex *
+          (CONFIG_DATA.visualization.wall_height +
+            CONFIG_DATA.visualization.floor_thickness)
+        : totalHeight / 2;
+    let camera = scene.getCameraByName("camera");
+    if (camera) {
+      camera.setPosition(
+        new BABYLON.Vector3(
+          0,
+          activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2,
+          0
+        )
       );
-      const activeFloorHeight =
-        activeFloorIndex === -1
-          ? totalHeight / 2
-          : activeFloorIndex *
-            (CONFIG_DATA.visualization.wall_height +
-              CONFIG_DATA.visualization.floor_thickness);
+      camera.alpha = -Math.PI / 2;
+      camera.beta = Math.PI / 4;
+      camera.radius = totalHeight * 1.5;
+    } else {
+      camera = new BABYLON.ArcRotateCamera(
+        "camera",
+        -Math.PI / 2,
+        -Math.PI / 4,
+        totalHeight * 1.5,
+        new BABYLON.Vector3(
+          0,
+          activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2,
+          0
+        ),
+        scene
+      );
+      camera.attachControl(canvasRef.current, true);
+      camera.panningSensibility = 1000;
+      camera.lowerRadiusLimit = 10;
+      camera.upperRadiusLimit = totalHeight * 10;
+      camera.upperBetaLimit = Math.PI / 2.2;
+    }
+  };
 
-      let camera = scene.getCameraByName("camera");
-      if (!camera) {
-        camera = new BABYLON.ArcRotateCamera(
-          "camera",
-          -Math.PI / 2,
-          Math.PI / 4,
-          totalHeight * 1.5,
-          new BABYLON.Vector3(
-            0,
-            activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2,
-            0
-          ),
-          scene
-        );
-        camera.attachControl(canvasRef.current, true);
-        camera.panningSensibility = 1000;
-        camera.lowerRadiusLimit = 10;
-        camera.upperRadiusLimit = totalHeight * 10;
-        camera.upperBetaLimit = Math.PI / 2.2;
-      } else {
-        camera.setPosition(
-          new BABYLON.Vector3(
-            0,
-            activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2,
-            0
-          )
-        );
-        camera.alpha = -Math.PI / 2;
-        camera.beta = Math.PI / 4;
-        camera.radius = totalHeight * 1.5;
-      }
-    },
-    [currentActiveFloor, canvasRef]
-  );
-
-  const updateCameraHeight = useCallback(
-    (camera, activeFloorIndex, isAllFloors, totalHeight) => {
-      if (!camera) return;
+  const updateCameraHeight = (
+    camera,
+    activeFloorIndex,
+    isAllFloors = false,
+    totalHeight
+  ) => {
+    if (!camera || activeFloorIndex === undefined) return;
+    if (isAllFloors) {
+      camera.setTarget(BABYLON.Vector3.Zero());
+      camera.radius = totalHeight * 3;
+      camera.beta = Math.PI / 4;
+    } else {
       const floorHeight =
         CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness;
+      const activeFloorHeight = activeFloorIndex * floorHeight;
+      camera.target.y =
+        activeFloorHeight + CONFIG_DATA.visualization.wall_height / 2;
+    }
+  };
 
-      if (isAllFloors) {
-        camera.setTarget(BABYLON.Vector3.Zero());
-        camera.radius = totalHeight * 3;
-        camera.beta = Math.PI / 4;
-      } else {
-        camera.setTarget(
-          new BABYLON.Vector3(
-            0,
-            activeFloorIndex * floorHeight +
-              CONFIG_DATA.visualization.wall_height / 2,
-            0
-          )
-        );
+  const resetCameraForAllFloors = (camera, totalHeight) => {
+    if (!camera) return;
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.setPosition(new BABYLON.Vector3(0, totalHeight / 2, 0));
+    camera.alpha = -Math.PI / 2;
+    camera.beta = Math.PI / 4;
+    camera.radius = totalHeight * 3;
+  };
+
+  const setupEventHandlers = (scene) => {
+    if (!scene) return;
+    scene.onPointerObservable.add((pointerInfo) => {
+      if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
+        const pickedMesh = pointerInfo.pickInfo.pickedMesh;
+
+        if (
+          !pointerInfo.pickInfo.hit ||
+          !pickedMesh ||
+          !pickedMesh.metadata ||
+          !pickedMesh.metadata.icon
+        ) {
+          setSelectedIconInfo(null);
+          setSelectedWifi(null);
+        }
       }
-    },
-    []
-  );
+    });
+  };
+  const showFloor = (
+    floorId,
+    meshes = allFloorMeshes,
+    floors = floorData,
+    generator = floorGenerator
+  ) => {
+    if (!generator) return;
 
-  const showFloor = useCallback(
-    (
-      floorId,
-      meshes = allFloorMeshes,
-      floors = floorData,
-      generator = floorGenerator
-    ) => {
-      if (!generator) return;
-      setCurrentActiveFloor(floorId);
+    setCurrentActiveFloor(floorId);
 
-      const isViewingAllFloors = floorId === "all";
-      const activeFloorIndex = floors.findIndex(
-        (floor) => floor && floor.floorNumber === floorId
-      );
-      const totalHeight =
-        floors.length *
-        (CONFIG_DATA.visualization.wall_height +
-          CONFIG_DATA.visualization.floor_thickness +
-          CONFIG_DATA.visualization.floor_spacing);
+    const isViewingAllFloors = floorId === "all";
+    const activeFloorIndex = floors.findIndex(
+      (floor) => floor && floor.floorNumber === floorId
+    );
 
-      const camera = scene?.getCameraByName("camera");
-      camera &&
+    const totalHeight =
+      floors.length *
+      (CONFIG_DATA.visualization.wall_height +
+        CONFIG_DATA.visualization.floor_thickness +
+        CONFIG_DATA.visualization.floor_spacing);
+
+    if (scene) {
+      const camera = scene.getCameraByName("camera");
+      if (camera) {
         updateCameraHeight(
           camera,
           activeFloorIndex,
           isViewingAllFloors,
           totalHeight
         );
-
-      meshes.forEach((floorMeshes, index) => {
-        const floorInfo = floors[index];
-        if (!floorInfo) return;
-
-        floorMeshes.forEach((mesh) => {
-          mesh.setEnabled(
-            isViewingAllFloors || floorInfo.floorNumber <= floorId
-          );
-          if (mesh.name.includes("grassArea")) {
-            mesh.setEnabled(!isViewingAllFloors && floorId >= 0);
-          }
-
-          if (isViewingAllFloors || floorInfo.floorNumber <= floorId) {
-            applyMaterial(mesh, generator);
-          }
-        });
-      });
-
-      isViewingAllFloors
-        ? updateRoomInfoForAllFloors(floors)
-        : updateRoomInfo(floors[activeFloorIndex]);
-    },
-    [scene]
-  );
-
-  const applyMaterial = useCallback((mesh, generator) => {
-    if (mesh.name.includes("_floor") || mesh.name.includes("_segment")) {
-      mesh.material = generator.materials.floorDefault;
-    } else if (mesh.name.includes("_glass") || mesh.name.includes("_outline")) {
-      mesh.material = generator.materials.glass;
-    } else if (
-      mesh.name.includes("_partition") ||
-      mesh.name.includes("_circular") ||
-      mesh.name.includes("_curved")
-    ) {
-      mesh.material = generator.materials.wallOpaque;
-    }
-  }, []);
-
-  // Update Room Info based on selected floor
-  const updateRoomInfo = useCallback((floor) => {
-    setRoomInfo((prev) => ({
-      ...prev,
-      activeFloor: floor.name,
-      floorArea: `${floor.area.toFixed(2)} m²`,
-    }));
-  }, []);
-
-  const updateRoomInfoForAllFloors = useCallback((floors) => {
-    setRoomInfo((prev) => ({
-      ...prev,
-      activeFloor: "All Floors",
-      floorArea: `${floors
-        .reduce((sum, f) => sum + (f ? f.area : 0), 0)
-        .toFixed(2)} m²`,
-    }));
-  }, []);
-
-  // Setup event handlers for scene interactions
-  const setupEventHandlers = useCallback((scene) => {
-    if (!scene) return;
-    scene.onPointerObservable.add((pointerInfo) => {
-      const pickedMesh = pointerInfo.pickInfo.pickedMesh;
-      if (!pointerInfo.pickInfo.hit || !pickedMesh?.metadata?.icon) {
-        setSelectedIconInfo(null);
-        setSelectedWifi(null);
       }
-    });
-  }, []);
+    }
 
-  const handleFloorChange = useCallback(
-    (floorId) => {
-      showFloor(floorId);
+    // Iterate over all floor meshes
+    meshes.forEach((floorMeshes, index) => {
+      const floorInfo = floors[index];
+      if (!floorInfo) return;
+
+      floorMeshes.forEach((mesh) => {
+        const isGrassMesh = mesh.name.includes("grassArea");
+
+        // Grass should be visible for 1NP and higher
+        if (isGrassMesh) {
+          mesh.setEnabled(!isViewingAllFloors && floorId >= 0);
+        } else {
+          // Show the current floor and all floors below
+          const shouldEnable =
+            isViewingAllFloors || floorInfo.floorNumber <= floorId;
+          mesh.setEnabled(shouldEnable);
+
+          // Ensure material is always applied when setting visibility
+          if (shouldEnable) {
+            if (
+              mesh.name.includes("_floor") ||
+              mesh.name.includes("_segment")
+            ) {
+              mesh.material = generator.materials.floorDefault;
+            } else if (mesh.name.includes("_glass")) {
+              mesh.material = generator.materials.glass;
+            } else if (
+              mesh.name.includes("_partition") ||
+              mesh.name.includes("_circular") ||
+              mesh.name.includes("_curved")
+            ) {
+              mesh.material = generator.materials.wallOpaque;
+            } else if (mesh.name.includes("_outline")) {
+              mesh.material = generator.materials.glass;
+            }
+          }
+        }
+      });
+    });
+
+    // Update room info to reflect the current floor and its details
+    if (!isViewingAllFloors) {
+      const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
+      if (selectedFloor) {
+        setRoomInfo((prev) => ({
+          ...prev,
+          activeFloor: selectedFloor.name,
+          floorArea: `${selectedFloor.area.toFixed(2)} m²`,
+        }));
+      }
+    } else {
       setRoomInfo((prev) => ({
         ...prev,
-        temperature: "N/A",
-        wifiSignal: "N/A",
+        activeFloor: "All Floors",
+        floorArea: `${floors
+          .reduce((sum, f) => sum + (f ? f.area : 0), 0)
+          .toFixed(2)} m²`,
       }));
-    },
-    [showFloor]
-  );
-
-  const handleOptionToggle = (option) => {
-    setActiveDisplayOption((prev) => (prev === option ? null : option));
+    }
   };
 
-  const clearLabels = useCallback((scene) => {
-    if (!scene?.meshes) return;
+  const handleFloorChange = (floorId) => {
+    showFloor(floorId);
+    setRoomInfo((prev) => ({
+      ...prev,
+      temperature: "N/A",
+      wifiSignal: "N/A",
+    }));
+  };
+
+  const clearLabels = (scene) => {
+    if (!scene || !scene.meshes) return;
     scene.meshes
       .filter((mesh) => mesh.name.startsWith("label"))
-      .forEach((mesh) => mesh.dispose());
-  }, []);
+      .forEach((mesh) => {
+        mesh.dispose();
+      });
+  };
 
-  const activeRooms = useMemo(() => activeFloor?.rooms || [], [activeFloor]);
-  const currentFloorParking = useMemo(
-    () => activeFloor?.parking || [],
-    [activeFloor]
+  useEffect(() => {
+    if (scene && activeDisplayOption === "icons") {
+      const iconsForActiveFloor =
+        CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+          ?.icons || [];
+
+      if (circleDisplayMode === "all") {
+        iconsForActiveFloor.forEach((icon) => {
+          const circleName = `range-circle-${icon.label}`;
+          const circleMesh = scene.getMeshByName(circleName);
+          if (circleMesh) {
+            circleMesh.setEnabled(true); // Enable mesh if mode is "all"
+          }
+        });
+      } else {
+        scene.meshes
+          .filter((mesh) => mesh.name.startsWith("range-circle"))
+          .forEach((circleMesh) => circleMesh.setEnabled(false)); // Disable otherwise
+      }
+    }
+  }, [scene, activeDisplayOption, circleDisplayMode, currentActiveFloor]);
+
+  const activeFloorIndex = floorData.findIndex(
+    (floor) => floor.floorNumber === currentActiveFloor
   );
-  const activeIcons = useMemo(() => activeFloor?.icons || [], [activeFloor]);
+
+  const activeRooms =
+    CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+      ?.rooms || [];
+  const currentFloorParking =
+    CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+      ?.parking || [];
+  const activeIcons =
+    CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
+      ?.icons || [];
 
   return (
     <div className="building-viewer">
@@ -351,7 +392,12 @@ const BuildingViewer = () => {
         style={{ width: "100%", height: "100%" }}
       />
       {scene && activeDisplayOption === "roomBoxes" && (
-        <RoomBoxes rooms={activeRooms} scene={scene} config={CONFIG_DATA} />
+        <RoomBoxes
+          rooms={activeRooms}
+          scene={scene}
+          floorIndex={activeFloorIndex}
+          config={CONFIG_DATA}
+        />
       )}
       {scene && currentFloorParking.length > 0 && (
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
@@ -360,12 +406,15 @@ const BuildingViewer = () => {
         <LabelComponent
           key={index}
           scene={scene}
-          {...label}
+          positionX={label.positionX}
+          positionZ={label.positionZ}
+          text={label.text}
+          floorIndex={label.floorIndex}
           config={CONFIG_DATA}
         />
       ))}
       {scene &&
-        activeDisplayOption === "icons" &&
+        activeDisplayOption === "icons" && // Ensure the condition is correct
         activeIcons.map((icon, index) => (
           <IconComponent
             key={index}
@@ -384,9 +433,7 @@ const BuildingViewer = () => {
             type={icon.type}
             label={icon.label}
             status={icon.status}
-            floorIndex={floorData.findIndex(
-              (floor) => floor.floorNumber === currentActiveFloor
-            )}
+            floorIndex={activeFloorIndex}
             config={CONFIG_DATA}
             onSelect={() => {
               setSelectedIconInfo({
@@ -394,9 +441,11 @@ const BuildingViewer = () => {
                 status: icon.status,
                 healthStatus: icon.healthStatus,
               });
-              icon.type === "wifi"
-                ? setSelectedWifi(icon.label)
-                : setSelectedWifi(null);
+              if (icon.type === "wifi") {
+                setSelectedWifi(icon.label);
+              } else {
+                setSelectedWifi(null);
+              }
             }}
             isSelected={
               selectedIconInfo && selectedIconInfo.label === icon.label
@@ -406,8 +455,10 @@ const BuildingViewer = () => {
                 ? selectedWifi === icon.label
                 : circleDisplayMode === "all"
             }
+            healthStatus={icon.healthStatus}
           />
         ))}
+
       {selectedIconInfo && (
         <div className="hover-info-box">
           <p>
@@ -423,13 +474,18 @@ const BuildingViewer = () => {
           )}
         </div>
       )}
+
       <InfoBox roomInfo={roomInfo} />
+
+      {/* Kontrola zobrazení CircleDisplayBox */}
       {activeDisplayOption === "icons" && (
         <CircleDisplayBox
           currentMode={circleDisplayMode}
           onModeChange={(mode) => {
             setCircleDisplayMode(mode);
-            mode === "click" && setSelectedWifi(null);
+            if (mode === "click") {
+              setSelectedWifi(null);
+            }
           }}
         />
       )}
