@@ -261,9 +261,11 @@ const BuildingViewer = () => {
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       if (!floorInfo) return;
+
       floorMeshes.forEach((mesh) => {
         const isGrassMesh = mesh.name.includes("grassArea");
         const isTreeMesh = mesh.name.startsWith("tree_");
+
         if (isGrassMesh) {
           mesh.setEnabled(isViewingAllFloors || floorId >= 0);
         } else if (isTreeMesh) {
@@ -274,8 +276,15 @@ const BuildingViewer = () => {
           const shouldEnable =
             isViewingAllFloors || floorInfo.floorNumber <= floorId;
           mesh.setEnabled(shouldEnable);
+
           if (shouldEnable) {
             if (
+              mesh.name.includes("_segment") &&
+              mesh.material === generator.materials.water
+            ) {
+              // Retain the water material for "retencni nadrz"
+              console.log("Water material remains on retencni nadrz");
+            } else if (
               mesh.name.includes("_floor") ||
               mesh.name.includes("_segment")
             ) {
