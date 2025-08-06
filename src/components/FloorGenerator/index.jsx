@@ -439,22 +439,6 @@ export class FloorGenerator {
           );
 
           floorMeshes.push(wallMesh);
-        } else if (wall.type === "stairs") {
-          const stairs = this.createStairs(
-            wall.position,
-            wall.stepWidth,
-            wall.stepDepth,
-            yLevel,
-            `${floorName}_stairs_${index}`,
-            wallHeight,
-            wall.isSecondPart,
-            wall.numSteps,
-            wall.totalSteps,
-            wall.floorP1,
-            wall.floorP2,
-            wall.direction
-          );
-          floorMeshes.push(stairs);
         } else if (wall.type === "curved") {
           const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
           const start = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
@@ -488,6 +472,34 @@ export class FloorGenerator {
             isUnderground
           );
           floorMeshes.push(wallMesh);
+        } else if (wall.type === "stairs") {
+          const stairs = this.createStairs(
+            wall.position,
+            wall.stepWidth,
+            wall.stepDepth,
+            yLevel,
+            `${floorName}_stairs_${index}`,
+            wallHeight,
+            wall.isSecondPart,
+            wall.numSteps,
+            wall.totalSteps,
+            wall.floorP1,
+            wall.floorP2,
+            wall.direction
+          );
+          floorMeshes.push(stairs);
+        } else if (wall.type === "spiralStairs") {
+          const spiral = this.createSpiralStairs(
+            wall.center,
+            wall.radius,
+            wall.numSteps,
+            yLevel,
+            wallHeight,
+            wall.stepWidth,
+            wall.stepDepth,
+            wall.start
+          );
+          floorMeshes.push(spiral);
         }
 
         if (wallMesh) {
@@ -819,5 +831,56 @@ export class FloorGenerator {
     tree.isPickable = false;
     tree.name = `tree_${position.x}_${position.z}`;
     return tree;
+  }
+
+  createSpiralStairs(
+    center,
+    radius,
+    numSteps,
+    yLevel,
+    height,
+    stepWidth,
+    stepDepth,
+    start
+  ) {
+    const spiralStairs = [];
+    const stepHeight = height / numSteps;
+    console.log(height);
+    console.log(stepHeight);
+    console.log(numSteps);
+    for (let i = 0; i < numSteps; i++) {
+      const angle = (i * 2.585 * Math.PI) / numSteps + start;
+      const x = center.x + radius * 2 * Math.cos(angle);
+      const z = center.z + radius * 2 * Math.sin(angle);
+      const step = BABYLON.MeshBuilder.CreateBox(
+        `step${i}`,
+        {
+          width: stepDepth,
+          height: stepHeight,
+          depth: stepWidth,
+        },
+        this.scene
+      );
+
+      step.position.x = x;
+      step.position.z = z;
+      step.position.y = yLevel + (i + 0.5) * stepHeight;
+      step.rotation.y = -angle;
+
+      step.material = this.materials.wallOpaque;
+      step.isPickable = false;
+
+      this.shadowGenerator.addShadowCaster(step);
+
+      spiralStairs.push(step);
+    }
+    return BABYLON.Mesh.MergeMeshes(
+      spiralStairs,
+      true,
+      false,
+      null,
+      false,
+      true
+    );
   }
 }

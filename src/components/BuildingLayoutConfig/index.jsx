@@ -6746,10 +6746,13 @@ export const CONFIG_DATA = {
             partitionWidth: 0.05,
           },
           {
-            //schody tocite v pravo nahore
-            type: "circular",
+            type: "spiralStairs",
             center: { x: 13.5, z: 7.2 },
-            radius: 1.515,
+            radius: 0.45,
+            numSteps: 30,
+            stepWidth: 0.4,
+            stepDepth: 1.165,
+            start: 0,
           },
           {
             //schody tocite v pravo nahore sloup
