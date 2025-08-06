@@ -437,7 +437,24 @@ export class FloorGenerator {
             yLevel,
             isUnderground
           );
+
           floorMeshes.push(wallMesh);
+        } else if (wall.type === "stairs") {
+          const stairs = this.createStairs(
+            wall.position,
+            wall.stepWidth,
+            wall.stepDepth,
+            yLevel,
+            `${floorName}_stairs_${index}`,
+            wallHeight,
+            wall.isSecondPart,
+            wall.numSteps,
+            wall.totalSteps,
+            wall.floorP1,
+            wall.floorP2,
+            wall.direction
+          );
+          floorMeshes.push(stairs);
         } else if (wall.type === "curved") {
           const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
           const start = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
@@ -661,6 +678,89 @@ export class FloorGenerator {
     railing.isPickable = false;
     this.shadowGenerator.addShadowCaster(railing);
     return railing;
+  }
+
+  createStairs(
+    position,
+    stepWidth,
+    stepDepth,
+    yLevel,
+    name,
+    wallHeight,
+    isSecondPart,
+    numSteps,
+    totalSteps,
+    floorP1,
+    floorP2,
+    direction
+  ) {
+    const stairMeshes = [];
+    const stepHeight = wallHeight / totalSteps;
+    const stepDirection = direction === "top" ? 1 : -1;
+
+    for (let i = 0; i < numSteps; i++) {
+      const stepPositionY =
+        yLevel + i * stepHeight + (isSecondPart ? stepHeight * numSteps : 0);
+
+      const stepMesh = BABYLON.MeshBuilder.CreateBox(
+        `stair_step_${i}`,
+        {
+          width: stepWidth,
+          height: stepHeight,
+          depth: stepDepth,
+        },
+        this.scene
+      );
+
+      stepMesh.position.x = position.x;
+      stepMesh.position.y = stepPositionY;
+      stepMesh.position.z = position.z + i * stepDepth * stepDirection; // Adjust z based on direction
+
+      stepMesh.material = this.materials.wallOpaque;
+      stepMesh.isPickable = false;
+      this.shadowGenerator.addShadowCaster(stepMesh);
+      stairMeshes.push(stepMesh);
+    }
+
+    // Create the floor at the level of the last step only if it's not the second part
+    if (!isSecondPart) {
+      const floorHeight = stepHeight;
+      const floorWidth = Math.abs(floorP2.x - floorP1.x);
+      const floorDepth = Math.abs(floorP2.z - floorP1.z);
+      const floorPositionY = yLevel + numSteps * stepHeight - floorHeight;
+
+      const floorMesh = BABYLON.MeshBuilder.CreateBox(
+        `${name}_floor`,
+        {
+          width: floorWidth,
+          height: floorHeight,
+          depth: floorDepth,
+        },
+        this.scene
+      );
+
+      // Position the floor midway between floorP1 and floorP2
+      floorMesh.position.x = (floorP1.x + floorP2.x) / 2;
+      floorMesh.position.y = floorPositionY;
+      floorMesh.position.z = (floorP1.z + floorP2.z) / 2;
+
+      floorMesh.material = this.materials.wallOpaque;
+      floorMesh.isPickable = false;
+      this.shadowGenerator.addShadowCaster(floorMesh);
+      stairMeshes.push(floorMesh);
+    }
+
+    const stairs = BABYLON.Mesh.MergeMeshes(
+      stairMeshes,
+      true,
+      true,
+      undefined,
+      false,
+      true
+    );
+
+    stairs.name = name;
+    return stairs;
   }
 
   createTree(position, scale) {

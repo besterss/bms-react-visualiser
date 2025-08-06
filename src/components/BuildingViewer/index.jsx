@@ -228,6 +228,7 @@ const BuildingViewer = () => {
       }
     });
   };
+
   const showFloor = (
     floorId,
     meshes = allFloorMeshes,
