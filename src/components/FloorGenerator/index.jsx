@@ -231,32 +231,45 @@ export class FloorGenerator {
 
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
-      // Ensure the array is initialized for the current index
       if (!this.allFloorMeshes[index]) {
         this.allFloorMeshes[index] = [];
       }
 
-      const yLevel =
-        index *
-        (this.config.visualization.wall_height +
+      // Determine if this is 1NP and set the correct wall height
+      const is1NP = floorConfig.id === 0;
+      const wallHeight = is1NP
+        ? this.config.visualization.wall_height_1NP
+        : this.config.visualization.wall_height;
+
+      // Calculate yLevel considering special case for 1NP
+      let yLevel = 0;
+      for (let i = 0; i < index; i++) {
+        const isPrevious1NP = this.config.floors[i].id === 0;
+        const prevWallHeight = isPrevious1NP
+          ? this.config.visualization.wall_height_1NP
+          : this.config.visualization.wall_height;
+        yLevel +=
+          prevWallHeight +
           this.config.visualization.floor_thickness +
-          this.config.visualization.floor_spacing);
+          this.config.visualization.floor_spacing;
+      }
+
+      // Consider if the current floor is underground
       const isUnderground = floorConfig.type === "underground";
+
+      // Create floor based on config
       const floorResult = this.createFloorFromConfig(
         floorConfig,
         yLevel,
-        isUnderground
+        isUnderground,
+        is1NP
       );
 
       if (floorConfig.layout && floorConfig.layout.trees) {
         floorConfig.layout.trees.forEach((treeConfig) => {
           const tree = this.createTree(treeConfig.position, treeConfig.scale);
-          tree.position.y +=
-            index *
-            (this.config.visualization.wall_height +
-              this.config.visualization.floor_thickness +
-              this.config.visualization.floor_spacing);
-          this.allFloorMeshes[index].push(tree); // Push trees to the initialized array
+          tree.position.y = yLevel + tree.position.y;
+          this.allFloorMeshes[index].push(tree);
         });
       }
 
@@ -265,8 +278,8 @@ export class FloorGenerator {
           mesh.receiveShadows = true;
         }
       });
-      this.allFloorMeshes[index].push(...floorResult.meshes);
 
+      this.allFloorMeshes[index].push(...floorResult.meshes);
       this.floorData.push({
         floorNumber: floorConfig.id,
         name: floorConfig.name,
@@ -293,17 +306,20 @@ export class FloorGenerator {
       );
       this.allFloorMeshes[firstAboveGroundIndex].push(grassMesh);
     }
+
     return {
       allFloorMeshes: this.allFloorMeshes,
       floorData: this.floorData,
     };
   }
 
-  createFloorFromConfig(floorConfig, yLevel, isUnderground) {
+  createFloorFromConfig(floorConfig, yLevel, isUnderground, is1NP) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
     const layout = floorConfig.layout;
-    const wallHeight = this.config.visualization.wall_height;
+    const wallHeight = is1NP
+      ? this.config.visualization.wall_height_1NP
+      : this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
 
@@ -480,7 +496,7 @@ export class FloorGenerator {
             yLevel,
             `${floorName}_stairs_${index}`,
             wallHeight,
-            wall.isSecondPart,
+            wall.partPosition,
             wall.numSteps,
             wall.totalSteps,
             wall.floorP1,
@@ -699,7 +715,7 @@ export class FloorGenerator {
     yLevel,
     name,
     wallHeight,
-    isSecondPart,
+    partPosition,
     numSteps,
     totalSteps,
     floorP1,
@@ -709,11 +725,16 @@ export class FloorGenerator {
     const stairMeshes = [];
     const stepHeight = wallHeight / totalSteps;
     const stepDirection = direction === "top" ? 1 : -1;
+    const isLastPart = partPosition * numSteps >= totalSteps;
+    let startingYLevel;
+    if (partPosition === 1) {
+      startingYLevel = yLevel;
+    } else {
+      startingYLevel =
+        yLevel + (partPosition - 1) * (numSteps + 1) * stepHeight;
+    }
 
     for (let i = 0; i < numSteps; i++) {
-      const stepPositionY =
-        yLevel + i * stepHeight + (isSecondPart ? stepHeight * numSteps : 0);
-
       const stepMesh = BABYLON.MeshBuilder.CreateBox(
         `stair_step_${i}`,
         {
@@ -725,7 +746,7 @@ export class FloorGenerator {
       );
 
       stepMesh.position.x = position.x;
-      stepMesh.position.y = stepPositionY;
+      stepMesh.position.y = startingYLevel + i * stepHeight;
       stepMesh.position.z = position.z + i * stepDepth * stepDirection; // Adjust z based on direction
 
       stepMesh.material = this.materials.wallOpaque;
@@ -735,11 +756,11 @@ export class FloorGenerator {
     }
 
     // Create the floor at the level of the last step only if it's not the second part
-    if (!isSecondPart) {
+    if (!isLastPart) {
       const floorHeight = stepHeight;
       const floorWidth = Math.abs(floorP2.x - floorP1.x);
       const floorDepth = Math.abs(floorP2.z - floorP1.z);
-      const floorPositionY = yLevel + numSteps * stepHeight - floorHeight;
+      const floorPositionY = startingYLevel + numSteps * stepHeight;
 
       const floorMesh = BABYLON.MeshBuilder.CreateBox(
         `${name}_floor`,
@@ -845,9 +866,6 @@ export class FloorGenerator {
   ) {
     const spiralStairs = [];
     const stepHeight = height / numSteps;
-    console.log(height);
-    console.log(stepHeight);
-    console.log(numSteps);
     for (let i = 0; i < numSteps; i++) {
       const angle = (i * 2.585 * Math.PI) / numSteps + start;
       const x = center.x + radius * 2 * Math.cos(angle);

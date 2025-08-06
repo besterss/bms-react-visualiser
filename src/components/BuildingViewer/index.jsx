@@ -283,8 +283,6 @@ const BuildingViewer = () => {
               mesh.name.includes("_segment") &&
               mesh.material === generator.materials.water
             ) {
-              // Retain the water material for "retencni nadrz"
-              console.log("Water material remains on retencni nadrz");
             } else if (
               mesh.name.includes("_floor") ||
               mesh.name.includes("_segment")
