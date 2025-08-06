@@ -19,7 +19,7 @@ export class FloorGenerator {
 
   initializeGrassMaterial() {
     const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
-    grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.45, 0.0);
+    grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
     grassMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     grassMaterial.alpha = 0.7;
     grassMaterial.backFaceCulling = false;
@@ -231,12 +231,16 @@ export class FloorGenerator {
 
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
+      // Ensure the array is initialized for the current index
+      if (!this.allFloorMeshes[index]) {
+        this.allFloorMeshes[index] = [];
+      }
+
       const yLevel =
         index *
         (this.config.visualization.wall_height +
           this.config.visualization.floor_thickness +
           this.config.visualization.floor_spacing);
-
       const isUnderground = floorConfig.type === "underground";
       const floorResult = this.createFloorFromConfig(
         floorConfig,
@@ -244,13 +248,25 @@ export class FloorGenerator {
         isUnderground
       );
 
+      if (floorConfig.layout && floorConfig.layout.trees) {
+        floorConfig.layout.trees.forEach((treeConfig) => {
+          const tree = this.createTree(treeConfig.position, treeConfig.scale);
+          tree.position.y +=
+            index *
+            (this.config.visualization.wall_height +
+              this.config.visualization.floor_thickness +
+              this.config.visualization.floor_spacing);
+          this.allFloorMeshes[index].push(tree); // Push trees to the initialized array
+        });
+      }
+
       floorResult.meshes.forEach((mesh) => {
         if (mesh.name.includes("floor")) {
           mesh.receiveShadows = true;
         }
       });
+      this.allFloorMeshes[index].push(...floorResult.meshes);
 
-      this.allFloorMeshes.push(floorResult.meshes);
       this.floorData.push({
         floorNumber: floorConfig.id,
         name: floorConfig.name,
@@ -264,7 +280,6 @@ export class FloorGenerator {
     const firstAboveGroundIndex = this.config.floors.findIndex(
       (floorConfig) => floorConfig.id === 0
     );
-
     if (firstAboveGroundIndex !== -1) {
       const firstAboveGroundLevel =
         firstAboveGroundIndex *
@@ -278,7 +293,6 @@ export class FloorGenerator {
       );
       this.allFloorMeshes[firstAboveGroundIndex].push(grassMesh);
     }
-
     return {
       allFloorMeshes: this.allFloorMeshes,
       floorData: this.floorData,
@@ -457,22 +471,6 @@ export class FloorGenerator {
             isUnderground
           );
           floorMeshes.push(wallMesh);
-        } else if (wall.type === "stairs") {
-          const stairs = this.createStairs(
-            wall.position,
-            wall.stepWidth,
-            wall.stepDepth,
-            yLevel,
-            `${floorName}_stairs_${index}`,
-            wallHeight,
-            wall.isSecondPart,
-            wall.numSteps,
-            wall.totalSteps,
-            wall.floorP1,
-            wall.floorP2,
-            wall.direction
-          );
-          floorMeshes.push(stairs);
         }
 
         if (wallMesh) {
@@ -665,86 +663,61 @@ export class FloorGenerator {
     return railing;
   }
 
-  createStairs(
-    position,
-    stepWidth,
-    stepDepth,
-    yLevel,
-    name,
-    wallHeight,
-    isSecondPart,
-    numSteps,
-    totalSteps,
-    floorP1,
-    floorP2,
-    direction
-  ) {
-    const stairMeshes = [];
-    const stepHeight = wallHeight / totalSteps;
-    const stepDirection = direction === "top" ? 1 : -1;
+  createTree(position, scale) {
+    const trunkHeight = 2 * scale;
+    const trunkDiameter = 0.3 * scale;
 
-    for (let i = 0; i < numSteps; i++) {
-      const stepPositionY =
-        yLevel + i * stepHeight + (isSecondPart ? stepHeight * numSteps : 0);
+    // Create the trunk of the tree
+    const trunk = BABYLON.MeshBuilder.CreateCylinder(
+      "trunk",
+      { diameter: trunkDiameter, height: trunkHeight },
+      this.scene
+    );
+    trunk.position = new BABYLON.Vector3(
+      position.x,
+      trunkHeight / 2,
+      position.z
+    );
+    trunk.material = new BABYLON.StandardMaterial("trunkMat", this.scene);
+    trunk.material.diffuseColor = new BABYLON.Color3(0.35, 0.16, 0.14); // Brown color for the trunk
 
-      const stepMesh = BABYLON.MeshBuilder.CreateBox(
-        `stair_step_${i}`,
-        {
-          width: stepWidth,
-          height: stepHeight,
-          depth: stepDepth,
-        },
+    // Create the foliage of the tree with controlled randomness
+    const foliage = [];
+    const numberOfFoliageBalls = 5;
+
+    for (let i = 0; i < numberOfFoliageBalls; i++) {
+      const leaves = BABYLON.MeshBuilder.CreateSphere(
+        `leaves_${i}`,
+        { diameter: trunkDiameter * 3 },
         this.scene
       );
 
-      stepMesh.position.x = position.x;
-      stepMesh.position.y = stepPositionY;
-      stepMesh.position.z = position.z + i * stepDepth * stepDirection; // Adjust z based on direction
+      const offsetX = (Math.random() * 1 - 0.5) * scale * 0.4;
+      const offsetY = trunkHeight * (0.6 + Math.random() * 0.4);
+      const offsetZ = (Math.random() * 1 - 0.5) * scale * 0.4;
 
-      stepMesh.material = this.materials.wallOpaque;
-      stepMesh.isPickable = false;
-      this.shadowGenerator.addShadowCaster(stepMesh);
-      stairMeshes.push(stepMesh);
-    }
-
-    // Create the floor at the level of the last step only if it's not the second part
-    if (!isSecondPart) {
-      const floorHeight = stepHeight;
-      const floorWidth = Math.abs(floorP2.x - floorP1.x);
-      const floorDepth = Math.abs(floorP2.z - floorP1.z);
-      const floorPositionY = yLevel + numSteps * stepHeight - floorHeight;
-
-      const floorMesh = BABYLON.MeshBuilder.CreateBox(
-        `${name}_floor`,
-        {
-          width: floorWidth,
-          height: floorHeight,
-          depth: floorDepth,
-        },
-        this.scene
+      leaves.position = new BABYLON.Vector3(
+        position.x + offsetX,
+        offsetY,
+        position.z + offsetZ
       );
 
-      // Position the floor midway between floorP1 and floorP2
-      floorMesh.position.x = (floorP1.x + floorP2.x) / 2;
-      floorMesh.position.y = floorPositionY;
-      floorMesh.position.z = (floorP1.z + floorP2.z) / 2;
-
-      floorMesh.material = this.materials.wallOpaque;
-      floorMesh.isPickable = false;
-      this.shadowGenerator.addShadowCaster(floorMesh);
-      stairMeshes.push(floorMesh);
+      leaves.material = new BABYLON.StandardMaterial("leavesMat", this.scene);
+      leaves.material.diffuseColor = new BABYLON.Color3(0.0, 0.5, 0.0); // Green color for the leaves
+      leaves.material.specularColor = new BABYLON.Color3(0, 0, 0);
+      foliage.push(leaves);
     }
 
-    const stairs = BABYLON.Mesh.MergeMeshes(
-      stairMeshes,
+    const tree = BABYLON.Mesh.MergeMeshes(
+      [trunk, ...foliage],
       true,
-      true,
-      undefined,
+      false,
+      null,
       false,
       true
     );
-
-    stairs.name = name;
-    return stairs;
+    tree.isPickable = false;
+    tree.name = `tree_${position.x}_${position.z}`;
+    return tree;
   }
 }

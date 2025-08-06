@@ -235,20 +235,16 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
-
     setCurrentActiveFloor(floorId);
-
     const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
       (floor) => floor && floor.floorNumber === floorId
     );
-
     const totalHeight =
       floors.length *
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
@@ -265,20 +261,19 @@ const BuildingViewer = () => {
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       if (!floorInfo) return;
-
       floorMeshes.forEach((mesh) => {
         const isGrassMesh = mesh.name.includes("grassArea");
-
-        // Grass should be visible for 1NP and higher
+        const isTreeMesh = mesh.name.startsWith("tree_");
         if (isGrassMesh) {
-          mesh.setEnabled(!isViewingAllFloors && floorId >= 0);
+          mesh.setEnabled(isViewingAllFloors || floorId >= 0);
+        } else if (isTreeMesh) {
+          // Enable tree meshes only when viewing "all floors" or for floor 7 and above
+          mesh.setEnabled(isViewingAllFloors || floorId >= 6);
         } else {
           // Show the current floor and all floors below
           const shouldEnable =
             isViewingAllFloors || floorInfo.floorNumber <= floorId;
           mesh.setEnabled(shouldEnable);
-
-          // Ensure material is always applied when setting visibility
           if (shouldEnable) {
             if (
               mesh.name.includes("_floor") ||

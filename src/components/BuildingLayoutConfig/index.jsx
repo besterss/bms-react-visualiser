@@ -13038,6 +13038,20 @@ export const CONFIG_DATA = {
           columns: 1,
           rows: 1,
         },
+        trees: [
+          {
+            position: { x: 2.5, z: 2.5 }, // Position where you want the tree
+            scale: 3.0, // Scale size of the tree
+          },
+          {
+            position: { x: 2, z: -1 }, // Position where you want the tree
+            scale: 2.0, // Scale size of the tree
+          },
+          {
+            position: { x: 4, z: -4 }, // Position where you want the tree
+            scale: 2.5, // Scale size of the tree
+          },
+        ],
         walls: [
           {
             type: "outline",
