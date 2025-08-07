@@ -8,14 +8,21 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
   useEffect(() => {
     if (!scene || !rooms || floorIndex === undefined) return;
 
-    const yLevel =
-      floorIndex *
-      (config.visualization.wall_height +
+    // Spočítáme yLevel jako součet výšek všech předchozích pater
+    let yLevel = 0;
+    for (let i = 0; i < floorIndex; i++) {
+      const fc = config.floors[i];
+      const wallH =
+        fc.id === 0
+          ? config.visualization.wall_height_1NP
+          : config.visualization.wall_height;
+      yLevel +=
+        wallH +
         config.visualization.floor_thickness +
-        config.visualization.floor_spacing);
+        config.visualization.floor_spacing;
+    }
 
     let roomMeshes = [];
-
     const boxes = rooms.map((room, index) => {
       const parentNode = new BABYLON.TransformNode(
         `parentNode-${index}`,
@@ -65,7 +72,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
 
       roomMeshes = [...roomMeshes, ...meshes];
       setupActions(room.name, meshes);
-
       return { parentNode, roomName: room.name, meshes };
     });
 
@@ -106,7 +112,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       });
     }
 
-    // Update highlight state
+    // Highlight stavu vybraného boxu
     boxes.forEach(({ roomName, meshes }) => {
       const isSelected = selectedBoxName === roomName;
       meshes.forEach((mesh) => {
@@ -114,13 +120,13 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       });
     });
 
+    // Klik mimo box zruší výběr
     const onPointerDown = (evt, pickResult) => {
       if (!pickResult.hit || !roomMeshes.includes(pickResult.pickedMesh)) {
         setSelectedBoxName(null);
         setSelectedRoomInfo(null);
       }
     };
-
     scene.onPointerDown = onPointerDown;
 
     return () => {
@@ -129,8 +135,8 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
     };
   }, [rooms, scene, floorIndex, config, selectedBoxName]);
 
+  // Při změně patra resetujeme výběr
   useEffect(() => {
-    // Reset selection when floor index changes
     setSelectedRoomInfo(null);
     setSelectedBoxName(null);
   }, [floorIndex]);
