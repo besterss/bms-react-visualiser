@@ -340,6 +340,14 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
+            //prava zed nad schodistem vyssi - leva
+            type: "partition",
+            start: { x: 10.1, z: -2.8 },
+            end: { x: 10.1, z: -8.9 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
             //prostredni zed vpravo s H spodni
             type: "partition",
             start: { x: 10.2, z: -2.9 },
@@ -362,6 +370,14 @@ export const CONFIG_DATA = {
             partitionWidth: 0.15,
           },
           {
+            //prostredni zed doprava vrchni nahore
+            type: "partition",
+            start: { x: 11.7, z: 5.965 },
+            end: { x: 13.61, z: 5.965 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
             //prostredni zed doprava spodni pokjracovani
             type: "partition",
             start: { x: 13.61, z: 5.965 },
@@ -375,7 +391,14 @@ export const CONFIG_DATA = {
             end: { x: 17.795, z: 5.965 },
             partitionWidth: 0.15,
           },
-
+          {
+            //prostredni zed doprava spodni pokjracovani
+            type: "partition",
+            start: { x: 13.61, z: 5.965 },
+            end: { x: 17.795, z: 5.965 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
           {
             //prostredni zed LEVA dnahoruoprava prava
             type: "partition",
@@ -403,7 +426,7 @@ export const CONFIG_DATA = {
             //Schodiste01 - nahore
             type: "partition",
             start: { x: 6.6, z: -10.2 },
-            end: { x: 8.35, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
             partitionWidth: 0.26,
           },
           {
@@ -420,6 +443,15 @@ export const CONFIG_DATA = {
             end: { x: 6.6, z: -17.335 },
             partitionWidth: 1.07,
           },
+
+          {
+            //Schodiste01 - spodekleva pricka
+            type: "partition",
+            start: { x: 9.925, z: -14.25 },
+            end: { x: 9.925, z: -17.25 },
+            partitionWidth: 0.55,
+            yLevel: 2.1,
+          },
           {
             //Schodiste01 - spodekleva
             type: "partition",
@@ -433,6 +465,14 @@ export const CONFIG_DATA = {
             start: { x: 6.875, z: -17.25 },
             end: { x: 6.875, z: -17.25 },
             partitionWidth: 0.55,
+          },
+          {
+            //Schodiste01 - spodekprava pricka
+            type: "partition",
+            start: { x: 6.875, z: -14.25 },
+            end: { x: 6.875, z: -17.25 },
+            partitionWidth: 0.55,
+            yLevel: 2.1,
           },
 
           {
@@ -502,9 +542,17 @@ export const CONFIG_DATA = {
           {
             //rozvodna RPO - dolni leva kratka
             type: "partition",
-            start: { x: -10.275, z: -14.35 },
+            start: { x: -10.275, z: -15.175 },
             end: { x: -10.275, z: -16.075 },
             partitionWidth: 0.15,
+          },
+          {
+            //pricka 02.24 - 02.25
+            type: "partition",
+            start: { x: -10.275, z: -9.65 },
+            end: { x: -10.275, z: -16.075 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
           },
           {
             //rozvodna RPO - dolni
@@ -520,6 +568,14 @@ export const CONFIG_DATA = {
             start: { x: -16.5, z: -16 },
             end: { x: -15.325, z: -16 },
             partitionWidth: 0.15,
+          },
+          {
+            //pricka 02.31
+            type: "partition",
+            start: { x: -16.5, z: -16 },
+            end: { x: -13.525, z: -16 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
           },
           {
             //mistnost CBS - leva leva
@@ -549,6 +605,14 @@ export const CONFIG_DATA = {
             start: { x: 12.27, z: -4.165 },
             end: { x: 11.775, z: -4.165 },
             partitionWidth: 0.2,
+          },
+          {
+            //šachta vrchni pricka
+            type: "partition",
+            start: { x: 15.27, z: -4.165 },
+            end: { x: 11.775, z: -4.165 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
           },
           {
             //šachta  leva
@@ -871,6 +935,27 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -16.625, z: -0.75 },
             end: { x: -16.625, z: 0.75 },
+            partitionWidth: 0.35,
+          },
+          {
+            //Prvni anglicky dvorek  2.26b spodek
+            type: "partition",
+            start: { x: -16.625, z: 2.85 },
+            end: { x: -16.625, z: 4.15 },
+            partitionWidth: 0.35,
+          },
+          {
+            //Prvni anglicky dvorek  2.26a spodek
+            type: "partition",
+            start: { x: -16.625, z: 5.5 },
+            end: { x: -16.625, z: 6 },
+            partitionWidth: 0.35,
+          },
+          {
+            //Prvni anglicky dvorek  2.26b spodek
+            type: "partition",
+            start: { x: -16.625, z: 7.35 },
+            end: { x: -16.625, z: 9.55 },
             partitionWidth: 0.35,
           },
           {
