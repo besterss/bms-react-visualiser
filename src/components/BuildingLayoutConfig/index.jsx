@@ -5579,6 +5579,88 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+
+          {
             //V5 - vrchni
             type: "partition",
             start: { x: -6.6, z: 14.95 },
@@ -7286,6 +7368,126 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //2.15 pricka
+            type: "partition",
+            start: { x: -11.4, z: 13.8 },
+            end: { x: -11.4, z: 9.6 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //2.18 pricka
+            type: "partition",
+            start: { x: 8.3, z: 4.8 },
+            end: { x: 8.3, z: 0.6 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            type: "partition",
+            start: { x: -6, z: -4.8 },
+            end: { x: -6, z: -0.4 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //2.13 - vpravo
+            type: "partition",
+            start: { x: -2.48, z: -11.4 },
+            end: { x: -2.48, z: -15.6 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
             //V5 - vrchni
             type: "partition",
             start: { x: -6.6, z: 14.95 },
@@ -7735,6 +7937,111 @@ export const CONFIG_DATA = {
               { x: 17.15, z: 17.15 },
               { x: -17.15, z: 17.15 },
             ],
+          },
+          {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava pricka
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //3.12 leva spodni pricka
+            type: "partition",
+            start: { x: -4.8, z: -0.8 },
+            end: { x: -4.8, z: -5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //3.11 prava vrchni pricka
+            type: "partition",
+            start: { x: -11.4, z: 0.4 },
+            end: { x: -11.4, z: 4.6 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
           },
           {
             //okna
@@ -9111,6 +9418,135 @@ export const CONFIG_DATA = {
             railingHeight: 1.2, // Specifikovat výšku zábradlí
           },
           {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //4.11 - nahore pricka
+            type: "partition",
+            start: { x: 2.97, z: 0 },
+            end: { x: -8.53, z: 0 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //4.13a - nahore pricka
+            type: "partition",
+            start: { x: -8.53, z: -6 },
+            end: { x: -6.03, z: -6 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //4.12 vpravo pricka
+            type: "partition",
+            start: { x: 10.02, z: 4.8 },
+            end: { x: 10.02, z: -4.8 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //4.12 vlevo pricka
+            type: "partition",
+            start: { x: 4.22, z: 4.8 },
+            end: { x: 4.22, z: -4.8 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //4.14 - vlevo pricka
+            type: "partition",
+            start: { x: 11.4, z: 15.6 },
+            end: { x: 11.4, z: 9.62 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
             //okna
             type: "partition",
             start: { x: 17.15, z: 17.15 },
@@ -10339,7 +10775,6 @@ export const CONFIG_DATA = {
             end: { x: 11.4, z: 10.52 },
             partitionWidth: 0.1,
           },
-
           {
             //4.14 - nahore
             type: "partition",
@@ -10606,7 +11041,135 @@ export const CONFIG_DATA = {
             end: { x: -10.05, z: -7.8 },
             railingHeight: 1.2, // Specifikovat výšku zábradlí
           },
-
+          {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //5.13 a 5.15 - horni pricka
+            type: "partition",
+            start: { x: -4.6, z: -5.8 },
+            end: { x: 5, z: -5.8 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //5.12 a 5.14 - spodni pricka
+            type: "partition",
+            start: { x: -4.6, z: -4.6 },
+            end: { x: -0.47, z: -4.6 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //5.12 a 5.14 - vrchni pricka
+            type: "partition",
+            start: { x: -4.6, z: 5 },
+            end: { x: -0.4, z: 5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //5.19 - leva pricka
+            type: "partition",
+            start: { x: 4.4, z: -0.4 },
+            end: { x: 4.4, z: -4.6 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //5.19 - prava pricka
+            type: "partition",
+            start: { x: 8.6, z: -0.4 },
+            end: { x: 8.6, z: -4.6 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
           {
             //okna
             type: "partition",
@@ -12093,6 +12656,119 @@ export const CONFIG_DATA = {
             ],
           },
           {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            // Technické hnízdo - vpravo pricka
+            type: "partition",
+            start: { x: -4.8, z: 6.68 },
+            end: { x: -4.8, z: 3.08 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            // Zasedací místnost - vpravo pricka
+            type: "partition",
+            start: { x: 3, z: 6.68 },
+            end: { x: 3, z: -7.8 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            // Zasedací místnost - vlevo pricka
+            type: "partition",
+            start: { x: -3.05, z: 6.68 },
+            end: { x: -3.05, z: -7.8 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
             //okna
             type: "partition",
             start: { x: 17.15, z: 17.15 },
@@ -13556,6 +14232,124 @@ export const CONFIG_DATA = {
               { x: 17.15, z: 17.15 },
               { x: -17.15, z: 17.15 },
             ],
+          },
+          {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //Kostka - vlevo pricka
+            type: "partition",
+            start: { x: -10.2, z: 9.6 },
+            end: { x: -10.2, z: -10.2 },
+            yLevel: 2.1,
+          },
+          {
+            //Kostka -  vpravo pricka
+            type: "partition",
+            start: { x: 10.2, z: 9.6 },
+            end: { x: 10.2, z: -10.2 },
+            yLevel: 2.1,
+          },
+          {
+            //Kostka - dole pricka
+            type: "partition",
+            start: { x: -9.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            yLevel: 2.1,
+          },
+          {
+            //7.25 - vlevo 1
+            type: "partition",
+            start: { x: -7.675, z: -7.75 },
+            end: { x: -7.675, z: 6.55 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
           },
           {
             //okna
@@ -15158,6 +15952,124 @@ export const CONFIG_DATA = {
             direction: "bottom",
           },
           {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 9.8 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //2.05 - Pricka prava
+            type: "partition",
+            start: { x: 3.325, z: 16.6 },
+            end: { x: 3.325, z: 14.3 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //2schodiste 02
+            type: "partition",
+            start: { x: -10, z: 9.7 },
+            end: { x: -7.15, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //04 - spodni pricka
+            type: "partition",
+            start: { x: -5, z: 9.7 },
+            end: { x: -0.63, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //Kostka - vlevo pricka
+            type: "partition",
+            start: { x: -10.2, z: 9.6 },
+            end: { x: -10.2, z: -10.2 },
+            yLevel: 2.1,
+          },
+          {
+            //Kostka -  vpravo pricka
+            type: "partition",
+            start: { x: 10.2, z: 9.6 },
+            end: { x: 10.2, z: -10.2 },
+            yLevel: 2.1,
+          },
+          {
+            //Kostka - dole pricka
+            type: "partition",
+            start: { x: -9.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            yLevel: 2.1,
+          },
+          {
+            //Spisovna/Tiskarna - vlevo
+            type: "partition",
+            start: { x: -7.72, z: 3.08 },
+            end: { x: -7.72, z: -7.8 },
+            partitionWidth: 0.22,
+            yLevel: 2.1,
+          },
+          {
             //okna
             type: "partition",
             start: { x: 17.15, z: 17.15 },
@@ -16743,6 +17655,110 @@ export const CONFIG_DATA = {
             ],
           },
           {
+            //ROZVADECE - pricka
+            type: "partition",
+            start: { x: -10.36, z: -8.2 },
+            end: { x: -10.36, z: -9.85 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste01 - prava
+            type: "partition",
+            start: { x: 6.6, z: -10.2 },
+            end: { x: 10.2, z: -10.2 },
+            partitionWidth: 0.26,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste02 - spodni pricka
+            type: "partition",
+            start: { x: -10.2, z: 9.78 },
+            end: { x: -6.6, z: 9.78 },
+            partitionWidth: 0.32,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste02 - prava pricka
+            type: "partition",
+            start: { x: -6.875, z: 16.8 },
+            end: { x: -6.875, z: 9.8 },
+            partitionWidth: 0.55,
+            yLevel: 2.1,
+          },
+          {
+            //  spodni pricka pod wc zamestnanci az dozadu
+            type: "partition",
+            start: { x: -6.6, z: 14.425 },
+            end: { x: 4.125, z: 14.425 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //  WC ženy - prava pricka
+            type: "partition",
+            start: { x: -3.075, z: 16.55 },
+            end: { x: -3.075, z: 14.425 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //  WC muži - prava stena
+            type: "partition",
+            start: { x: 0.45, z: 16.55 },
+            end: { x: 0.45, z: 14.425 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //  WC muži - prava stena
+            type: "partition",
+            start: { x: 2.295, z: 16.55 },
+            end: { x: 2.295, z: 14.425 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //   -rozvadec FVE prava stena
+            type: "partition",
+            start: { x: 2.94, z: 12.05 },
+            end: { x: 2.94, z: 9.8 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //   -rozvadeec horni FVE
+            type: "partition",
+            start: { x: -0.81, z: 12.15 },
+            end: { x: 4.45, z: 12.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //VODOROVNA OSA VPRAVO KRATKA 9.18
+            type: "partition",
+            start: { x: 10.02, z: -5.47 },
+            end: { x: 10.02, z: -7 },
+            partitionWidth: 0.36,
+            yLevel: 2.1,
+          },
+          {
+            //Kostka - vpravo
+            type: "partition",
+            start: { x: 10.02, z: -5.65 },
+            end: { x: 10.02, z: 9 },
+            partitionWidth: 0.36,
+            yLevel: 2.1,
+          },
+          {
+            //  šachta -prava stena
+            type: "partition",
+            start: { x: 9.615, z: 15.5 },
+            end: { x: 9.615, z: 9.6 },
+            partitionWidth: 0.44,
+            yLevel: 2.1,
+          },
+          {
             //okna
             type: "partition",
             start: { x: 17.15, z: 17.15 },
@@ -17541,27 +18557,6 @@ export const CONFIG_DATA = {
             partitionWidth: 0.32,
           },
 
-          {
-            //vrsek - prava stena
-            type: "partition",
-            start: { x: 10.05, z: 16.8 },
-            end: { x: 10.05, z: 16.075 },
-            partitionWidth: 0.43,
-          },
-          {
-            //vrsek - prava stena
-            type: "partition",
-            start: { x: 10.05, z: 15.625 },
-            end: { x: 10.05, z: 15.235 },
-            partitionWidth: 0.43,
-          },
-          {
-            //vrsek - prava stena
-            type: "partition",
-            start: { x: 10.05, z: 14.635 },
-            end: { x: 10.05, z: 12.3 },
-            partitionWidth: 0.43,
-          },
           {
             //vrsek - prava stena
             type: "partition",
