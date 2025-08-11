@@ -1892,6 +1892,399 @@ export const CONFIG_DATA = {
             direction: "bottom",
           },
           {
+            //01.12 - prava 1 pricka
+            type: "partition",
+            start: { x: -3.05, z: 7.7 },
+            end: { x: -3.05, z: -5.9 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.12 - leva 1 priocka
+            type: "partition",
+            start: { x: -14.95, z: 7.7 },
+            end: { x: -14.95, z: -5.9 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.69 - leva 2 pricka
+            type: "partition",
+            start: { x: -6.55, z: -7.9 },
+            end: { x: -6.55, z: -15.5 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.69 - vrchni 1 pricka
+            type: "partition",
+            start: { x: -6.6, z: -7.85 },
+            end: { x: 4.2, z: -7.85 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.65 a 01.66 - prava pricka
+            type: "partition",
+            start: { x: -11.4, z: 15.6 },
+            end: { x: -11.4, z: 9.6 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.21 - leva 2
+            type: "partition",
+            start: { x: 10.085, z: 15.475 },
+            end: { x: 10.085, z: -15.25 },
+            partitionWidth: 0.23,
+            yLevel: 2.1,
+          },
+          {
+            //01.22 - vrchni 1
+            type: "partition",
+            start: { x: 10.2, z: -3.2 },
+            end: { x: 12.19, z: -3.2 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //V7 - vrchni1
+            type: "partition",
+            start: { x: 12.19, z: -4.56 },
+            end: { x: 13.29, z: -4.56 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.21 - vrchni 2
+            type: "partition",
+            start: { x: 16.8, z: -1.8 },
+            end: { x: 10.2, z: -1.8 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //01.70 - vertikalni 1
+            type: "partition",
+            start: { x: 13.275, z: 3.175 },
+            end: { x: 13.275, z: 4.725 },
+            partitionWidth: 0.25,
+            yLevel: 2.1,
+          },
+          {
+            //1.19 - prava spodni
+            type: "partition",
+            start: { x: 1.955, z: 14 },
+            end: { x: 1.955, z: 16.6 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //1.19 - leva
+            type: "partition",
+            start: { x: -0.95, z: 16.6 },
+            end: { x: -0.95, z: 15.145 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //VRCHNI PRICKY
+            //V4, V5, 03, 06
+            type: "partition",
+            start: { x: -3.95, z: 16.6 },
+            end: { x: -3.95, z: 10.15 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.64 - prava 1
+            type: "partition",
+            start: { x: -6.69, z: 17.045 },
+            end: { x: -6.69, z: 17.945 },
+            partitionWidth: 0.18,
+            yLevel: 2.1,
+          },
+          {
+            //01.64 - rozdeleni 1
+            type: "partition",
+            start: { x: -8.425, z: 17.045 },
+            end: { x: -8.425, z: 17.945 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste02 - vrchni prava pricka
+            type: "partition",
+            start: { x: -7.3, z: 16.9 },
+            end: { x: -10.2, z: 16.9 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //Schodiste02 - leva
+            type: "partition",
+            start: { x: -9.925, z: 16.9 },
+            end: { x: -9.925, z: 9.6 },
+            partitionWidth: 0.55,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - vrchni pricka
+            type: "partition",
+            start: { x: 5.05, z: 13.275 },
+            end: { x: 10.2, z: 13.275 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.07 - spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 11.525 },
+            end: { x: 7.2, z: 11.525 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //1.08 - zachod prava 1
+            type: "partition",
+            start: { x: 8.325, z: 13.3 },
+            end: { x: 8.325, z: 11.5 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //07 - prava spodni pricka
+            type: "partition",
+            start: { x: 5.05, z: 9.7 },
+            end: { x: 10.2, z: 9.7 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.17 - vrchni 2
+            type: "partition",
+            start: { x: 10.2, z: 18.02 },
+            end: { x: 17.87, z: 18.02 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //01.20 - vrchni 2
+            type: "partition",
+            start: { x: 9.9, z: 18.08 },
+            end: { x: 6.955, z: 18.08 },
+            partitionWidth: 0.18,
+            yLevel: 2.1,
+          },
+          {
+            //01.18 vrchni leva
+            type: "partition",
+            start: { x: 18.62, z: 18.07 },
+            end: { x: 25.45, z: 18.07 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.74 vrchni leva
+            type: "partition",
+            start: { x: 24.75, z: 14.695 },
+            end: { x: 38.85, z: 14.695 },
+            partitionWidth: 0.34,
+            yLevel: 2.1,
+          },
+          {
+            //01.27 vrchni prava
+            type: "partition",
+            start: { x: 27.55, z: 18.07 },
+            end: { x: 38.85, z: 18.07 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.28a leva 1
+            type: "partition",
+            start: { x: 28.85, z: 18.17 },
+            end: { x: 28.85, z: 21.27 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.30 leva
+            type: "partition",
+            start: { x: 35.75, z: 21.97 },
+            end: { x: 35.75, z: 49.311 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.61 leva vrchni
+            type: "partition",
+            start: { x: 35.8175, z: 48.71 },
+            end: { x: 35.8175, z: 50.71 },
+            partitionWidth: 0.335,
+            yLevel: 2.1,
+          },
+          {
+            //01.31 prava prostredni
+            type: "partition",
+            start: { x: 37.175, z: 37.36 },
+            end: { x: 37.175, z: 48.85 },
+            partitionWidth: 0.35,
+            yLevel: 2.1,
+          },
+          {
+            //01.26 - vrchni
+            type: "partition",
+            start: { x: -18.07, z: 18.07 },
+            end: { x: -28.3, z: 18.07 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.44 - leva 2
+            type: "partition",
+            start: { x: -24.9, z: 14.455 },
+            end: { x: -24.9, z: 8.03 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.43 - vrchni 2
+            type: "partition",
+            start: { x: -25, z: 11.395 },
+            end: { x: -28.3, z: 11.395 },
+            partitionWidth: 0.2,
+            yLevel: 2.1,
+          },
+          {
+            //01.71 - leva
+            type: "partition",
+            start: { x: -28.45, z: 15.7 },
+            end: { x: -28.45, z: 18.57 },
+            partitionWidth: 0.3,
+            yLevel: 2.1,
+          },
+          {
+            //01.39 - vrchni leva
+            type: "partition",
+            start: { x: -35.6, z: 14.965 },
+            end: { x: -38.7, z: 14.965 },
+            partitionWidth: 0.12,
+            yLevel: 2.1,
+          },
+          {
+            //01.41 - vrchni leva
+            type: "partition",
+            start: { x: -38.85, z: 14.89 },
+            end: { x: -35.7, z: 14.89 },
+            partitionWidth: 0.27,
+            yLevel: 2.1,
+          },
+          {
+            //01.48 - vrchni 1
+            type: "partition",
+            start: { x: -43.8, z: 12.955 },
+            end: { x: -39.45, z: 12.955 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //01.47 - vrchni 2
+            type: "partition",
+            start: { x: -43.8, z: 15.945 },
+            end: { x: -39.45, z: 15.945 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //01.46 - vrchni 2
+            type: "partition",
+            start: { x: -43.8, z: 18.55 },
+            end: { x: -39.45, z: 18.55 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //01.46 - prava
+            type: "partition",
+            start: { x: -39.15, z: 13.92 },
+            end: { x: -39.15, z: 27.63 },
+            partitionWidth: 0.6,
+            yLevel: 2.1,
+          },
+          {
+            //01.49 - vrchni 2
+            type: "partition",
+            start: { x: -43.8, z: 21.205 },
+            end: { x: -39.45, z: 21.205 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+          },
+          {
+            //01.32 - vrchni 1
+            type: "partition",
+            start: { x: -44.2, z: 25.43 },
+            end: { x: -39.25, z: 25.43 },
+            partitionWidth: 0.4,
+            yLevel: 2.1,
+          },
+          {
+            //01.53 spodni 1
+            type: "partition",
+            start: { x: -38.85, z: 50.605 },
+            end: { x: -32.55, z: 50.605 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //01.54 spodni 1
+            type: "partition",
+            start: { x: -38.85, z: 46.805 },
+            end: { x: -32.55, z: 46.805 },
+            partitionWidth: 0.15,
+            yLevel: 2.1,
+          },
+          {
+            //01.37c - spodni 1
+            type: "partition",
+            start: { x: -32.15, z: 33.635 },
+            end: { x: -29.45, z: 33.635 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.37c - prava 2
+            type: "partition",
+            start: { x: -31.15, z: 35.585 },
+            end: { x: -31.15, z: 33.685 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+          },
+          {
+            //01.35 - leva 2
+            type: "partition",
+            start: { x: -30.7, z: 37.66 },
+            end: { x: -30.7, z: 46.81 },
+            partitionWidth: 0.5,
+            yLevel: 2.1,
+          },
+          {
+            //V6 - leva 1
+            type: "partition",
+            start: { x: -32.525, z: 45.61 },
+            end: { x: -32.525, z: 50.53 },
+            yLevel: 2.1,
+            partitionWidth: 0.25,
+          },
+          {
+            //01.35 - prava
+            type: "partition",
+            start: { x: -29.2, z: 49.51 },
+            end: { x: -29.2, z: 37.66 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
+          {
             //schodiste11 vnejsi leva
             type: "partition",
             start: { x: -0.6, z: 4.775 },
@@ -4099,7 +4492,7 @@ export const CONFIG_DATA = {
         {
           start: { x: -18.065, z: 35.98 },
           end: { x: -13.065, z: 33.48 },
-          status: "occupfreeied",
+          status: "occupied",
         },
         {
           start: { x: -18.065, z: 38.48 },
