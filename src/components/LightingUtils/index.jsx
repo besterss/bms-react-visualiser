@@ -16,7 +16,7 @@ export const setupSceneLighting = (scene) => {
     mainDirectionalLight
   );
   shadowGenerator.usePercentageCloserFiltering = true; // Use advanced filtering for better shadow detail
-  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH; // High-quality shadows
+  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM; // High-quality shadows
 
   // Hemispheric Light for general ambient lighting from above
   const hemisphericLight = new BABYLON.HemisphericLight(

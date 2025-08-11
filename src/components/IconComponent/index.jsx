@@ -17,78 +17,93 @@ const IconComponent = ({
 }) => {
   useEffect(() => {
     if (!scene || typeof floorIndex !== "number" || !config) return;
-    const wall_height = config.visualization.wall_height;
-    const floor_thickness = config.visualization.floor_thickness;
-    const yOffset = wall_height + floor_thickness;
-    const yPosition = Math.max(0, floorIndex * yOffset + 1);
-    const planeSize = 1;
 
-    const plane = BABYLON.MeshBuilder.CreatePlane(
-      `icon-${text}`,
-      { size: planeSize },
-      scene
-    );
-    plane.position.set(positionX, yPosition, positionZ);
-    plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-    plane.isPickable = true;
+    // proměnné pro cleanup
+    let plane = null;
+    let iconTexture = null;
+    let circle = null;
+    let pointerObserver = null;
+    let canceled = false;
 
-    const iconTexture = GUI.AdvancedDynamicTexture.CreateForMesh(plane);
-    const iconBlock = new GUI.TextBlock();
-    iconBlock.text = text;
-    iconBlock.color = isSelected ? "#7F7FFF" : "white";
-    iconBlock.fontSize = "800px";
-    iconBlock.fontFamily = "FontAwesome";
-    iconTexture.addControl(iconBlock);
+    document.fonts
+      .load('800px "FontAwesome"')
+      .then(() => {
+        if (canceled) return;
 
-    let circle;
-    if (type === "wifi") {
-      const circleRange = 10;
-      circle = BABYLON.MeshBuilder.CreateCylinder(
-        `range-circle-${text}`,
-        { height: 2.5, diameter: circleRange * 2, tessellation: 64 },
-        scene
-      );
-      circle.position.set(positionX, yPosition + 0.5, positionZ);
-      circle.material = new BABYLON.StandardMaterial("circleMaterial", scene);
+        const { wall_height, floor_thickness } = config.visualization;
+        const yOffset = wall_height + floor_thickness;
+        const yPosition = Math.max(0, floorIndex * yOffset + 1);
+        const planeSize = 1;
 
-      // Setting circle color based on healthStatus
-      switch (healthStatus) {
-        case "Good":
-          circle.material.diffuseColor = new BABYLON.Color3(0, 1, 0); // Green
-          break;
-        case "Average":
-          circle.material.diffuseColor = new BABYLON.Color3(1, 0.65, 0); // Orange
-          break;
-        case "Unstable":
-          circle.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red
-          break;
-        default:
-          circle.material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1); // Default color
-      }
+        plane = BABYLON.MeshBuilder.CreatePlane(
+          `icon-${text}`,
+          { size: planeSize },
+          scene
+        );
+        plane.position.set(positionX, yPosition, positionZ);
+        plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+        plane.isPickable = true;
 
-      circle.material.specularColor = new BABYLON.Color3(0, 0, 0);
-      circle.material.alpha = 0.3;
-      circle.isPickable = false;
-      circle.setEnabled(showCircle);
-    }
+        iconTexture = GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+        const iconBlock = new GUI.TextBlock();
+        iconBlock.text = text;
+        iconBlock.color = isSelected ? "#7F7FFF" : "white";
+        iconBlock.fontSize = "800px";
+        iconBlock.fontFamily = "FontAwesome";
+        iconTexture.addControl(iconBlock);
 
-    const pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
-      if (
-        pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK &&
-        pointerInfo.pickInfo.hit &&
-        pointerInfo.pickInfo.pickedMesh === plane
-      ) {
-        onSelect();
-      }
-    });
+        if (type === "wifi") {
+          const circleRange = 10;
+          circle = BABYLON.MeshBuilder.CreateCylinder(
+            `range-circle-${text}`,
+            { height: 2.5, diameter: circleRange * 2, tessellation: 64 },
+            scene
+          );
+          circle.position.set(positionX, yPosition + 0.5, positionZ);
+          const mat = new BABYLON.StandardMaterial("circleMaterial", scene);
+          switch (healthStatus) {
+            case "Good":
+              mat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+              break;
+            case "Average":
+              mat.diffuseColor = new BABYLON.Color3(1, 0.65, 0);
+              break;
+            case "Unstable":
+              mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+              break;
+            default:
+              mat.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
+          }
+          mat.specularColor = new BABYLON.Color3(0, 0, 0);
+          mat.alpha = 0.3;
+          circle.material = mat;
+          circle.isPickable = false;
+          circle.setEnabled(showCircle);
+        }
 
+        pointerObserver = scene.onPointerObservable.add((pi) => {
+          if (
+            pi.type === BABYLON.PointerEventTypes.POINTERPICK &&
+            pi.pickInfo.hit &&
+            pi.pickInfo.pickedMesh === plane
+          ) {
+            onSelect();
+          }
+        });
+      })
+      .catch((e) => {
+        console.warn("Nepodařilo se načíst FontAwesome:", e);
+      });
+
+    // cleanup
     return () => {
-      scene.onPointerObservable.remove(pointerObserver);
-      iconTexture.dispose();
-      plane.dispose();
-      if (circle) {
-        circle.dispose();
+      canceled = true;
+      if (pointerObserver) {
+        scene.onPointerObservable.remove(pointerObserver);
       }
+      if (iconTexture) iconTexture.dispose();
+      if (plane) plane.dispose();
+      if (circle) circle.dispose();
     };
   }, [
     scene,
@@ -101,7 +116,7 @@ const IconComponent = ({
     isSelected,
     onSelect,
     showCircle,
-    healthStatus, // Added as a dependency
+    healthStatus,
   ]);
 
   return null;
