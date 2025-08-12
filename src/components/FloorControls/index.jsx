@@ -61,7 +61,6 @@ const FloorControls = ({
           />
           Show Room Boxes
         </label>
-        {/* New option for showing icons */}
         <label>
           <input
             type="checkbox"

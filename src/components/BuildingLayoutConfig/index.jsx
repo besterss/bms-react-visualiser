@@ -4477,7 +4477,6 @@ export const CONFIG_DATA = {
           end: { x: -24.14, z: 50.98 },
           status: "free",
         },
-
         // 2
         {
           start: { x: -18.065, z: 30.98 },
@@ -15997,6 +15996,7 @@ export const CONFIG_DATA = {
             start: { x: -10.2, z: 8.85 },
             end: { x: -10.2, z: 9.6 },
           },
+
           {
             //leva strana stena 2
             type: "partition",
@@ -16028,6 +16028,13 @@ export const CONFIG_DATA = {
             end: { x: -11.17, z: 6.6 },
           },
           {
+            //leva strana rozdeleni 1 1
+            type: "partition",
+            start: { x: -16.8, z: 6.6 },
+            end: { x: -10.2, z: 6.6 },
+            yLevel: 2.1,
+          },
+          {
             //leva strana rozdeleni 1 2
             type: "partition",
             start: { x: -10.27, z: 6.6 },
@@ -16038,6 +16045,13 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -16.8, z: -0.6 },
             end: { x: -11.17, z: -0.6 },
+          },
+          {
+            //leva strana rozdeleni 2 1
+            type: "partition",
+            start: { x: -16.8, z: -0.6 },
+            end: { x: -10.2, z: -0.6 },
+            yLevel: 2.1,
           },
           {
             //leva strana rozdeleni 2 2
@@ -16090,20 +16104,20 @@ export const CONFIG_DATA = {
           {
             //spodni strana rozdeleni 1
             type: "partition",
-            start: { x: -7.6, z: -10.2 },
-            end: { x: -7.6, z: -16.8 },
+            start: { x: -7.8, z: -10.2 },
+            end: { x: -7.8, z: -16.8 },
           },
           {
             //spodni strana rozdeleni 2
             type: "partition",
-            start: { x: -0.4, z: -10.2 },
-            end: { x: -0.4, z: -16.8 },
+            start: { x: -0.6, z: -10.2 },
+            end: { x: -0.6, z: -16.8 },
           },
           {
             //spodni strana rozdeleni 3
             type: "partition",
-            start: { x: 3.2, z: -10.2 },
-            end: { x: 3.2, z: -16.8 },
+            start: { x: 3, z: -10.2 },
+            end: { x: 3, z: -16.8 },
           },
           {
             //prava strana stena 1
@@ -16148,6 +16162,13 @@ export const CONFIG_DATA = {
             end: { x: 16.8, z: 6.6 },
           },
           {
+            //prava strana rozdeleni 1 2
+            type: "partition",
+            start: { x: 10.2, z: 6.6 },
+            end: { x: 16.8, z: 6.6 },
+            yLevel: 2.1,
+          },
+          {
             //prava strana rozdeleni 2 1
             type: "partition",
             start: { x: 10.2, z: -4.2 },
@@ -16158,6 +16179,13 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: 11.17, z: -4.2 },
             end: { x: 16.8, z: -4.2 },
+          },
+          {
+            //prava strana rozdeleni 2 2
+            type: "partition",
+            start: { x: 10.2, z: -4.2 },
+            end: { x: 16.8, z: -4.2 },
+            yLevel: 2.1,
           },
           {
             //prava strana rozdeleni 3
