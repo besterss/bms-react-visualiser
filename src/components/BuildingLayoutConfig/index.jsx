@@ -1774,6 +1774,7 @@ export const CONFIG_DATA = {
         { width: 6, depth: 14.55, position: { x: -41, z: 18.05 } },
         { width: 5, depth: 20.1, position: { x: -41.85, z: -3.2 } }, // retencni nadrz2
       ],
+      holes: [{ x: 8.4, z: -13.5, width: 3, depth: 4 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -5209,6 +5210,7 @@ export const CONFIG_DATA = {
         width: 35.82,
         depth: 35.82,
       },
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -6920,6 +6922,11 @@ export const CONFIG_DATA = {
         width: 35.82,
         depth: 35.82,
       },
+      holes: [
+        { x: 0.86, z: -0.2, width: 2.1, depth: 8.2 }, // 2.11 - leva
+        { x: 2, z: -1, width: 4, depth: 6.6 }, //2.11 - prava
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -6970,6 +6977,41 @@ export const CONFIG_DATA = {
             numSteps: 13,
             totalSteps: 26,
             direction: "bottom",
+          },
+          {
+            //schodiste11 vnejsi leva
+            type: "railing",
+            start: { x: -0.3, z: 4 },
+            end: { x: -0.3, z: -4.4 },
+            railingHeight: 1.2,
+          },
+          {
+            //schodiste11 vnejsi vrchni leva
+            type: "railing",
+            start: { x: 2.05, z: 4 },
+            end: { x: -0.35, z: 4 },
+            railingHeight: 1.2,
+          },
+          {
+            //schodiste11 vnejsi vrchni leva
+            type: "railing",
+            start: { x: 2, z: 4.05 },
+            end: { x: 2, z: 2.35 },
+            railingHeight: 1.2,
+          },
+          {
+            //schodiste11 vnejsi prava
+            type: "railing",
+            start: { x: 4.1, z: -4.4 },
+            end: { x: 4.1, z: 4 },
+            railingHeight: 1.2,
+          },
+          {
+            //schodiste11 vnejsi spodni
+            type: "railing",
+            start: { x: 4.15, z: -4.4 },
+            end: { x: -0.35, z: -4.4 },
+            railingHeight: 1.2,
           },
           {
             type: "outline",
@@ -8439,6 +8481,7 @@ export const CONFIG_DATA = {
       name: "3NP",
       type: "aboveground",
       segments: [{ width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } }],
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -9903,6 +9946,7 @@ export const CONFIG_DATA = {
         { width: 35.82, depth: 28.19, position: { x: 0, z: 3.855 } },
         { width: 3, depth: 10, position: { x: 8.5, z: -12 } }, // kostka hlavni
       ],
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -11528,6 +11572,7 @@ export const CONFIG_DATA = {
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
         { width: 28.19, depth: 35.82, position: { x: 3.855, z: 0 } }, // kostka hlavni
       ],
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -13200,6 +13245,7 @@ export const CONFIG_DATA = {
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
         { width: 20.56, depth: 35.82, position: { x: 0, z: 0 } },
       ],
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -14720,6 +14766,7 @@ export const CONFIG_DATA = {
         width: 35.82,
         depth: 35.82,
       },
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -16480,6 +16527,7 @@ export const CONFIG_DATA = {
         { width: 12, depth: 11.7, position: { x: 3, z: 12.1 } },
         { width: 12, depth: 10.6, position: { x: 3, z: -12.65 } },
       ],
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -18227,6 +18275,7 @@ export const CONFIG_DATA = {
         { width: 12, depth: 11.7, position: { x: 3, z: 12.1 } },
         { width: 12, depth: 10.6, position: { x: 3, z: -12.65 } },
       ],
+      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
           columns: 1,
