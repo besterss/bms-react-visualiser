@@ -5214,6 +5214,7 @@ export const CONFIG_DATA = {
           columns: 1,
           rows: 1,
         },
+
         walls: [
           {
             type: "stairs",

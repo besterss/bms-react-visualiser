@@ -229,6 +229,18 @@ export class FloorGenerator {
     return grassMesh;
   }
 
+  createHoleBox(hole, yLevel) {
+    const thickness = this.config.visualization.room_floor_height + 0.02;
+    const holeMesh = BABYLON.MeshBuilder.CreateBox(
+      `hole_${hole.x}_${hole.z}`,
+      { width: hole.width, height: thickness, depth: hole.depth },
+      this.scene
+    );
+    holeMesh.position.set(hole.x, yLevel + thickness / 2, hole.z);
+    holeMesh.isPickable = false;
+    return holeMesh;
+  }
+
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
       if (!this.allFloorMeshes[index]) {
@@ -384,6 +396,26 @@ export class FloorGenerator {
           roomIdx++;
         }
       }
+    }
+
+    if (Array.isArray(floorConfig.holes)) {
+      floorConfig.holes.forEach((hole) => {
+        const holeBox = this.createHoleBox(hole, yLevel);
+        // u každého floor mesh proveďme subtrakci
+        floorMeshes.forEach((mesh, i) => {
+          if (mesh.name.includes("_floor") || mesh.name.includes("_segment")) {
+            const cut = BABYLON.CSG.FromMesh(mesh)
+              .subtract(BABYLON.CSG.FromMesh(holeBox))
+              .toMesh(mesh.name, mesh.material, this.scene);
+            cut.receiveShadows = mesh.receiveShadows;
+            cut.metadata = mesh.metadata;
+            this.shadowGenerator.addShadowCaster(cut);
+            mesh.dispose();
+            floorMeshes[i] = cut;
+          }
+        });
+        holeBox.dispose();
+      });
     }
 
     if (layout && layout.walls) {
