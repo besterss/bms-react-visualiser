@@ -247,13 +247,11 @@ export class FloorGenerator {
         this.allFloorMeshes[index] = [];
       }
 
-      // Determine if this is 1NP and set the correct wall height
       const is1NP = floorConfig.id === 0;
       const wallHeight = is1NP
         ? this.config.visualization.wall_height_1NP
         : this.config.visualization.wall_height;
 
-      // Calculate yLevel considering special case for 1NP
       let yLevel = 0;
       for (let i = 0; i < index; i++) {
         const isPrevious1NP = this.config.floors[i].id === 0;
@@ -507,17 +505,20 @@ export class FloorGenerator {
           );
           floorMeshes.push(wallMesh);
         } else if (wall.type === "railing") {
-          // Nový typ "|za"
           const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
           const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
           const railingHeight = wall.railingHeight || 1.2;
+          const railingThickness = wall.thickness || 0.1;
+          const railingYOffset = wall.yLevel || 0;
           wallMesh = this.createRailingSegment(
             p1,
             p2,
             `${floorName}_railing_${index}`,
-            yLevel,
+            yLevel + railingYOffset,
             railingHeight,
-            isUnderground
+            railingThickness,
+            isUnderground,
+            wall.materialType
           );
           floorMeshes.push(wallMesh);
         } else if (wall.type === "stairs") {

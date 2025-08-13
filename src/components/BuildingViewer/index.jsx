@@ -304,7 +304,6 @@ const BuildingViewer = () => {
       });
     });
 
-    // Update room info to reflect the current floor and its details
     if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {

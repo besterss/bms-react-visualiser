@@ -33,7 +33,7 @@ export const CONFIG_DATA = {
             numSteps: 13,
             totalSteps: 26,
             floorP1: { x: 7.15, z: -11.855 },
-            floorP2: { x: 9.65, z: -10.655 },
+            floorP2: { x: 9.65, z: -10.1 },
             direction: "top",
           },
           {
@@ -8480,7 +8480,10 @@ export const CONFIG_DATA = {
       id: 2,
       name: "3NP",
       type: "aboveground",
-      segments: [{ width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } }],
+      segments: [
+        { width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } },
+        { width: 3.5, depth: 1.2, position: { x: 11.6, z: 8.1 } },
+      ],
       holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
         rooms_grid: {
@@ -8549,6 +8552,22 @@ export const CONFIG_DATA = {
               { x: 17.15, z: 17.15 },
               { x: -17.15, z: 17.15 },
             ],
+          },
+          {
+            //leva strana - vrchni stena
+            type: "railing",
+            start: { x: 10.2, z: 7.65 },
+            end: { x: 13.25, z: 7.65 },
+            railingHeight: 0.9,
+            partitionWidth: 0.5,
+          },
+          {
+            //leva strana - spodni stena
+            type: "railing",
+            start: { x: 10.2, z: 8.55 },
+            end: { x: 13.25, z: 8.55 },
+            railingHeight: 0.9,
+            partitionWidth: 0.5,
           },
           {
             //VRCHNI PRICKY
@@ -9566,11 +9585,18 @@ export const CONFIG_DATA = {
             partitionWidth: 0.55,
           },
           {
-            // Např. pro zábradlí na některém patře
+            //Y osa - vpravo
             type: "railing",
-            start: { x: 10.05, z: 9.6 },
-            end: { x: 10.05, z: -10.1 },
-            railingHeight: 1.2, // Specifikovat výšku zábradlí
+            start: { x: 10.2, z: 16.8 },
+            end: { x: 10.2, z: 8.55 },
+            railingHeight: 1.2,
+          },
+          {
+            //Y osa - vpravo 2
+            type: "railing",
+            start: { x: 10.2, z: -16.8 },
+            end: { x: 10.2, z: 7.65 },
+            railingHeight: 1.2,
           },
           {
             //sachta2 - spodni
@@ -9944,7 +9970,8 @@ export const CONFIG_DATA = {
       type: "aboveground",
       segments: [
         { width: 35.82, depth: 28.19, position: { x: 0, z: 3.855 } },
-        { width: 3, depth: 10, position: { x: 8.5, z: -12 } }, // kostka hlavni
+        { width: 3, depth: 10, position: { x: 8.5, z: -12 } },
+        { width: 1.2, depth: 3.2, position: { x: -6.3, z: -11.7 } }, // kostka hlavni
       ],
       holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
@@ -10019,16 +10046,39 @@ export const CONFIG_DATA = {
           {
             // Např. pro zábradlí na některém patře
             type: "railing",
-            start: { x: -10.2, z: -10.05 },
-            end: { x: 6.55, z: -10.05 },
+            start: { x: -10.2, z: -10.2 },
+            end: { x: -6.75, z: -10.2 },
             railingHeight: 1.2, // Specifikovat výšku zábradlí
           },
           {
             // Např. pro zábradlí na některém patře
             type: "railing",
-            start: { x: 10.2, z: -10.05 },
-            end: { x: 17.15, z: -10.05 },
+            start: { x: -5.85, z: -10.2 },
+            end: { x: 6.55, z: -10.2 },
             railingHeight: 1.2, // Specifikovat výšku zábradlí
+          },
+          {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: 10.2, z: -10.2 },
+            end: { x: 17.15, z: -10.2 },
+            railingHeight: 1.2, // Specifikovat výšku zábradlí
+          },
+          {
+            //leva strana - vrchni stena
+            type: "railing",
+            start: { x: -6.75, z: -10.2 },
+            end: { x: -6.75, z: -13.25 },
+            railingHeight: 1.2,
+            partitionWidth: 0.5,
+          },
+          {
+            //leva strana - vrchni stena
+            type: "railing",
+            start: { x: -5.85, z: -10.2 },
+            end: { x: -5.85, z: -13.25 },
+            railingHeight: 1.2,
+            partitionWidth: 0.5,
           },
           {
             //VRCHNI PRICKY
@@ -11570,7 +11620,8 @@ export const CONFIG_DATA = {
       type: "aboveground",
       segments: [
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
-        { width: 28.19, depth: 35.82, position: { x: 3.855, z: 0 } }, // kostka hlavni
+        { width: 28.19, depth: 35.82, position: { x: 3.855, z: 0 } },
+        { width: -3.5, depth: 1.2, position: { x: -11.6, z: 6.25 } }, // kostka hlavni
       ],
       holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
@@ -11642,18 +11693,40 @@ export const CONFIG_DATA = {
             ],
           },
           {
-            // Např. pro zábradlí na některém patře
             type: "railing",
-            start: { x: -10.05, z: -10.2 },
-            end: { x: -10.05, z: -17.15 },
-            railingHeight: 1.2, // Specifikovat výšku zábradlí
+            start: { x: -10.2, z: -10.2 },
+            end: { x: -10.2, z: -17.15 },
+            railingHeight: 1.2,
           },
           {
             // Např. pro zábradlí na některém patře
             type: "railing",
-            start: { x: -10.05, z: 9.6 },
-            end: { x: -10.05, z: -7.8 },
-            railingHeight: 1.2, // Specifikovat výšku zábradlí
+            start: { x: -10.2, z: 9.6 },
+            end: { x: -10.2, z: 6.7 },
+            railingHeight: 1.2,
+          },
+          {
+            // Např. pro zábradlí na některém patře
+            type: "railing",
+            start: { x: -10.2, z: 5.8 },
+            end: { x: -10.2, z: -7.8 },
+            railingHeight: 1.2,
+          },
+          {
+            //leva strana - vrchni stena
+            type: "railing",
+            start: { x: -10.2, z: 5.8 },
+            end: { x: -13.25, z: 5.8 },
+            railingHeight: 1.2,
+            partitionWidth: 0.5,
+          },
+          {
+            //leva strana - spodni stena
+            type: "railing",
+            start: { x: -10.2, z: 6.7 },
+            end: { x: -13.25, z: 6.7 },
+            railingHeight: 1.2,
+            partitionWidth: 0.5,
           },
           {
             //VRCHNI PRICKY
@@ -13244,6 +13317,7 @@ export const CONFIG_DATA = {
       segments: [
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
         { width: 20.56, depth: 35.82, position: { x: 0, z: 0 } },
+        { width: 3.5, depth: 1.2, position: { x: 11.6, z: 8.1 } },
       ],
       holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
@@ -14550,16 +14624,54 @@ export const CONFIG_DATA = {
           {
             //Y osa - vlevo
             type: "railing",
-            start: { x: -10.2, z: -16.8 },
-            end: { x: -10.2, z: 16.8 },
+            start: { x: -10.2, z: -7.8 },
+            end: { x: -10.2, z: 9.6 },
             railingHeight: 3,
           },
           {
             //Y osa - vlevo
             type: "railing",
-            start: { x: 10.2, z: -16.8 },
-            end: { x: 10.2, z: 16.8 },
+            start: { x: -10.2, z: -16.8 },
+            end: { x: -10.2, z: -10.2 },
             railingHeight: 3,
+          },
+          {
+            //Y osa - vpravo
+            type: "railing",
+            start: { x: 10.2, z: 9.6 },
+            end: { x: 10.2, z: 8.55 },
+            railingHeight: 3,
+          },
+          {
+            //Y osa - vpravo 2
+            type: "railing",
+            start: { x: 10.2, z: -10.2 },
+            end: { x: 10.2, z: 7.65 },
+            railingHeight: 3,
+          },
+          {
+            //Y osa - vpravo 2
+            type: "railing",
+            start: { x: 10.2, z: 8.55 },
+            end: { x: 10.2, z: 7.65 },
+            yLevel: 1.8,
+          },
+
+          {
+            //leva strana - vrchni stena
+            type: "railing",
+            start: { x: 10.2, z: 7.65 },
+            end: { x: 13.25, z: 7.65 },
+            railingHeight: 0.9,
+            partitionWidth: 0.5,
+          },
+          {
+            //leva strana - spodni stena
+            type: "railing",
+            start: { x: 10.2, z: 8.55 },
+            end: { x: 13.25, z: 8.55 },
+            railingHeight: 0.9,
+            partitionWidth: 0.5,
           },
           {
             // Technické hnízdo - vlevo
@@ -14624,19 +14736,6 @@ export const CONFIG_DATA = {
             start: { x: 3.05, z: -7.8 },
             end: { x: -3.05, z: -7.8 },
             partitionWidth: 0.1,
-          },
-
-          {
-            //leva strana - vrchni stena
-            type: "partition",
-            start: { x: 10.2, z: 6.8 },
-            end: { x: 13.5, z: 6.8 },
-          },
-          {
-            //leva strana - spodni stena
-            type: "partition",
-            start: { x: 10.2, z: 8.7 },
-            end: { x: 13.5, z: 8.7 },
           },
         ],
       },
@@ -19559,7 +19658,7 @@ export const CONFIG_DATA = {
     wall_height: 3.1,
     wall_height_1NP: 5.3,
     floor_thickness: 0.2,
-    floor_spacing: 0,
+    floor_spacing: -0.15,
     wall_thickness: 0.15,
     room_floor_height: 0.05,
   },
