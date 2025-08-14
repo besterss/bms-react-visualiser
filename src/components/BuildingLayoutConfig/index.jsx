@@ -5289,6 +5289,7 @@ export const CONFIG_DATA = {
           {
             type: "stairs",
             position: { x: 2.95, z: -2.222 },
+            railing: "yes",
             stepWidth: 2.1,
             stepDepth: 0.296,
             partPosition: 1,
@@ -5300,7 +5301,35 @@ export const CONFIG_DATA = {
           },
           {
             type: "stairs",
+            position: { x: 2.95, z: -2.222 },
+            railing: "yes",
+            stepWidth: 2.1,
+            stepDepth: 0.296,
+            partPosition: 3,
+            numSteps: 16,
+            totalSteps: 48,
+            direction: "top",
+          },
+          {
+            type: "pinkglass",
+            start: { x: 4.05, z: -4.6 },
+            end: { x: -0.45, z: -4.6 },
+            partitionWidth: 0.05,
+            yLevel: 3.65,
+            partitionHeight: 1,
+          },
+          {
+            type: "pinkglass",
+            start: { x: 4.05, z: 4.6 },
+            end: { x: -0.45, z: 4.6 },
+            partitionWidth: 0.05,
+            yLevel: 1.765,
+            partitionHeight: 1,
+          },
+          {
+            type: "stairs",
             position: { x: 0.65, z: 2.218 },
+            railing: "yes",
             stepWidth: 2.1,
             stepDepth: 0.296,
             partPosition: 2,
@@ -5310,16 +5339,7 @@ export const CONFIG_DATA = {
             floorP2: { x: 4, z: -4.6 },
             direction: "bottom",
           },
-          {
-            type: "stairs",
-            position: { x: 2.95, z: -2.222 },
-            stepWidth: 2.1,
-            stepDepth: 0.296,
-            partPosition: 3,
-            numSteps: 16,
-            totalSteps: 48,
-            direction: "top",
-          },
+
           {
             //okna
             type: "partition",
@@ -6980,38 +7000,38 @@ export const CONFIG_DATA = {
           },
           {
             //schodiste11 vnejsi leva
-            type: "railing",
+            type: "pinkglass",
             start: { x: -0.3, z: 4 },
             end: { x: -0.3, z: -4.4 },
-            railingHeight: 1.2,
+            partitionHeight: 1.2,
           },
           {
             //schodiste11 vnejsi vrchni leva
-            type: "railing",
-            start: { x: 2.05, z: 4 },
+            type: "pinkglass",
+            start: { x: 1.87, z: 4 },
             end: { x: -0.35, z: 4 },
-            railingHeight: 1.2,
+            partitionHeight: 1.2,
           },
           {
             //schodiste11 vnejsi vrchni leva
-            type: "railing",
-            start: { x: 2, z: 4.05 },
-            end: { x: 2, z: 2.35 },
-            railingHeight: 1.2,
+            type: "pinkglass",
+            start: { x: 1.87, z: 4.05 },
+            end: { x: 1.87, z: 2.35 },
+            partitionHeight: 1.2,
           },
           {
             //schodiste11 vnejsi prava
-            type: "railing",
+            type: "pinkglass",
             start: { x: 4.1, z: -4.4 },
             end: { x: 4.1, z: 4 },
-            railingHeight: 1.2,
+            partitionHeight: 1.2,
           },
           {
             //schodiste11 vnejsi spodni
-            type: "railing",
+            type: "pinkglass",
             start: { x: 4.15, z: -4.4 },
             end: { x: -0.35, z: -4.4 },
-            railingHeight: 1.2,
+            partitionHeight: 1.2,
           },
           {
             type: "outline",
@@ -7754,13 +7774,13 @@ export const CONFIG_DATA = {
             stepDepth: 1.165,
             start: 0,
           },
-          {
+          /* {
             //schody tocite v pravo nahore sloup
             type: "circular",
             center: { x: 13.5, z: 7.2 },
             radius: 0,
             circularWidth: 0.8,
-          },
+          }, */
           {
             //Schodiste01 - prava
             type: "partition",
@@ -8482,7 +8502,7 @@ export const CONFIG_DATA = {
       type: "aboveground",
       segments: [
         { width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } },
-        { width: 3.5, depth: 1.2, position: { x: 11.6, z: 8.1 } },
+        { width: 4, depth: 1.4, position: { x: 11.6, z: 8.1 } },
       ],
       holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
       layout: {
@@ -8556,17 +8576,17 @@ export const CONFIG_DATA = {
           {
             //leva strana - vrchni stena
             type: "railing",
-            start: { x: 10.2, z: 7.65 },
-            end: { x: 13.25, z: 7.65 },
-            railingHeight: 0.9,
+            start: { x: 10.2, z: 7.55 },
+            end: { x: 13.55, z: 7.55 },
+            railingHeight: 1.2,
             partitionWidth: 0.5,
           },
           {
             //leva strana - spodni stena
             type: "railing",
-            start: { x: 10.2, z: 8.55 },
-            end: { x: 13.25, z: 8.55 },
-            railingHeight: 0.9,
+            start: { x: 10.2, z: 8.7 },
+            end: { x: 13.45, z: 8.7 },
+            railingHeight: 1.2,
             partitionWidth: 0.5,
           },
           {
@@ -9587,14 +9607,14 @@ export const CONFIG_DATA = {
           {
             //Y osa - vpravo
             type: "railing",
-            start: { x: 10.2, z: 16.8 },
+            start: { x: 10.2, z: 9.6 },
             end: { x: 10.2, z: 8.55 },
             railingHeight: 1.2,
           },
           {
             //Y osa - vpravo 2
             type: "railing",
-            start: { x: 10.2, z: -16.8 },
+            start: { x: 10.2, z: -10.2 },
             end: { x: 10.2, z: 7.65 },
             railingHeight: 1.2,
           },

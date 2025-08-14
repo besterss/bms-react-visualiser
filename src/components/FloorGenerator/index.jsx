@@ -1,6 +1,5 @@
 import * as BABYLON from "babylonjs";
 import { setupSceneLighting } from "../LightingUtils";
-
 export class FloorGenerator {
   constructor(scene, engine, configData) {
     this.scene = scene;
@@ -16,7 +15,6 @@ export class FloorGenerator {
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
   }
-
   initializeGrassMaterial() {
     const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
     grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
@@ -25,7 +23,6 @@ export class FloorGenerator {
     grassMaterial.backFaceCulling = false;
     return grassMaterial;
   }
-
   initializeRailingMaterial() {
     const railingMaterial = new BABYLON.StandardMaterial(
       "railingMat",
@@ -36,11 +33,11 @@ export class FloorGenerator {
       211 / 255,
       225 / 255
     ); // Světle modrý odstín
+    railingMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     railingMaterial.alpha = 0.5; // Průhlednost
     railingMaterial.backFaceCulling = false;
     return railingMaterial;
   }
-
   initializeWaterMaterial() {
     const waterMaterial = new BABYLON.StandardMaterial("waterMat", this.scene);
     waterMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.3, 1.0); // výraznější modrá
@@ -48,7 +45,6 @@ export class FloorGenerator {
     waterMaterial.backFaceCulling = false;
     return waterMaterial;
   }
-
   initializeMaterials() {
     // Wall material
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
@@ -58,7 +54,6 @@ export class FloorGenerator {
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1); // White
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.alpha = 1;
-
     // Default floor material
     this.materials.floorDefault = new BABYLON.StandardMaterial(
       "floorDefaultMat",
@@ -72,7 +67,6 @@ export class FloorGenerator {
     this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.floorDefault.backFaceCulling = false;
     this.materials.floorDefault.alpha = 1;
-
     // Above ground transparent material
     this.materials.aboveGroundTransparent = new BABYLON.StandardMaterial(
       "aboveGroundTransparentMat",
@@ -93,7 +87,6 @@ export class FloorGenerator {
       0,
       0
     );
-
     // Underground transparent material
     this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
       "undergroundTransparentMat",
@@ -114,7 +107,6 @@ export class FloorGenerator {
       0,
       0
     );
-
     // Ground-like material (grasTransparent renamed for clarity)
     this.materials.ground = new BABYLON.StandardMaterial(
       "groundMat",
@@ -127,31 +119,33 @@ export class FloorGenerator {
       BABYLON.Material.MATERIAL_ALPHABLEND;
     this.materials.ground.needDepthPrePass = true;
     this.materials.ground.specularColor = new BABYLON.Color3(0, 0, 0);
-
     this.materials.glass = new BABYLON.StandardMaterial("glassMat", this.scene);
-
     // Light gray color for frosted effect
     this.materials.glass.diffuseColor = new BABYLON.Color3(
       203 / 255,
       211 / 255,
       225 / 255
     );
-
     // Higher transparency for more frosted look
     this.materials.glass.alpha = 0.5; // Adjust as needed
-
     // Ensure backface culling to improve render efficiency
     this.materials.glass.backFaceCulling = true;
-
     // Low specular intensity for minimal shininess
-    this.materials.glass.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
-
+    this.materials.glass.specularColor = new BABYLON.Color3(0, 0, 0);
     // Transparency mode settings
     this.materials.glass.transparencyMode =
       BABYLON.Material.MATERIAL_ALPHABLEND;
     this.materials.glass.needDepthPrePass = true;
+    const pinkGlass = new BABYLON.StandardMaterial("pinkGlass", this.scene);
+    pinkGlass.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
+    pinkGlass.alpha = 0.5;
+    this.materials.pinkGlass = pinkGlass;
+    this.materials.wallOpaque = new BABYLON.StandardMaterial(
+      "wallOpaqueMat",
+      this.scene
+    );
+    this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
   }
-
   getColorFromTemperature(temp, alpha = 1.0) {
     let r, g, b;
     if (temp <= 0) {
@@ -185,7 +179,6 @@ export class FloorGenerator {
     }
     return new BABYLON.Color4(r, g, b, alpha);
   }
-
   getColorFromWifiSignal(signal, alpha = 1.0) {
     let r, g, b;
     switch (signal) {
@@ -217,7 +210,6 @@ export class FloorGenerator {
     }
     return new BABYLON.Color4(r, g, b, alpha);
   }
-
   createGrassArea(dimensions, yLevel) {
     const grassMesh = BABYLON.MeshBuilder.CreateGround(
       "grassArea",
@@ -228,7 +220,6 @@ export class FloorGenerator {
     grassMesh.material = this.materials.grass;
     return grassMesh;
   }
-
   createHoleBox(hole, yLevel) {
     const thickness = this.config.visualization.room_floor_height + 0.02;
     const holeMesh = BABYLON.MeshBuilder.CreateBox(
@@ -240,18 +231,15 @@ export class FloorGenerator {
     holeMesh.isPickable = false;
     return holeMesh;
   }
-
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
       if (!this.allFloorMeshes[index]) {
         this.allFloorMeshes[index] = [];
       }
-
       const is1NP = floorConfig.id === 0;
       const wallHeight = is1NP
         ? this.config.visualization.wall_height_1NP
         : this.config.visualization.wall_height;
-
       let yLevel = 0;
       for (let i = 0; i < index; i++) {
         const isPrevious1NP = this.config.floors[i].id === 0;
@@ -262,11 +250,10 @@ export class FloorGenerator {
           prevWallHeight +
           this.config.visualization.floor_thickness +
           this.config.visualization.floor_spacing;
+        this.config.visualization.floorConfig;
       }
-
       // Consider if the current floor is underground
       const isUnderground = floorConfig.type === "underground";
-
       // Create floor based on config
       const floorResult = this.createFloorFromConfig(
         floorConfig,
@@ -274,7 +261,6 @@ export class FloorGenerator {
         isUnderground,
         is1NP
       );
-
       if (floorConfig.layout && floorConfig.layout.trees) {
         floorConfig.layout.trees.forEach((treeConfig) => {
           const tree = this.createTree(treeConfig.position, treeConfig.scale);
@@ -282,13 +268,11 @@ export class FloorGenerator {
           this.allFloorMeshes[index].push(tree);
         });
       }
-
       floorResult.meshes.forEach((mesh) => {
         if (mesh.name.includes("floor")) {
           mesh.receiveShadows = true;
         }
       });
-
       this.allFloorMeshes[index].push(...floorResult.meshes);
       this.floorData.push({
         floorNumber: floorConfig.id,
@@ -298,7 +282,6 @@ export class FloorGenerator {
         isUnderground,
       });
     });
-
     // Find the yLevel for 1NP specifically to draw the grass there
     const firstAboveGroundIndex = this.config.floors.findIndex(
       (floorConfig) => floorConfig.id === 0
@@ -316,13 +299,11 @@ export class FloorGenerator {
       );
       this.allFloorMeshes[firstAboveGroundIndex].push(grassMesh);
     }
-
     return {
       allFloorMeshes: this.allFloorMeshes,
       floorData: this.floorData,
     };
   }
-
   createFloorFromConfig(floorConfig, yLevel, isUnderground, is1NP) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
@@ -332,7 +313,6 @@ export class FloorGenerator {
       : this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
-
     if (floorConfig.segments) {
       floorConfig.segments.forEach((segmentConfig) => {
         const { width, depth, position } = segmentConfig;
@@ -395,7 +375,6 @@ export class FloorGenerator {
         }
       }
     }
-
     if (Array.isArray(floorConfig.holes)) {
       floorConfig.holes.forEach((hole) => {
         const holeBox = this.createHoleBox(hole, yLevel);
@@ -415,7 +394,6 @@ export class FloorGenerator {
         holeBox.dispose();
       });
     }
-
     if (layout && layout.walls) {
       layout.walls.forEach((wall, index) => {
         let wallMesh;
@@ -447,17 +425,13 @@ export class FloorGenerator {
           const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
           const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
           const partitionThickness = wall.partitionWidth || wallThickness;
-
           const baseYLevel = yLevel;
-
           let partitionYLevel = baseYLevel;
           let partitionHeight = wallHeight;
-
           if (wall.yLevel) {
             partitionYLevel = baseYLevel + wall.yLevel;
             partitionHeight = wallHeight - wall.yLevel;
           }
-
           const materialType = wall.materialType || "opaque";
           wallMesh = this.createWallSegment(
             p1,
@@ -483,7 +457,6 @@ export class FloorGenerator {
             yLevel,
             isUnderground
           );
-
           floorMeshes.push(wallMesh);
         } else if (wall.type === "curved") {
           const center = new BABYLON.Vector3(wall.center.x, 0, wall.center.z);
@@ -504,6 +477,25 @@ export class FloorGenerator {
             isUnderground
           );
           floorMeshes.push(wallMesh);
+        } else if (wall.type === "pinkglass") {
+          const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
+          const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
+          const partitionThickness = wall.partitionWidth || wallThickness; // Zjisti sílu dělení
+          const baseYLevel = yLevel;
+          let partitionYLevel = baseYLevel;
+          let partitionHeight = wall.partitionHeight || wallHeight; // Zjisti výšku dělení
+          if (wall.yLevel) {
+            partitionYLevel = baseYLevel + wall.yLevel;
+            partitionHeight = wall.partitionHeight || wallHeight - wall.yLevel;
+          }
+          const pinkGlassPartition = this.createPinkGlassPartition(
+            p1,
+            p2,
+            partitionThickness,
+            partitionYLevel,
+            partitionHeight
+          );
+          floorMeshes.push(pinkGlassPartition);
         } else if (wall.type === "railing") {
           const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
           const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
@@ -534,7 +526,8 @@ export class FloorGenerator {
             wall.totalSteps,
             wall.floorP1,
             wall.floorP2,
-            wall.direction
+            wall.direction,
+            wall.railing
           );
           floorMeshes.push(stairs);
         } else if (wall.type === "spiralStairs") {
@@ -550,26 +543,22 @@ export class FloorGenerator {
           );
           floorMeshes.push(spiral);
         }
-
         if (wallMesh) {
           this.shadowGenerator.addShadowCaster(wallMesh);
         }
       });
     }
-
     const area = floorConfig.segments
       ? floorConfig.segments.reduce(
           (total, segment) => total + segment.width * segment.depth,
           0
         )
       : 0;
-
     return {
       meshes: floorMeshes,
       area: area,
     };
   }
-
   createWallSegment(
     p1,
     p2,
@@ -586,26 +575,21 @@ export class FloorGenerator {
       { width: wallThickness, height: wallHeight, depth: wallLength },
       this.scene
     );
-
     // Position wall
     const midPoint = BABYLON.Vector3.Center(p1, p2);
     wall.position.x = midPoint.x;
     wall.position.z = midPoint.z;
     wall.position.y = yLevel + wallHeight / 2;
-
     // Rotate wall to align with points
     const direction = p2.subtract(p1).normalize();
     const angle = Math.atan2(direction.x, direction.z);
     wall.rotation.y = angle;
-
     if (materialType === "glass") wall.material = this.materials.glass;
     else wall.material = this.materials.wallOpaque;
-
     wall.isPickable = false;
     this.shadowGenerator.addShadowCaster(wall);
     return wall;
   }
-
   createCurvedWall(
     center,
     radius,
@@ -621,7 +605,6 @@ export class FloorGenerator {
     // Calculate start and end angles for the curved wall
     let startAngle = Math.atan2(start.z - center.z, start.x - center.x);
     let endAngle = Math.atan2(end.z - center.z, end.x - center.x);
-
     // Ensure the shortest path on the circle
     if (endAngle < startAngle) {
       endAngle += 2 * Math.PI;
@@ -630,7 +613,6 @@ export class FloorGenerator {
       [startAngle, endAngle] = [endAngle, startAngle];
       endAngle += 2 * Math.PI;
     }
-
     const arcPath = [];
     const numSegments = 72; // Number of segments for smoothness
     for (let i = 0; i <= numSegments; i++) {
@@ -639,7 +621,6 @@ export class FloorGenerator {
       const z = center.z + radius * Math.sin(angle);
       arcPath.push(new BABYLON.Vector3(x, yLevel, z));
     }
-
     // Define the shape to be extruded
     const shape = [
       new BABYLON.Vector3(width / 2, 0, 0),
@@ -650,7 +631,6 @@ export class FloorGenerator {
     const extrusionPath = arcPath.map(
       (point) => new BABYLON.Vector3(point.x, point.y, point.z)
     );
-
     const curvedWall = BABYLON.MeshBuilder.ExtrudeShape(
       name,
       {
@@ -661,16 +641,13 @@ export class FloorGenerator {
       },
       this.scene
     );
-
     // Assign materials based on view and floor type
     curvedWall.material = this.materials.wallOpaque;
     curvedWall.convertToFlatShadedMesh();
-
     curvedWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(curvedWall);
     return curvedWall;
   }
-
   createCircularWall(
     center,
     radius,
@@ -710,10 +687,8 @@ export class FloorGenerator {
       innerCylinder.dispose();
     }
     circularWall.position.set(center.x, yLevel + wallHeight / 2, center.z);
-
     circularWall.material = this.materials.wallOpaque;
     circularWall.convertToFlatShadedMesh();
-
     circularWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(circularWall);
     return circularWall;
@@ -734,13 +709,11 @@ export class FloorGenerator {
     const direction = p2.subtract(p1).normalize();
     const angle = Math.atan2(direction.x, direction.z);
     railing.rotation.y = angle;
-
     railing.material = this.materials.railing;
     railing.isPickable = false;
     this.shadowGenerator.addShadowCaster(railing);
     return railing;
   }
-
   createStairs(
     position,
     stepWidth,
@@ -753,13 +726,15 @@ export class FloorGenerator {
     totalSteps,
     floorP1,
     floorP2,
-    direction
+    direction,
+    railing
   ) {
     const stairMeshes = [];
     const stepHeight = wallHeight / totalSteps;
     const stepDirection = direction === "top" ? 1 : -1;
     const isLastPart = partPosition * numSteps >= totalSteps;
     let startingYLevel;
+
     if (partPosition === 1) {
       startingYLevel = yLevel;
     } else {
@@ -767,6 +742,7 @@ export class FloorGenerator {
         yLevel + (partPosition - 1) * (numSteps + 1) * stepHeight;
     }
 
+    // Create steps
     for (let i = 0; i < numSteps; i++) {
       const stepMesh = BABYLON.MeshBuilder.CreateBox(
         `stair_step_${i}`,
@@ -777,25 +753,25 @@ export class FloorGenerator {
         },
         this.scene
       );
-
       stepMesh.position.x = position.x;
       stepMesh.position.y = startingYLevel + i * stepHeight;
-      stepMesh.position.z = position.z + i * stepDepth * stepDirection; // Adjust z based on direction
-
+      stepMesh.position.z = position.z + i * stepDepth * stepDirection;
       stepMesh.material = this.materials.wallOpaque;
       stepMesh.isPickable = false;
       this.shadowGenerator.addShadowCaster(stepMesh);
       stairMeshes.push(stepMesh);
     }
 
-    // Create the floor at the level of the last step only if it's not the second part
+    let floorMesh;
+    let floorWidth = 0; // Initialize floorWidth
+    let floorDepth = 0; // Initialize floorDepth
     if (!isLastPart) {
       const floorHeight = stepHeight;
-      const floorWidth = Math.abs(floorP2.x - floorP1.x);
-      const floorDepth = Math.abs(floorP2.z - floorP1.z);
+      floorWidth = Math.abs(floorP2.x - floorP1.x); // Define floorWidth here
+      floorDepth = Math.abs(floorP2.z - floorP1.z); // Define floorDepth here
       const floorPositionY = startingYLevel + numSteps * stepHeight;
 
-      const floorMesh = BABYLON.MeshBuilder.CreateBox(
+      floorMesh = BABYLON.MeshBuilder.CreateBox(
         `${name}_floor`,
         {
           width: floorWidth,
@@ -805,15 +781,106 @@ export class FloorGenerator {
         this.scene
       );
 
-      // Position the floor midway between floorP1 and floorP2
       floorMesh.position.x = (floorP1.x + floorP2.x) / 2;
       floorMesh.position.y = floorPositionY;
       floorMesh.position.z = (floorP1.z + floorP2.z) / 2;
-
       floorMesh.material = this.materials.wallOpaque;
       floorMesh.isPickable = false;
       this.shadowGenerator.addShadowCaster(floorMesh);
       stairMeshes.push(floorMesh);
+    }
+
+    if (railing === "yes") {
+      console.log("Railing is enabled");
+      const railingMaterial = new BABYLON.StandardMaterial(
+        "railingMaterial",
+        this.scene
+      );
+
+      railingMaterial.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
+      railingMaterial.alpha = 0.5;
+      const railingHeight = 1.0;
+      const railingThickness = 0.05;
+
+      // Create railings for each step
+      for (let i = 0; i < numSteps; i++) {
+        const railingLeft = BABYLON.MeshBuilder.CreateBox(
+          `railing_left_step_${i}`,
+          {
+            width: railingThickness,
+            height: railingHeight,
+            depth: stepDepth,
+          },
+          this.scene
+        );
+
+        railingLeft.position.x =
+          position.x - stepWidth / 2 - railingThickness / 2;
+        railingLeft.position.y =
+          startingYLevel + i * stepHeight + railingHeight / 2;
+        railingLeft.position.z = position.z + i * stepDepth * stepDirection;
+        railingLeft.material = railingMaterial;
+        stairMeshes.push(railingLeft);
+
+        const railingRight = BABYLON.MeshBuilder.CreateBox(
+          `railing_right_step_${i}`,
+          {
+            width: railingThickness,
+            height: railingHeight,
+            depth: stepDepth,
+          },
+          this.scene
+        );
+
+        railingRight.position.x =
+          position.x + stepWidth / 2 + railingThickness / 2;
+        railingRight.position.y =
+          startingYLevel + i * stepHeight + railingHeight / 2;
+        railingRight.position.z = position.z + i * stepDepth * stepDirection;
+        railingRight.material = railingMaterial;
+        stairMeshes.push(railingRight);
+      }
+
+      // Only add railings to the floor if it's not the last part
+      if (!isLastPart && floorMesh) {
+        const floorEndYPosition =
+          startingYLevel + numSteps * stepHeight + railingHeight / 2;
+
+        // Fix the position of the left side railing on the floor
+        const floorSideRailingLeft = BABYLON.MeshBuilder.CreateBox(
+          `floor_side_railing_left`,
+          {
+            width: railingThickness,
+            height: railingHeight,
+            depth: floorDepth,
+          },
+          this.scene
+        );
+
+        floorSideRailingLeft.position.x =
+          floorMesh.position.x - floorWidth / 2 - railingThickness / 2;
+        floorSideRailingLeft.position.y = floorEndYPosition;
+        floorSideRailingLeft.position.z = floorMesh.position.z;
+        floorSideRailingLeft.material = railingMaterial;
+        stairMeshes.push(floorSideRailingLeft);
+
+        const floorSideRailingRight = BABYLON.MeshBuilder.CreateBox(
+          `floor_side_railing_right`,
+          {
+            width: railingThickness,
+            height: railingHeight,
+            depth: floorDepth,
+          },
+          this.scene
+        );
+
+        floorSideRailingRight.position.x =
+          floorMesh.position.x + floorWidth / 2 + railingThickness / 2;
+        floorSideRailingRight.position.y = floorEndYPosition;
+        floorSideRailingRight.position.z = floorMesh.position.z;
+        floorSideRailingRight.material = railingMaterial;
+        stairMeshes.push(floorSideRailingRight);
+      }
     }
 
     const stairs = BABYLON.Mesh.MergeMeshes(
@@ -828,11 +895,9 @@ export class FloorGenerator {
     stairs.name = name;
     return stairs;
   }
-
   createTree(position, scale) {
     const trunkHeight = 2 * scale;
     const trunkDiameter = 0.3 * scale;
-
     // Create the trunk of the tree
     const trunk = BABYLON.MeshBuilder.CreateCylinder(
       "trunk",
@@ -846,34 +911,28 @@ export class FloorGenerator {
     );
     trunk.material = new BABYLON.StandardMaterial("trunkMat", this.scene);
     trunk.material.diffuseColor = new BABYLON.Color3(0.35, 0.16, 0.14); // Brown color for the trunk
-
     // Create the foliage of the tree with controlled randomness
     const foliage = [];
     const numberOfFoliageBalls = 5;
-
     for (let i = 0; i < numberOfFoliageBalls; i++) {
       const leaves = BABYLON.MeshBuilder.CreateSphere(
         `leaves_${i}`,
         { diameter: trunkDiameter * 3 },
         this.scene
       );
-
       const offsetX = (Math.random() * 1 - 0.5) * scale * 0.4;
       const offsetY = trunkHeight * (0.6 + Math.random() * 0.4);
       const offsetZ = (Math.random() * 1 - 0.5) * scale * 0.4;
-
       leaves.position = new BABYLON.Vector3(
         position.x + offsetX,
         offsetY,
         position.z + offsetZ
       );
-
       leaves.material = new BABYLON.StandardMaterial("leavesMat", this.scene);
-      leaves.material.diffuseColor = new BABYLON.Color3(0.0, 0.5, 0.0); // Green color for the leaves
+      leaves.material.diffuseColor = new BABYLON.Color3(0.0, 0.5, 0.0);
       leaves.material.specularColor = new BABYLON.Color3(0, 0, 0);
       foliage.push(leaves);
     }
-
     const tree = BABYLON.Mesh.MergeMeshes(
       [trunk, ...foliage],
       true,
@@ -886,7 +945,6 @@ export class FloorGenerator {
     tree.name = `tree_${position.x}_${position.z}`;
     return tree;
   }
-
   createSpiralStairs(
     center,
     radius,
@@ -899,6 +957,18 @@ export class FloorGenerator {
   ) {
     const spiralStairs = [];
     const stepHeight = height / numSteps;
+    const railingHeight = 1.1;
+    // Create transparent glass material
+    const glassMaterial = new BABYLON.StandardMaterial(
+      "glassMaterial",
+      this.scene
+    );
+    glassMaterial.diffuseColor = new BABYLON.Color3(
+      203 / 255,
+      211 / 255,
+      225 / 255
+    );
+    glassMaterial.alpha = 0.5;
     for (let i = 0; i < numSteps; i++) {
       const angle = (i * 2.585 * Math.PI) / numSteps + start;
       const x = center.x + radius * 2 * Math.cos(angle);
@@ -912,26 +982,95 @@ export class FloorGenerator {
         },
         this.scene
       );
-
       step.position.x = x;
       step.position.z = z;
       step.position.y = yLevel + (i + 0.5) * stepHeight;
       step.rotation.y = -angle;
-
       step.material = this.materials.wallOpaque;
       step.isPickable = false;
-
       this.shadowGenerator.addShadowCaster(step);
-
       spiralStairs.push(step);
     }
+    const outerPath = [];
+    const innerPath = [];
+    for (let i = 0; i <= numSteps; i++) {
+      const angle = (i * 2.585 * Math.PI) / numSteps + start;
+      const y = yLevel + i * stepHeight;
+      // Outer path
+      const outerX =
+        center.x + (radius - 0.1 + stepDepth) * Math.cos(angle - 0.25);
+      const outerZ =
+        center.z + (radius - 0.1 + stepDepth) * Math.sin(angle - 0.25);
+      outerPath.push(new BABYLON.Vector3(outerX, y, outerZ));
+      outerPath.push(
+        new BABYLON.Vector3(outerX, y + railingHeight + 0.1, outerZ)
+      );
+      // Inner path
+      const innerX =
+        center.x + (radius * 2 - stepDepth) * Math.cos(angle + 2.9);
+      const innerZ =
+        center.z + (radius * 2 - stepDepth) * Math.sin(angle + 2.9);
+      innerPath.push(new BABYLON.Vector3(innerX, y, innerZ));
+      innerPath.push(
+        new BABYLON.Vector3(innerX, y + railingHeight + 0.1, innerZ)
+      );
+    }
+    const outerGlassWall = BABYLON.MeshBuilder.CreateRibbon(
+      "outerGlassWall",
+      {
+        pathArray: [
+          outerPath.filter((_, index) => index % 2 === 0),
+          outerPath.filter((_, index) => index % 2 !== 0),
+        ],
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+      },
+      this.scene
+    );
+    outerGlassWall.material = glassMaterial;
+    outerGlassWall.isPickable = false;
+    this.shadowGenerator.addShadowCaster(outerGlassWall);
+    // Create the inner glass wall
+    const innerGlassWall = BABYLON.MeshBuilder.CreateRibbon(
+      "innerGlassWall",
+      {
+        pathArray: [
+          innerPath.filter((_, index) => index % 2 === 0),
+          innerPath.filter((_, index) => index % 2 !== 0),
+        ],
+        sideOrientation: BABYLON.Mesh.DOUBLESIDE,
+      },
+      this.scene
+    );
+    innerGlassWall.material = glassMaterial;
+    innerGlassWall.isPickable = false;
+    this.shadowGenerator.addShadowCaster(innerGlassWall);
     return BABYLON.Mesh.MergeMeshes(
-      spiralStairs,
+      [...spiralStairs, outerGlassWall, innerGlassWall],
       true,
       false,
       null,
       false,
       true
     );
+  }
+  createPinkGlassPartition(start, end, width, yLevel, height) {
+    const length = new BABYLON.Vector3(
+      end.x - start.x,
+      0,
+      end.z - start.z
+    ).length();
+    const wall = BABYLON.MeshBuilder.CreateBox(
+      "pinkGlassPartition",
+      { width: length, height: height, depth: width },
+      this.scene
+    );
+    wall.position.x = (start.x + end.x) / 2;
+    wall.position.y = yLevel + height / 2;
+    wall.position.z = (start.z + end.z) / 2;
+    const angle = Math.atan2(end.z - start.z, end.x - start.x);
+    wall.rotation.y = -angle;
+    wall.material = this.materials.pinkGlass;
+    wall.isPickable = false;
+    return wall;
   }
 }
