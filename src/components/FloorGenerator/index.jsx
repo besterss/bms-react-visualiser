@@ -138,12 +138,14 @@ export class FloorGenerator {
     this.materials.glass.needDepthPrePass = true;
     const pinkGlass = new BABYLON.StandardMaterial("pinkGlass", this.scene);
     pinkGlass.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
+    pinkGlass.specularColor = new BABYLON.Color3(0, 0, 0);
     pinkGlass.alpha = 0.5;
     this.materials.pinkGlass = pinkGlass;
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
+    this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
   }
   getColorFromTemperature(temp, alpha = 1.0) {
@@ -1015,6 +1017,7 @@ export class FloorGenerator {
         new BABYLON.Vector3(innerX, y + railingHeight + 0.1, innerZ)
       );
     }
+
     const outerGlassWall = BABYLON.MeshBuilder.CreateRibbon(
       "outerGlassWall",
       {
@@ -1053,6 +1056,7 @@ export class FloorGenerator {
       true
     );
   }
+
   createPinkGlassPartition(start, end, width, yLevel, height) {
     const length = new BABYLON.Vector3(
       end.x - start.x,
