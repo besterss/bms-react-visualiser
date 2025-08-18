@@ -5221,6 +5221,8 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: 0.86, z: 0.8, width: 2.1, depth: 6.4 }, // 2.11 - leva
+        { x: 2, z: 0.8, width: 4, depth: 6.4 }, //2.11 - prava],
       ],
       layout: {
         rooms_grid: {
