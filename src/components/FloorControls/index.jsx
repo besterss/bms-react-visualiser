@@ -27,6 +27,7 @@ const FloorControls = ({
           All Floors
         </button>
       </div>
+
       <div className="control-group">
         <h3>Display Options</h3>
         <label>
@@ -68,6 +69,15 @@ const FloorControls = ({
             onChange={() => onOptionToggle("icons")}
           />
           Show Objects
+        </label>
+        {/* Nový checkbox */}
+        <label>
+          <input
+            type="checkbox"
+            checked={activeDisplayOption === "evacuation"}
+            onChange={() => onOptionToggle("evacuation")}
+          />
+          Show Evacuation Paths
         </label>
       </div>
     </div>

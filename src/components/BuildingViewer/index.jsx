@@ -11,6 +11,7 @@ import RoomBoxes from "../RoomBoxes";
 import ParkingSpots from "../ParkingSpots";
 import IconComponent from "../IconComponent";
 import CircleDisplayBox from "../CircleDisplayBox";
+import EvacuationPath from "../EvacuationPath";
 
 const BuildingViewer = () => {
   const canvasRef = useRef(null);
@@ -32,6 +33,28 @@ const BuildingViewer = () => {
   });
   const [circleDisplayMode, setCircleDisplayMode] = useState("click");
 
+  // Pomocná funkce: uklid evakuačních meshů
+  const clearEvacuationMeshes = (scn) => {
+    if (!scn || !scn.meshes) return;
+    const prefixes = [
+      "evacuation_path_",
+      "evacuation_bubble_",
+      "start_bubble_",
+      "end_bubble_",
+    ];
+    scn.meshes
+      .filter(
+        (m) => m && m.name && prefixes.some((pref) => m.name.startsWith(pref))
+      )
+      .forEach((m) => {
+        try {
+          m.dispose();
+        } catch (e) {
+          // ignore
+        }
+      });
+  };
+
   useEffect(() => {
     if (!canvasRef.current) return;
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
@@ -48,11 +71,13 @@ const BuildingViewer = () => {
       CONFIG_DATA
     );
     const result = generator.generateFloors();
+
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
+
     setupCamera(babylonScene, result.floorData);
 
     if (result.floorData.length > 0) {
@@ -131,6 +156,23 @@ const BuildingViewer = () => {
     setActiveDisplayOption((prev) => (prev === option ? null : option));
   };
 
+  // Úklid evakuačních cest při vypnutí checkboxu nebo při změně patra
+  useEffect(() => {
+    if (!scene) return;
+    // Když se vypne evakuace, všechno uklidit
+    if (activeDisplayOption !== "evacuation") {
+      clearEvacuationMeshes(scene);
+    }
+  }, [scene, activeDisplayOption]);
+
+  useEffect(() => {
+    if (!scene) return;
+    // Při přepnutí patra s aktivní evakuací uklidit staré, nové se vykreslí znovu
+    if (activeDisplayOption === "evacuation") {
+      clearEvacuationMeshes(scene);
+    }
+  }, [scene, currentActiveFloor, activeDisplayOption]);
+
   const setupCamera = (scene, floors, currentActiveFloor) => {
     if (!scene || !floors) return;
     const totalHeight =
@@ -138,15 +180,18 @@ const BuildingViewer = () => {
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
+
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.id === currentActiveFloor
     );
+
     const activeFloorHeight =
       activeFloorIndex >= 0
         ? activeFloorIndex *
           (CONFIG_DATA.visualization.wall_height +
             CONFIG_DATA.visualization.floor_thickness)
         : totalHeight / 2;
+
     let camera = scene.getCameraByName("camera");
     if (camera) {
       camera.setPosition(
@@ -215,7 +260,6 @@ const BuildingViewer = () => {
     scene.onPointerObservable.add((pointerInfo) => {
       if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
         const pickedMesh = pointerInfo.pickInfo.pickedMesh;
-
         if (
           !pointerInfo.pickInfo.hit ||
           !pickedMesh ||
@@ -246,6 +290,7 @@ const BuildingViewer = () => {
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
+
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
@@ -283,6 +328,7 @@ const BuildingViewer = () => {
               mesh.name.includes("_segment") &&
               mesh.material === generator.materials.water
             ) {
+              // leave as is
             } else if (
               mesh.name.includes("_floor") ||
               mesh.name.includes("_segment")
@@ -347,7 +393,6 @@ const BuildingViewer = () => {
       const iconsForActiveFloor =
         CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
           ?.icons || [];
-
       if (circleDisplayMode === "all") {
         iconsForActiveFloor.forEach((icon) => {
           const circleName = `range-circle-${icon.label}`;
@@ -367,7 +412,6 @@ const BuildingViewer = () => {
   const activeFloorIndex = floorData.findIndex(
     (floor) => floor.floorNumber === currentActiveFloor
   );
-
   const activeRooms =
     CONFIG_DATA.floors.find((floor) => floor.id === currentActiveFloor)
       ?.rooms || [];
@@ -388,11 +432,20 @@ const BuildingViewer = () => {
         onOptionToggle={handleOptionToggle}
         onCircleDisplayModeChange={setCircleDisplayMode}
       />
+
       <canvas
         ref={canvasRef}
         className="render-canvas"
         style={{ width: "100%", height: "100%" }}
       />
+
+      {/* Evakuační cesty jen když je aktivní checkbox a je vybrán konkrétní floor (ne "all") */}
+      {scene &&
+        activeDisplayOption === "evacuation" &&
+        currentActiveFloor !== "all" && (
+          <EvacuationPath scene={scene} floorId={currentActiveFloor} />
+        )}
+
       {scene && activeDisplayOption === "roomBoxes" && (
         <RoomBoxes
           rooms={activeRooms}
@@ -401,9 +454,11 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       )}
+
       {scene && currentFloorParking.length > 0 && (
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}
+
       {labelData.map((label, index) => (
         <LabelComponent
           key={index}
@@ -415,8 +470,9 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       ))}
+
       {scene &&
-        activeDisplayOption === "icons" && // Ensure the condition is correct
+        activeDisplayOption === "icons" &&
         activeIcons.map((icon, index) => (
           <IconComponent
             key={index}
@@ -479,7 +535,6 @@ const BuildingViewer = () => {
 
       <InfoBox roomInfo={roomInfo} />
 
-      {/* Kontrola zobrazení CircleDisplayBox */}
       {activeDisplayOption === "icons" && (
         <CircleDisplayBox
           currentMode={circleDisplayMode}

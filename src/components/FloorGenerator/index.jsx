@@ -1,5 +1,6 @@
 import * as BABYLON from "babylonjs";
 import { setupSceneLighting } from "../LightingUtils";
+
 export class FloorGenerator {
   constructor(scene, engine, configData) {
     this.scene = scene;
@@ -15,6 +16,7 @@ export class FloorGenerator {
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
   }
+
   initializeGrassMaterial() {
     const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
     grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
@@ -23,6 +25,7 @@ export class FloorGenerator {
     grassMaterial.backFaceCulling = false;
     return grassMaterial;
   }
+
   initializeRailingMaterial() {
     const railingMaterial = new BABYLON.StandardMaterial(
       "railingMat",
@@ -38,6 +41,7 @@ export class FloorGenerator {
     railingMaterial.backFaceCulling = false;
     return railingMaterial;
   }
+
   initializeWaterMaterial() {
     const waterMaterial = new BABYLON.StandardMaterial("waterMat", this.scene);
     waterMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.3, 1.0); // výraznější modrá
@@ -45,12 +49,14 @@ export class FloorGenerator {
     waterMaterial.backFaceCulling = false;
     return waterMaterial;
   }
+
   initializeMaterials() {
     // Wall material
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
+
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1); // White
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.alpha = 1;
@@ -59,11 +65,13 @@ export class FloorGenerator {
       "floorDefaultMat",
       this.scene
     );
+
     this.materials.floorDefault.diffuseColor = new BABYLON.Color3(
       0.73,
       0.73,
       0.73
-    ); // Gray
+    );
+
     this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.floorDefault.backFaceCulling = false;
     this.materials.floorDefault.alpha = 1;
@@ -72,6 +80,7 @@ export class FloorGenerator {
       "aboveGroundTransparentMat",
       this.scene
     );
+
     this.materials.aboveGroundTransparent.diffuseColor = new BABYLON.Color3(
       0.3,
       0.3,
@@ -87,16 +96,19 @@ export class FloorGenerator {
       0,
       0
     );
+
     // Underground transparent material
     this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
       "undergroundTransparentMat",
       this.scene
     );
+
     this.materials.undergroundTransparent.diffuseColor = new BABYLON.Color3(
       0.6,
       0.8,
       1
     ); // Bluish
+
     this.materials.undergroundTransparent.backFaceCulling = false;
     this.materials.undergroundTransparent.alpha = 0.7;
     this.materials.undergroundTransparent.transparencyMode =
@@ -107,11 +119,13 @@ export class FloorGenerator {
       0,
       0
     );
+
     // Ground-like material (grasTransparent renamed for clarity)
     this.materials.ground = new BABYLON.StandardMaterial(
       "groundMat",
       this.scene
     );
+
     this.materials.ground.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5); // Ground-like color
     this.materials.ground.backFaceCulling = false;
     this.materials.ground.alpha = 1; // Visibility with slight transparency
@@ -145,6 +159,7 @@ export class FloorGenerator {
       "wallOpaqueMat",
       this.scene
     );
+
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
   }
@@ -970,6 +985,7 @@ export class FloorGenerator {
       211 / 255,
       225 / 255
     );
+
     glassMaterial.alpha = 0.5;
     for (let i = 0; i < numSteps; i++) {
       const angle = (i * 2.585 * Math.PI) / numSteps + start;
@@ -993,6 +1009,7 @@ export class FloorGenerator {
       this.shadowGenerator.addShadowCaster(step);
       spiralStairs.push(step);
     }
+
     const outerPath = [];
     const innerPath = [];
     for (let i = 0; i <= numSteps; i++) {

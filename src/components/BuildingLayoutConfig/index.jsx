@@ -5206,11 +5206,16 @@ export const CONFIG_DATA = {
       id: 0,
       name: "1NP",
       type: "aboveground",
+      evacuation: [{ start: { x: 13.5, z: -8 }, end: { x: 1.5, z: 15.5 } }],
       dimensions: {
         width: 35.82,
         depth: 35.82,
       },
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: 0.86, z: 0.8, width: 2.1, depth: 6.4 }, // 2.11 - leva
+        { x: 2, z: 0.8, width: 4, depth: 6.4 }, //2.11 - prava],
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -5338,6 +5343,31 @@ export const CONFIG_DATA = {
             floorP1: { x: -0.4, z: -2.37 },
             floorP2: { x: 4, z: -4.6 },
             direction: "bottom",
+          },
+          {
+            //schodiste11 vnejsi leva
+            type: "pinkglass",
+            start: { x: -0.3, z: 4 },
+            end: { x: -0.3, z: -4.4 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
+          },
+          {
+            //schodiste11 vnejsi vrchni leva
+            type: "pinkglass",
+            start: { x: 4.03, z: 4 },
+            end: { x: -0.325, z: 4 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
+          },
+
+          {
+            //schodiste11 vnejsi prava
+            type: "pinkglass",
+            start: { x: 4.03, z: -4.4 },
+            end: { x: 4.03, z: 4 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
           },
 
           {
@@ -6998,41 +7028,7 @@ export const CONFIG_DATA = {
             totalSteps: 26,
             direction: "bottom",
           },
-          {
-            //schodiste11 vnejsi leva
-            type: "pinkglass",
-            start: { x: -0.3, z: 4 },
-            end: { x: -0.3, z: -4.4 },
-            partitionHeight: 1.2,
-          },
-          {
-            //schodiste11 vnejsi vrchni leva
-            type: "pinkglass",
-            start: { x: 1.87, z: 4 },
-            end: { x: -0.35, z: 4 },
-            partitionHeight: 1.2,
-          },
-          {
-            //schodiste11 vnejsi vrchni leva
-            type: "pinkglass",
-            start: { x: 1.87, z: 4.05 },
-            end: { x: 1.87, z: 2.35 },
-            partitionHeight: 1.2,
-          },
-          {
-            //schodiste11 vnejsi prava
-            type: "pinkglass",
-            start: { x: 4.1, z: -4.4 },
-            end: { x: 4.1, z: 4 },
-            partitionHeight: 1.2,
-          },
-          {
-            //schodiste11 vnejsi spodni
-            type: "pinkglass",
-            start: { x: 4.15, z: -4.4 },
-            end: { x: -0.35, z: -4.4 },
-            partitionHeight: 1.2,
-          },
+
           {
             type: "outline",
             points: [
@@ -8368,6 +8364,46 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: 8.325, z: 13.3 },
             end: { x: 8.325, z: 12.275 },
+            partitionWidth: 0.05,
+          },
+          {
+            //schodiste11 vnejsi leva
+            type: "pinkglass",
+            start: { x: -0.3, z: 4 },
+            end: { x: -0.3, z: -4.4 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
+          },
+          {
+            //schodiste11 vnejsi vrchni leva
+            type: "pinkglass",
+            start: { x: 1.87, z: 4 },
+            end: { x: -0.325, z: 4 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
+          },
+          {
+            //schodiste11 vnejsi vrchni leva
+            type: "pinkglass",
+            start: { x: 1.87, z: 4 },
+            end: { x: 1.87, z: 2.35 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
+          },
+          {
+            //schodiste11 vnejsi prava
+            type: "pinkglass",
+            start: { x: 4.03, z: -4.4 },
+            end: { x: 4.03, z: 4 },
+            partitionHeight: 1.2,
+            partitionWidth: 0.05,
+          },
+          {
+            //schodiste11 vnejsi spodni
+            type: "pinkglass",
+            start: { x: 4.05, z: -4.4 },
+            end: { x: -0.325, z: -4.4 },
+            partitionHeight: 1.2,
             partitionWidth: 0.05,
           },
         ],
