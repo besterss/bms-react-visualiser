@@ -3,12 +3,12 @@ import * as BABYLON from "babylonjs";
 
 const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
   const [selectedRoomInfo, setSelectedRoomInfo] = useState(null);
-  const [selectedBoxName, setSelectedBoxName] = useState(null);
+  const [selectedRoomNumber, setSelectedRoomNumber] = useState(null);
 
   useEffect(() => {
     if (!scene || !rooms || floorIndex === undefined) return;
 
-    // Spočítáme yLevel jako součet výšek všech předchozích pater
+    // Compute yLevel as cumulative height of previous floors
     let yLevel = 0;
     for (let i = 0; i < floorIndex; i++) {
       const fc = config.floors[i];
@@ -22,25 +22,39 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         config.visualization.floor_spacing;
     }
 
+    // Box height for the current floor:
+    const currentFloor = config?.floors?.[floorIndex];
+    const is1NP = currentFloor ? currentFloor.id === 0 : floorIndex === 0;
+    const boxHeight = is1NP
+      ? config.visualization.wall_height_1NP
+      : config.visualization.wall_height;
+
     let roomMeshes = [];
+
     const boxes = rooms.map((room, index) => {
+      const roomName = room.name;
+      const roomNumber = room.number; // unique identifier
+
       const parentNode = new BABYLON.TransformNode(
-        `parentNode-${index}`,
+        `parentNode-${roomNumber || index}`,
         scene
       );
 
       const createMesh = (name, bounds) => {
         const width = bounds.maxX - bounds.minX;
         const depth = bounds.maxZ - bounds.minZ;
-        const height = 2.95;
+        const height = boxHeight - 0.1;
+
         const box = BABYLON.MeshBuilder.CreateBox(
           name,
           { width, depth, height },
           scene
         );
+
         box.position.x = (bounds.minX + bounds.maxX) / 2;
         box.position.y = yLevel + height / 2;
         box.position.z = (bounds.minZ + bounds.maxZ) / 2;
+
         const material = new BABYLON.StandardMaterial(
           `material-${name}`,
           scene
@@ -49,39 +63,49 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
         material.specularColor = new BABYLON.Color3(0, 0, 0);
         box.material = material;
+
         box.isPickable = true;
         box.actionManager = new BABYLON.ActionManager(scene);
         box.parent = parentNode;
+
         return box;
       };
 
       let meshes = [];
       if (room.baseBounds) {
-        meshes.push(createMesh(`baseBox-${index}`, room.baseBounds));
+        meshes.push(
+          createMesh(`baseBox-${roomNumber || index}`, room.baseBounds)
+        );
       }
       if (room.extensionBoundsList) {
         room.extensionBoundsList.forEach((eb, idx) => {
-          meshes.push(createMesh(`extensionBox-${index}-${idx}`, eb));
+          meshes.push(
+            createMesh(`extensionBox-${roomNumber || index}-${idx}`, eb)
+          );
         });
       }
       if (room.bounds && !room.baseBounds && !room.extensionBoundsList) {
         meshes.push(
-          createMesh(`box-${index}-floor-${floorIndex}`, room.bounds)
+          createMesh(
+            `box-${roomNumber || index}-floor-${floorIndex}`,
+            room.bounds
+          )
         );
       }
 
       roomMeshes = [...roomMeshes, ...meshes];
-      setupActions(room.name, meshes);
-      return { parentNode, roomName: room.name, meshes };
+      setupActions(roomName, roomNumber, meshes);
+
+      return { parentNode, roomName, roomNumber, meshes };
     });
 
-    function setupActions(roomName, meshes) {
+    function setupActions(roomName, roomNumber, meshes) {
       meshes.forEach((mesh) => {
         mesh.actionManager.registerAction(
           new BABYLON.ExecuteCodeAction(
             BABYLON.ActionManager.OnPointerOverTrigger,
             () => {
-              if (selectedBoxName !== roomName) {
+              if (selectedRoomNumber !== roomNumber) {
                 meshes.forEach((m) => (m.material.alpha = 0.7));
               }
             }
@@ -91,7 +115,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           new BABYLON.ExecuteCodeAction(
             BABYLON.ActionManager.OnPointerOutTrigger,
             () => {
-              if (selectedBoxName !== roomName) {
+              if (selectedRoomNumber !== roomNumber) {
                 meshes.forEach((m) => (m.material.alpha = 0.3));
               }
             }
@@ -101,29 +125,30 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           new BABYLON.ExecuteCodeAction(
             BABYLON.ActionManager.OnPickTrigger,
             () => {
-              setSelectedRoomInfo({
+              setSelectedRoomInfo((prev) => ({
                 name: roomName,
-                status: selectedRoomInfo?.status || "Available",
-              });
-              setSelectedBoxName(roomName);
+                number: roomNumber,
+                status: prev?.status || "Available",
+              }));
+              setSelectedRoomNumber(roomNumber);
             }
           )
         );
       });
     }
 
-    // Highlight stavu vybraného boxu
-    boxes.forEach(({ roomName, meshes }) => {
-      const isSelected = selectedBoxName === roomName;
+    // Highlight selection by room number (unique)
+    boxes.forEach(({ roomNumber, meshes }) => {
+      const isSelected = selectedRoomNumber === roomNumber;
       meshes.forEach((mesh) => {
         mesh.material.alpha = isSelected ? 0.7 : 0.3;
       });
     });
 
-    // Klik mimo box zruší výběr
+    // Click outside any box to clear selection
     const onPointerDown = (evt, pickResult) => {
       if (!pickResult.hit || !roomMeshes.includes(pickResult.pickedMesh)) {
-        setSelectedBoxName(null);
+        setSelectedRoomNumber(null);
         setSelectedRoomInfo(null);
       }
     };
@@ -133,12 +158,12 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       boxes.forEach(({ parentNode }) => parentNode.dispose());
       scene.onPointerDown = null;
     };
-  }, [rooms, scene, floorIndex, config, selectedBoxName]);
+  }, [rooms, scene, floorIndex, config, selectedRoomNumber]);
 
-  // Při změně patra resetujeme výběr
+  // Reset selection when floor changes
   useEffect(() => {
     setSelectedRoomInfo(null);
-    setSelectedBoxName(null);
+    setSelectedRoomNumber(null);
   }, [floorIndex]);
 
   return (
@@ -147,6 +172,9 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         <div className="hover-info-box">
           <p>
             Room: <span>{selectedRoomInfo.name}</span>
+          </p>
+          <p>
+            Number: <span>{selectedRoomInfo.number}</span>
           </p>
           <p>
             Status: <span>{selectedRoomInfo.status}</span>

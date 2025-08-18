@@ -1579,131 +1579,166 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 10.4, maxX: -7.2, maxZ: 16.75 },
+          number: "02.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "02.18",
         },
         {
           name: "ÚKLID",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "2.30",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "02.04",
         },
         {
           name: "ŠATNA A ZÁZEMÍ ZAMĚSTNANCI",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 1.9, maxZ: 16.6 },
+          number: "02.05",
         },
         {
           name: "KOUPELNA",
           bounds: { minX: 2.02, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "02.03",
         },
         {
           name: "PROSTOR PRO VEDENÍ INSTALACÍ",
           bounds: { minX: -0.75, minZ: 9.82, maxX: 4.7, maxZ: 11.7 },
+          number: "02.28",
         },
         {
           name: "ŠACHTA - Š2",
           bounds: { minX: -0.75, minZ: 11.75, maxX: 4.7, maxZ: 14 },
+          number: "02.32",
         },
         {
           name: "ŠACHTA - Š3",
           bounds: { minX: 4.9, minZ: 15.2, maxX: 9.7, maxZ: 16.6 },
+          number: "02.19",
         },
         {
           // rozvaděče
-          name: "ROZVADĚČE",
-          bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          name: "INSTALAČNÍ PROSTOR",
+          baseBounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          extensionBoundsList: [
+            { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          ],
+          number: "02.27b",
         },
         {
-          name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
-          bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          name: "INSTALAČNÍ ŠACHTA - Š1",
+          bounds: { minX: -16.6, minZ: -9.8, maxX: -13.65, maxZ: -8.2 },
+          number: "02.27a",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -15.67, maxX: 9.65, maxZ: -10.3 },
+          number: "02.01",
         },
         {
           name: "HLAVNÍ ROZVADĚČ ELEKTRO",
           bounds: { minX: -16.5, minZ: -13.075, maxX: -10.35, maxZ: -10.2 },
+          number: "02.25",
         },
         {
           name: "MÍSTNOST CBS",
           bounds: { minX: -16.5, minZ: -15.925, maxX: -13.4, maxZ: -13.15 },
+          number: "02.31",
         },
         {
-          name: "ROZVODNA RPO ",
+          name: "ROZVODNA RPO",
           bounds: { minX: -13.35, minZ: -15.925, maxX: -10.275, maxZ: -13.15 },
+          number: "02.24",
         },
         {
-          name: "NÁDRŽ SHZ ",
+          name: "NÁDRŽ SHZ",
           bounds: { minX: 13.4, minZ: -17.87, maxX: 17.87, maxZ: -4.185 },
+          number: "02.22",
         },
         {
           name: "ŠACHTA Š10",
           bounds: { minX: 11.775, minZ: -5.375, maxX: 13.37, maxZ: -4.265 },
+          number: "02.34",
         },
         {
           name: "STROJOVNA CHLAZENÍ",
           bounds: { minX: -1.7, minZ: -8.7, maxX: 4, maxZ: -0.5 },
+          number: "02.35",
         },
         {
           name: "ANGLICKÝ DVOREK",
           bounds: { minX: -17.87, minZ: 3.6, maxX: -16.8, maxZ: 9.2 },
+          number: "02.26a",
         },
         {
           name: "ANGLICKÝ DVOREK",
           bounds: { minX: -17.87, minZ: 0.2, maxX: -16.8, maxZ: 3.4 },
+          number: "02.26b",
         },
         {
           name: "ANGLICKÝ DVOREK",
           bounds: { minX: -17.87, minZ: -3.6, maxX: -16.8, maxZ: -0.2 },
+          number: "02.26c",
         },
         {
           name: "ANGLICKÝ DVOREK",
           bounds: { minX: -17.87, minZ: -7.8, maxX: -16.8, maxZ: -3.8 },
+          number: "02.26d",
         },
         {
           name: "TREZOROVÁ MÍSTNOST",
           bounds: { minX: -38.85, minZ: 8, maxX: -32.325, maxZ: 11.75 },
+          number: "02.08",
         },
         {
           name: "ODVĚTRACÍ ŠACHTA Š6",
           bounds: { minX: -32.4, minZ: 51.03, maxX: -29.435, maxZ: 54.485 },
+          number: "02.12",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -30.825, minZ: 48.91, maxX: -29.26, maxZ: 50.76 },
+          number: "02.29",
         },
         {
           name: "SKLAD (JÁDRO B1)",
           bounds: { minX: -32.4, minZ: 40.44, maxX: -30.9, maxZ: 44.845 },
+          number: "02.11",
         },
         {
           name: "ODVĚTRACÍ ŠACHTA Š7",
           bounds: { minX: 35.9, minZ: 50.9, maxX: 38.85, maxZ: 54.48 },
+          number: "02.16",
         },
         {
           name: "SKLAD (JÁDRO B2)",
           bounds: { minX: 37.325, minZ: 40.76, maxX: 38.85, maxZ: 44.215 },
+          number: "02.15",
         },
         {
           name: "STROJOVNA HAŠENÍ DUSÍKEM",
           bounds: { minX: 11.85, minZ: -4.06, maxX: 17.87, maxZ: 5.89 },
+          number: "02.21",
         },
         {
           name: "RETENČNÍ NÁDRŽ",
           bounds: { minX: -44.15, minZ: 25.68, maxX: -39.25, maxZ: 54.68 },
+          number: "02.38",
         },
       ],
       temperature_data: [0],
@@ -1720,9 +1755,9 @@ export const CONFIG_DATA = {
 
       roomLabels: [
         //2PP
-        { x: -12.7, z: -9, label: "4.09a" },
-        { x: -11, z: -9, label: "4.09b" },
-        { x: 8.4, z: -13.5, label: "4.01" },
+        { x: -12.7, z: -9, label: "02.27b" },
+        { x: -15, z: -9, label: "02.27a" },
+        { x: 8.4, z: -16.2, label: "4.01" },
         { x: -17.1, z: 6.6, label: "02.26a" },
         { x: -17.1, z: 1.8, label: "02.26b" },
         { x: -17.1, z: -1.8, label: "02.26c" },
@@ -4852,111 +4887,138 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.8 },
+          number: "01.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "01.03",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "01.67",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "01.04",
         },
         {
-          name: "ŠATNA A ZÁZEMÍ ZAMĚSTNANCI",
+          name: "ZÁZEMÍ PRO KAVÁRNU - ŠATNA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 1.9, maxZ: 16.6 },
+          number: "01.05",
         },
         {
-          name: "KOUPELNA",
+          name: "ZÁZEMÍ PRO KAVÁRNU - WC ZAMĚSTNANCI",
           bounds: { minX: 2.02, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "01.06",
         },
         {
-          name: "V1",
+          name: "ŠACHTA V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
-          name: "V2",
+          name: "ŠACHTA V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
-          name: "V3",
+          name: "ŠACHTA V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "01.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "01.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "01.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "01.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "01.01",
         },
         {
           name: "MAKERSPACE -3D TISK A ROBOTICKÁ DLAŇ",
           bounds: { minX: -6.55, minZ: -15.5, maxX: 4.15, maxZ: -7.9 },
+          number: "01.69",
         },
         {
           name: "KONFERENČNÍ SÁL",
           bounds: { minX: -14.95, minZ: -5.95, maxX: -3.05, maxZ: 7.7 },
+          number: "01.12",
         },
         {
           name: "STUDOVNA MÉDIÍ - I",
           bounds: { minX: -15.6, minZ: 12.6, maxX: -11.4, maxZ: 15.6 },
+          number: "01.65",
         },
         {
           name: "STUDOVNA MÉDIÍ - II",
           bounds: { minX: -15.6, minZ: 9.6, maxX: -11.4, maxZ: 12.6 },
+          number: "01.66",
         },
         {
           name: "POČÍTAČOVÝ SÁL",
           bounds: { minX: 10.05, minZ: -16.8, maxX: 16.8, maxZ: -5.475 },
+          number: "01.13",
         },
         {
           name: "ZÁZEMÍ PRO KAVÁRNU - SKLAD NÁPOJŮ",
           bounds: { minX: 10.2, minZ: -5.325, maxX: 12.15, maxZ: -3.275 },
+          number: "01.22",
         },
         {
           name: "V7",
           bounds: { minX: 12.15, minZ: -5.325, maxX: 13.34, maxZ: -4.61 },
+          number: "V7",
         },
         {
           name: "NAHRÁVACÍ STUDIO",
           bounds: { minX: 13.4, minZ: 3, maxX: 16.8, maxZ: 6.55 },
+          number: "01.70b",
         },
         {
           name: "REŽIE NAHRÁVACÍHO STUDIA",
           bounds: { minX: 10.3, minZ: 3, maxX: 13.15, maxZ: 6.55 },
+          number: "01.70a",
         },
         {
           name: "KNIHAŘSKÁ DÍLNA",
           bounds: { minX: 10.05, minZ: 6.675, maxX: 16.8, maxZ: 17.87 },
+          number: "01.17",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 6.865, minZ: 16.8, maxX: 9.9, maxZ: 18.02 },
+          number: "01.20",
         },
         {
           name: "ZÁZEMÍ PRO KAVÁRNU - PŘÍPRAVNA",
@@ -4975,6 +5037,7 @@ export const CONFIG_DATA = {
               maxZ: -4.51,
             },
           ],
+          number: "01.21",
         },
         {
           name: "KUCHYŇKA",
@@ -4987,6 +5050,7 @@ export const CONFIG_DATA = {
               maxZ: -0.15,
             },
           ],
+          number: "01.14",
         },
         {
           name: "ZÁZEMÍ PRO VYSTUPUJÍCÍ A PŘÍPRAVU AKCÍ",
@@ -4999,118 +5063,147 @@ export const CONFIG_DATA = {
               maxZ: 3.15,
             },
           ],
+          number: "01.16",
         },
         {
           name: "DIGITALIZAČNÍ PRACOVIŠTĚ",
           bounds: { minX: 18.62, minZ: 7.83, maxX: 24.92, maxZ: 18.07 },
+          number: "01.18",
         },
         {
           name: "NÁDRŽ VODNÍ PLOCHY - Č.1",
           bounds: { minX: 25.1, minZ: 7.83, maxX: 33.2, maxZ: 14.525 },
+          number: "01.74",
         },
         {
           name: "NÁDRŽ VODNÍ PLOCHY - Č.2",
           bounds: { minX: 33.4, minZ: 7.83, maxX: 37.08, maxZ: 14.525 },
+          number: "01.75",
         },
         {
           name: "PŘÍVOD Z VODNÍ PLOCHY",
           bounds: { minX: 37.2, minZ: 7.83, maxX: 39.05, maxZ: 14.525 },
+          number: "01.76",
         },
         {
           name: "T.Ú.V - SKLAD PRO REGULÁTOR PH A ALGICID",
           bounds: { minX: 31.475, minZ: 18.17, maxX: 34.05, maxZ: 19.675 },
+          number: "01.28b",
         },
         {
           name: "T.Ú.V - DÁVKOVÁNÍ DEZINFEKČNÍHO ČINIDLA",
           bounds: { minX: 34.1, minZ: 18.17, maxX: 36.275, maxZ: 19.675 },
+          number: "01.28c",
         },
         {
           name: "T.Ú.V - PROVOZNÍ SKLAD",
           bounds: { minX: 36.225, minZ: 18.17, maxX: 38.85, maxZ: 19.675 },
+          number: "01.28d",
         },
         {
           name: "STROJOVNA ÚPRAVY VODY",
           bounds: { minX: 35.85, minZ: 21.9, maxX: 38.85, maxZ: 23.75 },
+          number: "01.52",
         },
         {
           name: "ÚKLID A MYCÍ STROJ",
           bounds: { minX: 35.85, minZ: 23.8, maxX: 38.85, maxZ: 26.2 },
+          number: "01.30",
         },
         {
           name: "STROJOVNA VZT GARÁŽE",
           bounds: { minX: 35.85, minZ: 26.25, maxX: 38.85, maxZ: 37.3 },
+          number: "01.51",
         },
         {
           name: "ŠACHTA Š8",
           bounds: { minX: 35.85, minZ: 49, maxX: 38.85, maxZ: 51 },
-        },
-        {
-          name: "ŠACHTA Š8",
-          bounds: { minX: 35.85, minZ: 49, maxX: 38.85, maxZ: 51 },
+          number: "01.61",
         },
         {
           name: "DÍLNA ÚDRŽBY",
           bounds: { minX: -21.62, minZ: 7.83, maxX: -18.62, maxZ: 17.96 },
+          number: "01.26",
         },
         {
           name: "SKLAD NÁBYTKU",
           bounds: { minX: -24.8, minZ: 7.83, maxX: -21.67, maxZ: 17.96 },
+          number: "01.44",
         },
         {
           name: "SKLAD KANCELÁŘSKÝCH POTŘEB",
           bounds: { minX: -28.3, minZ: 7.83, maxX: -24.85, maxZ: 11.3 },
+          number: "01.43",
         },
         {
           name: "SKLAD ÚKLIDOVÝCH PROSTŘEDKŮ",
           bounds: { minX: -28.3, minZ: 11.5, maxX: -25, maxZ: 14.7 },
+          number: "01.42",
         },
         {
           name: "VELÍN",
           bounds: { minX: -28.3, minZ: 14.9, maxX: -25, maxZ: 17.96 },
+          number: "01.71",
         },
         {
           name: "AUTOMATICKÁ TLAKOVÁ STANICE",
           bounds: { minX: -39, minZ: 7.83, maxX: -35.85, maxZ: 9.9 },
+          number: "01.58",
         },
         {
           name: "ODPAD",
           bounds: { minX: -39, minZ: 10.05, maxX: -35.85, maxZ: 14.75 },
+          number: "01.41",
         },
         {
           name: "NAPOJOVACÍ UZEL SLABOPROUDU",
           bounds: { minX: -44, minZ: 11, maxX: -39.4, maxZ: 12.88 },
+          number: "01.48",
         },
         {
           name: "ROZVODNA NÍZKÉHO NAPĚTÍ",
           bounds: { minX: -44, minZ: 13.03, maxX: -39.4, maxZ: 15.86 },
+          number: "01.47",
         },
         {
-          name: "TRANSFORMÁTOR + CHODBA (CELEK E)",
-          bounds: { minX: -44, minZ: 16.03, maxX: -39.45, maxZ: 18.46 },
+          name: "TRANSFORMÁTOR",
+          bounds: { minX: -44, minZ: 16.03, maxX: -41.35, maxZ: 18.46 },
+          number: "01.46",
+        },
+        {
+          name: "CHODBA (CELEK E)",
+          bounds: { minX: -41.35, minZ: 16.03, maxX: -39.45, maxZ: 18.46 },
+          number: "01.45",
         },
         {
           name: "ROZVODNA VYSOKÉHO NAPĚTÍ - MSVK",
           bounds: { minX: -44, minZ: 18.62, maxX: -39.45, maxZ: 21.18 },
+          number: "01.49",
         },
         {
           name: "ROZVODNA VYSOKÉHO NAPĚTÍ - ČEZ",
           bounds: { minX: -44, minZ: 21.23, maxX: -39.25, maxZ: 24 },
+          number: "01.50",
         },
         {
           name: "KOMORA PRO ARMATURY RETENCÍ",
           bounds: { minX: -44, minZ: 24, maxX: -39.25, maxZ: 25.22 },
+          number: "01.32",
         },
         {
           name: "DIESELAGREGÁT",
           bounds: { minX: -38.85, minZ: 50.69, maxX: -32.5, maxZ: 54.5 },
+          number: "01.53",
         },
         {
           name: "UPS",
           bounds: { minX: -38.85, minZ: 46.88, maxX: -32.65, maxZ: 50.5 },
+          number: "01.54",
         },
         {
           name: "ROZVODNA SLP (GARÁŽ)",
           bounds: { minX: -32.5, minZ: 35.96, maxX: -29.1, maxZ: 37.47 },
+          number: "01.34",
         },
       ],
       temperature_data: [0],
@@ -5217,6 +5310,8 @@ export const CONFIG_DATA = {
         depth: 35.82,
       },
       holes: [
+        { x: 0.86, z: 0.8, width: 2.1, depth: 6.4 }, // 2.11 - leva
+        { x: 2, z: 0.8, width: 4, depth: 6.4 }, //2.11 - prava],
         { x: 8.4, z: -12.9, width: 2.6, depth: 5.2 },
         { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
@@ -6734,80 +6829,99 @@ export const CONFIG_DATA = {
         {
           name: "TŘÍDÍCÍ PROSTOR",
           bounds: { minX: -16.8, minZ: 10.2, maxX: -10.2, maxZ: 16.8 },
+          number: "1.13",
         },
         {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 10.4, maxX: -7.2, maxZ: 16.8 },
+          number: "1.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "1.03",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "1.06",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "1.04",
         },
         {
           name: "PODATELNA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "1.19",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "1.16",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "1.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "1.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "1.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "1.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.6 },
+          number: "1.01",
         },
         {
           name: "ZÁDVEŘÍ",
           bounds: { minX: -8.93, minZ: -17.84, maxX: 0.555, maxZ: -13.925 },
+          number: "1.15",
         },
         {
           name: "VRÁTNICE",
           bounds: { minX: 0.555, minZ: -17.84, maxX: 2.92, maxZ: -13.925 },
+          number: "1.14",
         },
       ],
       temperature_data: [0],
@@ -8422,83 +8536,103 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "2.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "2.03",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "2.06",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "2.04",
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "2.05",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "2.17",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "2.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "2.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "2.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "2.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "2.01",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
           bounds: { minX: -15.6, minZ: 9.6, maxX: -11.45, maxZ: 13.8 },
+          number: "2.15",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
           bounds: { minX: -10.2, minZ: -4.8, maxX: -6.05, maxZ: -0.4 },
+          number: "2.14",
         },
         {
           name: "VÝSTAVA MARKERSPACE",
           bounds: { minX: 5.95, minZ: 0.6, maxX: 8.25, maxZ: 4.8 },
+          number: "2.18",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 4 OSOBY",
           bounds: { minX: -4.83, minZ: -15.6, maxX: -2.53, maxZ: -11.4 },
+          number: "2.13",
         },
       ],
       temperature_data: [0],
@@ -9923,75 +10057,93 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "3.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "3.03",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "3.06",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "3.04",
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "3.05",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "3.14",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "3.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "3.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "3.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "3.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "3.01",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
           bounds: { minX: -15.6, minZ: 0.4, maxX: -11.425, maxZ: 4.6 },
+          number: "3.11",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 4 OSOB",
           bounds: { minX: -4.775, minZ: -5, maxX: -2.4, maxZ: -0.8 },
+          number: "3.12",
         },
       ],
       temperature_data: [0],
@@ -11559,95 +11711,118 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "4.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "4.03",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "4.06",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "4.04",
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "4.05",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "4.18",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "4.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "4.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "4.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "4.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "4.01",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 4 OSOBY",
           bounds: { minX: -8.48, minZ: -4.8, maxX: -6.08, maxZ: -0.05 },
+          number: "4.16",
         },
         {
           name: "TÝMOVÁ STUDOVNA/KLUBOVÁ MÍSTNOST",
           bounds: { minX: -6.08, minZ: -4.8, maxX: 2.92, maxZ: -0.05 },
+          number: "4.11",
         },
         {
           name: "UMĚLECKÉ A EXPERIMENTÁLNÍ KINO",
           bounds: { minX: 4.32, minZ: -4.8, maxX: 9.92, maxZ: 4.8 },
+          number: "4.12",
         },
         {
           name: "INDIVIDUALNÍ STUDOVNA",
           bounds: { minX: -8.43, minZ: -8.4, maxX: -7.33, maxZ: -6 },
+          number: "4.13a",
         },
         {
           name: "INDIVIDUALNÍ STUDOVNA",
           bounds: { minX: -7.23, minZ: -8.4, maxX: -6.08, maxZ: -6 },
+          number: "4.13b",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 6 OSOBY",
           bounds: { minX: 11.45, minZ: 12, maxX: 15.6, maxZ: 15.6 },
+          number: "4.14",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 4 OSOBY",
           bounds: { minX: 11.45, minZ: 9.62, maxX: 15.6, maxZ: 12 },
+          number: "4.15",
         },
       ],
       temperature_data: [0],
@@ -13243,107 +13418,133 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "5.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "5.03",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "5.06",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "5.04",
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "5.05",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "5.17"
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "5.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "5.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "5.09a", 
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "5.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "5.01",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 10 OSOB",
           bounds: { minX: -4.6, minZ: -0.4, maxX: -0.4, maxZ: 4.975 },
+          number: "5.12",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
           bounds: { minX: -4.6, minZ: -4.575, maxX: -0.4, maxZ: -0.4 },
+          number: "5.14",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 10 OSOB",
           bounds: { minX: -4.6, minZ: -10, maxX: 0.8, maxZ: -5.825 },
+          number: "5.13",
         },
         {
           name: "TÝMOVÁ STUDOVNA PRO 8 OSOB",
           bounds: { minX: 0.8, minZ: -10, maxX: 5, maxZ: -5.825 },
+          number: "5.15",
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA - F",
+          name: "INDIVIDUÁLNÍ STUDOVNA",
           bounds: { minX: 4.425, minZ: -1.775, maxX: 6.45, maxZ: -0.425 },
+          number: "5.19f",
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA - E ",
+          name: "INDIVIDUÁLNÍ STUDOVNA",
           bounds: { minX: 4.425, minZ: -3.175, maxX: 6.45, maxZ: -1.825 },
+          number: "5.19e",
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA - D",
+          name: "INDIVIDUÁLNÍ STUDOVNA",
           bounds: { minX: 4.425, minZ: -4.575, maxX: 6.45, maxZ: -3.225 },
+          number: "5.19d",
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA - A",
+          name: "INDIVIDUÁLNÍ STUDOVNA",
           bounds: { minX: 6.55, minZ: -1.775, maxX: 8.575, maxZ: -0.425 },
+          number: "5.19a",
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA - B",
+          name: "INDIVIDUÁLNÍ STUDOVNA",
           bounds: { minX: 6.55, minZ: -3.175, maxX: 8.575, maxZ: -1.825 },
+          number: "5.19b",
         },
         {
-          name: "INDIVIDUÁLNÍ STUDOVNA - C",
+          name: "INDIVIDUÁLNÍ STUDOVNA",
           bounds: { minX: 6.55, minZ: -4.575, maxX: 8.575, maxZ: -3.225 },
+          number: "5.19c",
         },
       ],
       temperature_data: [0],
@@ -14833,79 +15034,98 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "6.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          nubmer: "6.05",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "6.15",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "6.04",
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "6.06",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "6.03",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "6.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "6.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "6.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "6.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "6.01",
         },
         {
           name: "TECHNICKÉ HNÍZDO",
           bounds: { minX: -9, minZ: 3.08, maxX: -4.85, maxZ: 6.68 },
+          number: "6.13",
         },
         {
           name: "ZASEDACÍ MÍSTO PRO 22 OSOB",
           bounds: { minX: -2.95, minZ: -2.55, maxX: 2.95, maxZ: 6.68 },
+          number: "6.11",
         },
         {
           name: "ZASEDACÍ MÍSTO PRO 16 OSOB",
           bounds: { minX: -2.95, minZ: -7.75, maxX: 2.95, maxZ: -2.7 },
+          number: "6.12",
         },
       ],
       temperature_data: [0],
@@ -16537,127 +16757,158 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "7.02"
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4"
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5"
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "7.05"
         },
         {
-          name: "WC ZAMĚSTNANCI",
+          name: "BEZBARIEROVÉ WC",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          number: "7.27"
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "7.04"
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "7.06"
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "7.03"
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          number: "V1"
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2"
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3"
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "7.07"
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "7.08"
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "7.09a"
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "7.09b"
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "7.01"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ AKVIZICE KNIHOVNÍHO FONDU",
           bounds: { minX: -16.8, minZ: 6.7, maxX: -10.2, maxZ: 16.8 },
+          number: "7.12"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ AKVIZICE KNIHOVNÍHO FONDU",
           bounds: { minX: -16.8, minZ: -0.5, maxX: -10.275, maxZ: 6.5 },
+          number: "7.13"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI AKVIZIČNÍCH ČINNOSTI A OCHRANU KNIH. FONDU",
           bounds: { minX: -16.8, minZ: -4.1, maxX: -10.275, maxZ: -0.7 },
+          number: "7.14"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ SLUŽEB",
           bounds: { minX: -16.8, minZ: -7.7, maxX: -10.275, maxZ: -4.3 },
+          number: "7.15"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ INFORMAČNÍCH TECHNOLOGIÍ",
           bounds: { minX: -16.8, minZ: -16.8, maxX: -7.65, maxZ: -10.2 },
+          number: "7.16" 
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO BIBLIOGRAFICKÉ A REŠERŠNÍ SLUŽBY",
           bounds: { minX: -7.55, minZ: -16.8, maxX: -0.475, maxZ: -10.275 },
+          number: "7.17"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO REFORMOVÁNÍ DOKUMENTŮ A SPRÁVU DIGITÁLNÍ SBÍRKY",
           bounds: { minX: -0.325, minZ: -16.8, maxX: 3.125, maxZ: -10.275 },
+          number: "7.18"
         },
         {
           name: "LABORATOŘ NA TESTOVÁNÍ KNIH",
           bounds: { minX: 3.275, minZ: -16.8, maxX: 6.875, maxZ: -10.275 },
+          number: "7.19"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO ZPRACOVÁNÍ KNIHOVNÍHO FONDU",
           bounds: { minX: 10.2, minZ: 6.675, maxX: 16.8, maxZ: 16.8 },
+          number: "7.23"
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO ZPRACOVÁNÍ KNIHOVNÍHO FONDU",
           bounds: { minX: 10.275, minZ: -4.125, maxX: 16.8, maxZ: 6.525 },
+          number: "7.22"
         },
         {
-          name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI JMENNÉHO A VĚCNÉHO ZPRACOVÁNÍ DOKUMENTŮ",
+          name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI JMENNÉHO A VĚCNÉHO ZPRACOVÁNÍ DOKUMENTŮ 1",
           bounds: { minX: 10.275, minZ: -7.725, maxX: 16.8, maxZ: -4.275 },
+          number: "7.21"
         },
         {
-          name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI JMENNÉHO A VĚCNÉHO ZPRACOVÁNÍ DOKUMENTŮ",
+          name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI JMENNÉHO A VĚCNÉHO ZPRACOVÁNÍ DOKUMENTŮ 2",
           bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -7.875 },
+          number: "7.20"
         },
         {
           name: "SÍŤOVÁ TISKÁRNA",
           bounds: { minX: -7.6, minZ: 4.6, maxX: -3.2, maxZ: 6.4 },
+          number: "7.28"
         },
         {
           name: "SKLAD VÝPOČETNÍ TECHNIKY",
           bounds: { minX: -7.6, minZ: 0.075, maxX: -3.2, maxZ: 4.45 },
+          number: "7.24"
         },
         {
           name: "DATOVÉ CENTRUM",
           bounds: { minX: -7.6, minZ: -7.6, maxX: -3.2, maxZ: -0.075 },
+          number: "7.25"
         },
       ],
       temperature_data: [0],
@@ -16704,8 +16955,8 @@ export const CONFIG_DATA = {
         { x: 5, z: -13.5, label: "7.19" },
         { x: 13.5, z: -12.25, label: "7.20" },
         { x: 13.5, z: -6.15, label: "7.21" },
-        { x: 13.5, z: 1, label: "7.21" },
-        { x: 13.5, z: 12, label: "7.21" },
+        { x: 13.5, z: 1, label: "7.22" },
+        { x: 13.5, z: 12, label: "7.23" },
         { x: -5.25, z: 5.5, label: "7.28" },
         { x: -5.25, z: 2.1, label: "7.24" },
         { x: -5.25, z: -3.9, label: "7.25" },
@@ -18275,139 +18526,173 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "8.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
+          number: "8.05",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
+          NUMBER: "8.29"
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
+          number: "8.04",
         },
         {
-          name: "PODATELNA",
+          name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
+          number: "8.06",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
+          number: "8.03",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
+          nubmer: "V1", 
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
+          number: "8.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
+          number: "8.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "8.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "8.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "8.01",
         },
         {
           name: "CENTRUM VZDĚLÁVÁNÍ A REGIONÁLNÍCH SLUŽEB",
           bounds: { minX: -16.8, minZ: 6.7, maxX: -10.2, maxZ: 16.8 },
+          number: "8.11",
         },
         {
           name: "CENTRUM VZDĚLÁVÁNÍ A REGIONÁLNÍCH SLUŽEB - JEDNACÍ PROSTOR",
           bounds: { minX: -16.8, minZ: 3.1, maxX: -10.275, maxZ: 6.5 },
+          number: "8.12",
         },
         {
           name: "KANCELÁŘ PROJEKTOVÉHO MANAŽERA",
           bounds: { minX: -16.8, minZ: -0.5, maxX: -10.275, maxZ: 2.9 },
+          number: "8.13",
         },
         {
           name: "PRACOVIŠTĚ PR A ORGANIZACE AKCÍ PRO VEŘEJNOST",
           bounds: { minX: -16.8, minZ: -4.1, maxX: -10.275, maxZ: -0.7 },
+          number: "8.14",
         },
         {
           name: "GRAFICKÉ STUDIO",
           bounds: { minX: -16.8, minZ: -7.7, maxX: -10.275, maxZ: -4.3 },
+          number: "8.15",
         },
         {
           name: "ŘEDITELNA",
           bounds: { minX: -16.8, minZ: -16.8, maxX: -7.8, maxZ: -10.2 },
+          number: "8.16",
         },
         {
           name: "SEKRETARIÁT",
           bounds: { minX: -7.7, minZ: -16.8, maxX: -4.2, maxZ: -10.2 },
+          number: "8.17",
         },
         {
           name: "KANCELÁŘ ZÁSTUPCE ŘEDITELE",
           bounds: { minX: -4.1, minZ: -16.8, maxX: 0.6, maxZ: -10.2 },
+          number: "8.18",
         },
         {
           name: "KANCELÁŘ SPRÁVY BUDOVY",
           bounds: { minX: 0.7, minZ: -16.8, maxX: 4.2, maxZ: -10.2 },
+          number: "8.19",
         },
         {
           name: "PŘÍRUČNÍ SKLAD",
           bounds: { minX: 4.3, minZ: -16.8, maxX: 6.875, maxZ: -10.2 },
+          number: "8.20",
         },
         {
           name: "ÚČTÁRNA",
           bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -7.8 },
+          number: "8.21",
         },
         {
           name: "PŘÍRUČNÍ SKLAD PRO ÚČTÁRNU",
           bounds: { minX: 10.2, minZ: -7.7, maxX: 16.8, maxZ: -4.2 },
+          number: "8.22",
         },
         {
           name: "KANCELÁŘ VEDOUCÍ ODDĚLENÍ EKONOMIKY A PROVOZU",
           bounds: { minX: 10.2, minZ: -4.1, maxX: 16.8, maxZ: -0.6 },
+          number: "8.23", 
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO VZDĚLÁVÁNÍ UČITELŮ",
           bounds: { minX: 10.2, minZ: -0.5, maxX: 16.8, maxZ: 3 },
+          number: "8.24",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO VĚDU, VÝZKUM A VÝVOJ",
           bounds: { minX: 10.2, minZ: 3.1, maxX: 16.8, maxZ: 6.6 },
+          number: "8.25",
         },
         {
           name: "MULTIMEDIÁLNÍ UČEBNA",
           bounds: { minX: 10.2, minZ: 6.7, maxX: 16.8, maxZ: 16.8 },
+          number: "8.26",
         },
         {
           name: "SÍŤOVÁ TISKÁRNA",
           bounds: { minX: -7.62, minZ: 1.02, maxX: -3.24, maxZ: 3.08 },
+          number: "8.30",
         },
         {
           name: "SPISOVNA",
           bounds: { minX: -7.62, minZ: -7.69, maxX: -3.24, maxZ: 0.92 },
+          number: "8.27",
         },
       ],
       temperature_data: [0],
@@ -19718,42 +20003,52 @@ export const CONFIG_DATA = {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
+          number: "9.12a",
         },
         {
-          name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
+          name: "SKLAD",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
+          number: "9.12b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
+          number: "9.02",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
+          number: "9.01",
         },
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.9, minZ: 14.5, maxX: -4.875, maxZ: 16.55 },
+          number: "9.04",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: -4.785, minZ: 14.5, maxX: -1.125, maxZ: 16.55 },
+          number: "9.05",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: -1.025, minZ: 14.5, maxX: 4.2875, maxZ: 16.55 },
+          number: "9.06",
         },
         {
           name: "PROSTOR PRO TECHNOLOGIE VZT + CHLAD",
           bounds: { minX: 10.2, minZ: -5.47, maxX: 16.8, maxZ: 16.55 },
+          number: "9.13",
         },
         {
           name: "SKLAD NÁBYTKU",
           bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -5.67 },
+          number: "9.18",
         },
         {
           name: "ROZVADĚČ FVE",
           bounds: { minX: 1, minZ: 9.92, maxX: 2.94, maxZ: 12.05 },
+          number: "9.11",
         },
       ],
     },
