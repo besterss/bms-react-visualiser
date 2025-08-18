@@ -1774,7 +1774,12 @@ export const CONFIG_DATA = {
         { width: 6, depth: 14.55, position: { x: -41, z: 18.05 } },
         { width: 5, depth: 20.1, position: { x: -41.85, z: -3.2 } }, // retencni nadrz2
       ],
-      holes: [{ x: 8.4, z: -13.5, width: 3, depth: 4 }],
+      holes: [
+        { x: 8.4, z: -12.9, width: 2.6, depth: 5.2 },
+        { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -5212,9 +5217,10 @@ export const CONFIG_DATA = {
         depth: 35.82,
       },
       holes: [
-        { x: 8.4, z: -14.4, width: 3, depth: 5 },
-        { x: 0.86, z: 0.8, width: 2.1, depth: 6.4 }, // 2.11 - leva
-        { x: 2, z: 0.8, width: 4, depth: 6.4 }, //2.11 - prava],
+        { x: 8.4, z: -12.9, width: 2.6, depth: 5.2 },
+        { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
       layout: {
         rooms_grid: {
@@ -6976,6 +6982,9 @@ export const CONFIG_DATA = {
         { x: 0.86, z: -0.2, width: 2.1, depth: 8.2 }, // 2.11 - leva
         { x: 2, z: -1, width: 4, depth: 6.6 }, //2.11 - prava
         { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
       layout: {
         rooms_grid: {
@@ -8540,7 +8549,13 @@ export const CONFIG_DATA = {
         { width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } },
         { width: 4, depth: 1.4, position: { x: 11.6, z: 8.1 } },
       ],
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -10029,7 +10044,13 @@ export const CONFIG_DATA = {
         { width: 3, depth: 10, position: { x: 8.5, z: -12 } },
         { width: 1.2, depth: 3.2, position: { x: -6.3, z: -11.7 } }, // kostka hlavni
       ],
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -11677,9 +11698,14 @@ export const CONFIG_DATA = {
       segments: [
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
         { width: 28.19, depth: 35.82, position: { x: 3.855, z: 0 } },
-        { width: -3.5, depth: 1.2, position: { x: -11.6, z: 6.25 } }, // kostka hlavni
+        { width: 3.5, depth: 1.2, position: { x: -11.6, z: 6.25 } }, // kostka hlavni
       ],
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -13375,7 +13401,14 @@ export const CONFIG_DATA = {
         { width: 20.56, depth: 35.82, position: { x: 0, z: 0 } },
         { width: 3.5, depth: 1.2, position: { x: 11.6, z: 8.1 } },
       ],
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -14921,7 +14954,13 @@ export const CONFIG_DATA = {
         width: 35.82,
         depth: 35.82,
       },
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -16682,7 +16721,13 @@ export const CONFIG_DATA = {
         { width: 12, depth: 11.7, position: { x: 3, z: 12.1 } },
         { width: 12, depth: 10.6, position: { x: 3, z: -12.65 } },
       ],
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
+        { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
+        { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
+        { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -18430,7 +18475,10 @@ export const CONFIG_DATA = {
         { width: 12, depth: 11.7, position: { x: 3, z: 12.1 } },
         { width: 12, depth: 10.6, position: { x: 3, z: -12.65 } },
       ],
-      holes: [{ x: 8.4, z: -14.4, width: 3, depth: 5 }],
+      holes: [
+        { x: 8.4, z: -14.4, width: 3, depth: 5 },
+        { x: -8.4, z: 14.2, width: 3, depth: 4.7 },
+      ],
       layout: {
         rooms_grid: {
           columns: 1,
