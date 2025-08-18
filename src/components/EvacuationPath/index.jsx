@@ -3,7 +3,7 @@ import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import React, { useEffect } from "react";
 
 // Parametry
-const CLEARANCE = 0.12; // bezpečný odstup od zdí (m)
+const CLEARANCE = 0.12; // bezpečný odstup od zdí a děr (m)
 const SAMPLE_STEP = 0.05; // krok vzorkování LOS (m)
 const DEFAULT_WALL_THICKNESS = 0.15; // default tloušťka stěny, když chybí partitionWidth
 
@@ -12,6 +12,7 @@ const DEFAULT_WALL_THICKNESS = 0.15; // default tloušťka stěny, když chybí 
 const PASSABLE_UNDER_Y = 2.0;
 
 // ================== Pomocné funkce a pathfinding ==================
+
 class VGNode {
   constructor(position, id) {
     this.position = position; // {x,y,z}
@@ -46,6 +47,7 @@ const collectObstacleRects = (
 ) => {
   const walls = floorData?.layout?.walls || [];
   const parts = walls.filter((w) => w.type === "partition" && w.start && w.end);
+
   const rects = [];
   const eps = 1e-6;
 
@@ -70,7 +72,6 @@ const collectObstacleRects = (
       typeof p.partitionWidth === "number"
         ? p.partitionWidth
         : DEFAULT_WALL_THICKNESS;
-
     const half = w / 2 + clearance;
 
     // Axis-aligned?
@@ -100,6 +101,31 @@ const collectObstacleRects = (
   return rects;
 };
 
+// DÍRY v podlaze -> nafouknuté obdélníky (AABB), vždy neprůchodné
+const collectHoleRects = (floorData, clearance = CLEARANCE) => {
+  const holes = floorData?.holes || [];
+  const rects = [];
+  for (const h of holes) {
+    if (
+      typeof h.x !== "number" ||
+      typeof h.z !== "number" ||
+      typeof h.width !== "number" ||
+      typeof h.depth !== "number"
+    ) {
+      continue;
+    }
+    const halfW = h.width / 2 + clearance;
+    const halfD = h.depth / 2 + clearance;
+    rects.push({
+      minX: h.x - halfW,
+      maxX: h.x + halfW,
+      minZ: h.z - halfD,
+      maxZ: h.z + halfD,
+    });
+  }
+  return rects;
+};
+
 // Robustní line-of-sight: vzorkování podél úsečky proti obdélníkům
 // - nevyhodnocuje koncové body (abychom povolili dotyk v uzlech)
 // - kolize jen pokud bod leží ve STRICT vnitřku obdélníku
@@ -110,6 +136,7 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   if (dist === 0) return true;
 
   const steps = Math.max(2, Math.ceil(dist / step));
+
   const segBB = {
     minX: Math.min(a.x, b.x),
     maxX: Math.max(a.x, b.x),
@@ -141,6 +168,7 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
 const buildVisibilityNodes = (start, end, obstacleRects) => {
   const nodes = [];
   const seen = new Set();
+
   const push = (pt, label) => {
     const id = `${pt.x.toFixed(4)}_${pt.z.toFixed(4)}_${label || ""}`;
     if (!seen.has(id)) {
@@ -163,13 +191,13 @@ const buildVisibilityNodes = (start, end, obstacleRects) => {
     ];
     corners.forEach((c, i) => push(c, `corner_${i}`));
   }
+
   return nodes;
 };
 
 const buildVisibilityGraph = (nodes, obstacleRects) => {
   const idToNode = new Map(nodes.map((n) => [n.id, n]));
   // let edgeCount = 0; // Debug
-
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
       const a = nodes[i].position;
@@ -214,14 +242,12 @@ const aStar = (nodes, idToNode, startPos, endPos) => {
         cur = id;
       }
     }
-
     if (cur === e.id) {
       const path = [];
       for (let cid = cur; cid; cid = came.get(cid))
         path.push(idToNode.get(cid).position);
       return path.reverse();
     }
-
     open.delete(cur);
     const node = idToNode.get(cur);
     for (const nb of node.neighbors) {
@@ -295,7 +321,6 @@ const straightPathfinding = (start, end, obstacleRects) => {
   if (!raw.length) return [];
 
   const smoothed = smoothPath(raw, obstacleRects);
-
   // nahradíme první/poslední bod původním start/end pro hezké vykreslení
   if (smoothed.length >= 1) {
     smoothed[0] = start;
@@ -305,6 +330,7 @@ const straightPathfinding = (start, end, obstacleRects) => {
 };
 
 // ================== Vizualizace ==================
+
 const visualizePathLines = (
   scene,
   path,
@@ -313,14 +339,17 @@ const visualizePathLines = (
   namePrefix = "evacuation_path"
 ) => {
   if (!path || path.length < 2) return null;
+
   const name = `${namePrefix}_${Date.now()}`;
   const points = path.map((p) => new BABYLON.Vector3(p.x, yLevel + 0.7, p.z));
   const lines = BABYLON.MeshBuilder.CreateLines(name, { points }, scene);
+
   const mat = new BABYLON.StandardMaterial(`${name}_mat`, scene);
   mat.emissiveColor = color;
   mat.diffuseColor = color;
   mat.specularColor = new BABYLON.Color3(0, 0, 0);
   mat.alpha = 0.95;
+
   lines.color = color;
   lines.material = mat;
   return lines;
@@ -341,6 +370,7 @@ const visualizeEndpoints = (scene, start, end, yLevel) => {
 };
 
 // ================== Komponenta ==================
+
 const EvacuationPath = ({ scene, floorId }) => {
   useEffect(() => {
     try {
@@ -374,13 +404,14 @@ const EvacuationPath = ({ scene, floorId }) => {
           CONFIG_DATA.visualization.floor_spacing;
       }
 
-      // Překážky = všechny "partition" z layout.walls na daném patře
-      // s tím, že partitions nad PASSABLE_UNDER_Y ignorujeme.
-      const obstacleRects = collectObstacleRects(
+      // Překážky = partitions (pod PASSABLE_UNDER_Y) + díry v podlaze
+      const wallRects = collectObstacleRects(
         floorData,
         CLEARANCE,
         PASSABLE_UNDER_Y
       );
+      const holeRects = collectHoleRects(floorData, CLEARANCE);
+      const obstacleRects = [...wallRects, ...holeRects];
 
       floorData.evacuation.forEach((route, idx) => {
         const start = { x: route.start.x, y: 0, z: route.start.z };
@@ -389,7 +420,7 @@ const EvacuationPath = ({ scene, floorId }) => {
         // vždy zobraz start/cíl
         visualizeEndpoints(scene, start, end, yLevel);
 
-        // Strategická trasa s vyhnutím "partition"
+        // Strategická trasa s vyhnutím "partition" a "holes"
         const path = straightPathfinding(start, end, obstacleRects);
 
         if (path.length >= 2) {
@@ -400,6 +431,8 @@ const EvacuationPath = ({ scene, floorId }) => {
             BABYLON.Color3.Green(),
             `evacuation_path_${floorId}_${idx}`
           );
+
+          // Předpokládáme, že tato funkce existuje v projektu
           visualizePathBubbles(
             scene,
             path,
@@ -409,6 +442,7 @@ const EvacuationPath = ({ scene, floorId }) => {
             `path_${floorId}_${idx}`
           );
         } else if (path.length === 1) {
+          // Předpokládáme, že tato funkce existuje v projektu
           visualizePathBubbles(
             scene,
             path,
@@ -417,9 +451,6 @@ const EvacuationPath = ({ scene, floorId }) => {
             0.32,
             `single_${floorId}_${idx}`
           );
-        } else {
-          // Pokud se cesta nenajde, zůstanou alespoň koncové bubliny
-          // console.warn(`[Evac][${floorId}] Cesta nenalezena`);
         }
       });
     } catch (e) {
