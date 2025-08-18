@@ -3,16 +3,20 @@ import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import React, { useEffect } from "react";
 
 // Parametry
-const CLEARANCE = 0.12; // bezpečný odstup od zdí a děr (m)
+const CLEARANCE = 0.5; // bezpečný odstup od zdí a děr (m)
 const SAMPLE_STEP = 0.05; // krok vzorkování LOS (m)
 const DEFAULT_WALL_THICKNESS = 0.15; // default tloušťka stěny, když chybí partitionWidth
+const PASSABLE_UNDER_Y = 2.0; // příčky od této výšky bereme jako "nad hlavou" -> průchozí
 
-// Partitions, jejichž spodní hrana (yLevel) je >= této výšky, se berou jako "nad hlavou" => průchozí
-// Nastav dle svého (typicky 2.0–2.1 m). Můžeš případně vzít z configu.
-const PASSABLE_UNDER_Y = 2.0;
+// ŠIPKY – vizuál
+const ARROW_SPACING = 1.2; // rozestup šipek podél cesty (m)
+const ARROW_SHAFT_LEN = 0.55; // délka těla
+const ARROW_HEAD_LEN = 0.28; // délka hlavy
+const ARROW_SHAFT_THICK = 0.1; // tloušťka těla
+const ARROW_HEAD_DIAM = 0.3; // průměr hlavy
+const ARROW_START_OFFSET = 0.3; // jak brzy po startu začít pokládat šipky (m)
 
 // ================== Pomocné funkce a pathfinding ==================
-
 class VGNode {
   constructor(position, id) {
     this.position = position; // {x,y,z}
@@ -20,7 +24,6 @@ class VGNode {
     this.neighbors = []; // {id, cost}
   }
 }
-
 const getDistance = (a, b) =>
   Math.hypot(a.x - b.x, (a.y || 0) - (b.y || 0), a.z - b.z);
 
@@ -47,12 +50,10 @@ const collectObstacleRects = (
 ) => {
   const walls = floorData?.layout?.walls || [];
   const parts = walls.filter((w) => w.type === "partition" && w.start && w.end);
-
   const rects = [];
   const eps = 1e-6;
 
   for (const p of parts) {
-    // spodní hrana příčky (pokud není, bereme 0 = od podlahy)
     const bottomY =
       typeof p.yLevel === "number"
         ? p.yLevel
@@ -60,7 +61,6 @@ const collectObstacleRects = (
         ? p.y
         : 0;
 
-    // Pokud je příčka nad hlavou, je průchozí -> ignorujeme ji jako překážku
     if (bottomY >= passableUnderY - 1e-6) continue;
 
     const x1 = p.start.x,
@@ -74,7 +74,6 @@ const collectObstacleRects = (
         : DEFAULT_WALL_THICKNESS;
     const half = w / 2 + clearance;
 
-    // Axis-aligned?
     if (Math.abs(z1 - z2) < eps) {
       // horizontální segment
       const minX = Math.min(x1, x2) - clearance;
@@ -90,7 +89,7 @@ const collectObstacleRects = (
       const maxX = x1 + half;
       rects.push({ minX, maxX, minZ, maxZ });
     } else {
-      // diagonála (vzácné): použijeme konzervativní obdélník (bbox) nafouknutý o half
+      // diagonála (vzácné): konzervativní bbox nafouknutý o half
       const minX = Math.min(x1, x2) - half;
       const maxX = Math.max(x1, x2) + half;
       const minZ = Math.min(z1, z2) - half;
@@ -126,6 +125,64 @@ const collectHoleRects = (floorData, clearance = CLEARANCE) => {
   return rects;
 };
 
+// ===== PinkGlass: detekce materiálu a sběr AABB obdélníků =====
+// Detekce pinkGlass materiálu (funguje i pro MultiMaterial)
+const isPinkGlassMaterial = (mat) => {
+  if (!mat) return false;
+  const nameOrId = (mat.name || mat.id || "").toLowerCase();
+  if (nameOrId.includes("pinkglass")) return true;
+  if (Array.isArray(mat.subMaterials)) {
+    return mat.subMaterials.some((sm) =>
+      ((sm?.name || sm?.id || "") + "").toLowerCase().includes("pinkglass")
+    );
+  }
+  return false;
+};
+
+// PinkGlass mesh-e -> nafouknuté AABB obdélníky v XZ
+// Bere pouze ty, které nejsou "nad hlavou" na daném patře (viz PASSABLE_UNDER_Y)
+const collectPinkGlassRects = (
+  scene,
+  yLevel, // absolutní Y patra (viz výpočet níže)
+  clearance = CLEARANCE,
+  passableUnderY = PASSABLE_UNDER_Y
+) => {
+  const rects = [];
+  if (!scene) return rects;
+  const eps = 1e-6;
+
+  for (const m of scene.meshes) {
+    if (!m || !m.material) continue;
+    if (!isPinkGlassMaterial(m.material)) continue;
+    if (!(typeof m.isEnabled === "function" ? m.isEnabled() : m.isEnabled))
+      continue;
+    if (m.isVisible === false) continue;
+
+    // Ujisti se, že world matrix/bounding info je aktuální
+    m.computeWorldMatrix(true);
+    const bi = m.getBoundingInfo?.();
+    const bb = bi?.boundingBox;
+    if (!bb) continue;
+
+    const min = bb.minimumWorld;
+    const max = bb.maximumWorld;
+
+    // Spodní hrana vůči tomuto patru
+    const bottomLocalY = min.y - yLevel;
+    // Pokud je celé "nad hlavou", ignoruj
+    if (bottomLocalY >= passableUnderY - eps) continue;
+
+    // AABB v XZ, rozšířený o clearance
+    rects.push({
+      minX: min.x - clearance,
+      maxX: max.x + clearance,
+      minZ: min.z - clearance,
+      maxZ: max.z + clearance,
+    });
+  }
+  return rects;
+};
+
 // Robustní line-of-sight: vzorkování podél úsečky proti obdélníkům
 // - nevyhodnocuje koncové body (abychom povolili dotyk v uzlech)
 // - kolize jen pokud bod leží ve STRICT vnitřku obdélníku
@@ -136,7 +193,6 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   if (dist === 0) return true;
 
   const steps = Math.max(2, Math.ceil(dist / step));
-
   const segBB = {
     minX: Math.min(a.x, b.x),
     maxX: Math.max(a.x, b.x),
@@ -168,7 +224,6 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
 const buildVisibilityNodes = (start, end, obstacleRects) => {
   const nodes = [];
   const seen = new Set();
-
   const push = (pt, label) => {
     const id = `${pt.x.toFixed(4)}_${pt.z.toFixed(4)}_${label || ""}`;
     if (!seen.has(id)) {
@@ -191,13 +246,11 @@ const buildVisibilityNodes = (start, end, obstacleRects) => {
     ];
     corners.forEach((c, i) => push(c, `corner_${i}`));
   }
-
   return nodes;
 };
 
 const buildVisibilityGraph = (nodes, obstacleRects) => {
   const idToNode = new Map(nodes.map((n) => [n.id, n]));
-  // let edgeCount = 0; // Debug
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
       const a = nodes[i].position;
@@ -207,11 +260,9 @@ const buildVisibilityGraph = (nodes, obstacleRects) => {
         const d = getDistance(a, b);
         nodes[i].neighbors.push({ id: nodes[j].id, cost: d });
         nodes[j].neighbors.push({ id: nodes[i].id, cost: d });
-        // edgeCount++;
       }
     }
   }
-  // console.log('[Evac] VG nodes:', nodes.length, 'edges:', edgeCount);
   return idToNode;
 };
 
@@ -242,12 +293,14 @@ const aStar = (nodes, idToNode, startPos, endPos) => {
         cur = id;
       }
     }
+
     if (cur === e.id) {
       const path = [];
       for (let cid = cur; cid; cid = came.get(cid))
         path.push(idToNode.get(cid).position);
       return path.reverse();
     }
+
     open.delete(cur);
     const node = idToNode.get(cur);
     for (const nb of node.neighbors) {
@@ -271,6 +324,7 @@ const smoothPath = (path, obstacleRects) => {
   while (i < path.length) {
     result.push(path[i]);
     if (i === path.length - 1) break;
+
     let j = path.length - 1;
     while (j > i + 1 && !lineOfSight(path[i], path[j], obstacleRects)) {
       j--;
@@ -317,6 +371,7 @@ const straightPathfinding = (start, end, obstacleRects) => {
 
   const nodes = buildVisibilityNodes(s, e, obstacleRects);
   const idToNode = buildVisibilityGraph(nodes, obstacleRects);
+
   const raw = aStar(nodes, idToNode, s, e);
   if (!raw.length) return [];
 
@@ -329,38 +384,128 @@ const straightPathfinding = (start, end, obstacleRects) => {
   return smoothed;
 };
 
-// ================== Vizualizace ==================
+// ================== Vizualizace – šipky ==================
 
-const visualizePathLines = (
+// Udělá šablonu šipky (míří lokálně do +Z)
+const createArrowTemplate = (scene, color) => {
+  // Tělo
+  const shaft = BABYLON.MeshBuilder.CreateBox(
+    "arrow_shaft",
+    {
+      width: ARROW_SHAFT_THICK,
+      height: ARROW_SHAFT_THICK,
+      depth: ARROW_SHAFT_LEN,
+    },
+    scene
+  );
+  // posuň tělo trochu dozadu, aby celek byl kolem lokálního středu
+  shaft.position.z = -ARROW_HEAD_LEN / 2;
+
+  // Hlava (kužel)
+  const head = BABYLON.MeshBuilder.CreateCylinder(
+    "arrow_head",
+    {
+      height: ARROW_HEAD_LEN,
+      diameterTop: 0,
+      diameterBottom: ARROW_HEAD_DIAM,
+      tessellation: 12,
+    },
+    scene
+  );
+  // Natočit kužel, aby mířil po +Z
+  head.rotation.x = Math.PI / 2;
+  head.position.z = ARROW_SHAFT_LEN / 2;
+
+  // Sloučit do jedné mesh
+  const arrow = BABYLON.Mesh.MergeMeshes(
+    [shaft, head],
+    true,
+    true,
+    undefined,
+    false,
+    true
+  );
+  arrow.name = "arrow_template";
+
+  // Materiál
+  const mat = new BABYLON.StandardMaterial("arrow_mat", scene);
+  mat.diffuseColor = color || new BABYLON.Color3(1.0, 1.0, 1.0);
+  mat.emissiveColor = mat.diffuseColor;
+  mat.specularColor = new BABYLON.Color3(0, 0, 0);
+  arrow.material = mat;
+
+  return arrow;
+};
+
+// Vykreslí šipky podél cesty; vrátí rodičovský TransformNode pro případný úklid
+const visualizeArrowPath = (
   scene,
   path,
   yLevel,
-  color = BABYLON.Color3.Green(),
-  namePrefix = "evacuation_path"
+  color = BABYLON.Color3.Black(),
+  spacing = ARROW_SPACING,
+  startOffset = ARROW_START_OFFSET
 ) => {
   if (!path || path.length < 2) return null;
 
-  const name = `${namePrefix}_${Date.now()}`;
-  const points = path.map((p) => new BABYLON.Vector3(p.x, yLevel + 0.7, p.z));
-  const lines = BABYLON.MeshBuilder.CreateLines(name, { points }, scene);
+  // Rodič pro snadný úklid
+  const parent = new BABYLON.TransformNode(`arrow_path_${Date.now()}`, scene);
 
-  const mat = new BABYLON.StandardMaterial(`${name}_mat`, scene);
-  mat.emissiveColor = color;
-  mat.diffuseColor = color;
-  mat.specularColor = new BABYLON.Color3(0, 0, 0);
-  mat.alpha = 0.95;
+  // Šablona šipky (+Z)
+  const template = createArrowTemplate(scene, color);
+  template.setEnabled(false);
+  template.parent = parent;
 
-  lines.color = color;
-  lines.material = mat;
-  return lines;
+  const y = yLevel + 1;
+
+  // Umístění šipek s jednotným rozestupem přes více segmentů
+  let remainingToNext = Math.max(0, startOffset);
+
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = path[i];
+    const b = path[i + 1];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const segLen = Math.sqrt(dx * dx + dz * dz);
+    if (segLen < 1e-6) {
+      // Když je segment prakticky nulový
+      remainingToNext = Math.max(0, remainingToNext - segLen);
+      continue;
+    }
+
+    // Jednotkový směr a yaw vůči +Z
+    const ux = dx / segLen;
+    const uz = dz / segLen;
+    const yaw = Math.atan2(ux, uz);
+
+    // Vzdálenost od začátku segmentu k první šipce
+    let d = remainingToNext;
+    while (d <= segLen) {
+      const px = a.x + ux * d;
+      const pz = a.z + uz * d;
+
+      const inst = template.createInstance(`arrow_inst_${i}_${d.toFixed(3)}`);
+      inst.parent = parent;
+      inst.position = new BABYLON.Vector3(px, y, pz);
+      inst.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
+
+      d += spacing;
+    }
+
+    // Kolik “chybí” do další šipky na dalším segmentu
+    remainingToNext = d - segLen;
+  }
+
+  return parent;
 };
 
 const visualizeEndpoints = (scene, start, end, yLevel) => {
   const mk = (p, color, name) => {
     const s = BABYLON.MeshBuilder.CreateSphere(name, { diameter: 0.4 }, scene);
-    s.position = new BABYLON.Vector3(p.x, yLevel + 0.7, p.z);
+    s.position = new BABYLON.Vector3(p.x, yLevel + 1, p.z);
     const m = new BABYLON.StandardMaterial(`${name}_mat`, scene);
     m.diffuseColor = color;
+    m.emissiveColor = color;
     m.specularColor = new BABYLON.Color3(0, 0, 0);
     s.material = m;
     return s;
@@ -370,9 +515,9 @@ const visualizeEndpoints = (scene, start, end, yLevel) => {
 };
 
 // ================== Komponenta ==================
-
 const EvacuationPath = ({ scene, floorId }) => {
   useEffect(() => {
+    let arrowGroups = [];
     try {
       if (!scene) return;
 
@@ -404,14 +549,20 @@ const EvacuationPath = ({ scene, floorId }) => {
           CONFIG_DATA.visualization.floor_spacing;
       }
 
-      // Překážky = partitions (pod PASSABLE_UNDER_Y) + díry v podlaze
+      // Překážky = partitions (pod PASSABLE_UNDER_Y) + díry v podlaze + pinkGlass mesh-e
       const wallRects = collectObstacleRects(
         floorData,
         CLEARANCE,
         PASSABLE_UNDER_Y
       );
       const holeRects = collectHoleRects(floorData, CLEARANCE);
-      const obstacleRects = [...wallRects, ...holeRects];
+      const glassRects = collectPinkGlassRects(
+        scene,
+        yLevel,
+        CLEARANCE,
+        PASSABLE_UNDER_Y
+      );
+      const obstacleRects = [...wallRects, ...holeRects, ...glassRects];
 
       floorData.evacuation.forEach((route, idx) => {
         const start = { x: route.start.x, y: 0, z: route.start.z };
@@ -420,42 +571,37 @@ const EvacuationPath = ({ scene, floorId }) => {
         // vždy zobraz start/cíl
         visualizeEndpoints(scene, start, end, yLevel);
 
-        // Strategická trasa s vyhnutím "partition" a "holes"
+        // Trasa s vyhnutím překážkám
         const path = straightPathfinding(start, end, obstacleRects);
 
         if (path.length >= 2) {
-          visualizePathLines(
+          // ŠIPKY místo jedné čáry
+          const group = visualizeArrowPath(
             scene,
             path,
             yLevel,
-            BABYLON.Color3.Green(),
-            `evacuation_path_${floorId}_${idx}`
+            BABYLON.Color3.Black(),
+            ARROW_SPACING,
+            ARROW_START_OFFSET
           );
-
-          // Předpokládáme, že tato funkce existuje v projektu
-          visualizePathBubbles(
-            scene,
-            path,
-            yLevel,
-            BABYLON.Color3.Green(),
-            0.32,
-            `path_${floorId}_${idx}`
-          );
-        } else if (path.length === 1) {
-          // Předpokládáme, že tato funkce existuje v projektu
-          visualizePathBubbles(
-            scene,
-            path,
-            yLevel,
-            BABYLON.Color3.Green(),
-            0.32,
-            `single_${floorId}_${idx}`
-          );
+          if (group) arrowGroups.push(group);
         }
       });
     } catch (e) {
       console.error("[Evac] Chyba v EvacuationPath:", e);
     }
+
+    // Úklid: zlikviduj všechny šipkové skupiny při změně scene/floorId
+    return () => {
+      try {
+        for (const g of arrowGroups) {
+          if (g && !g.isDisposed()) {
+            g.dispose(true, true);
+          }
+        }
+        arrowGroups = [];
+      } catch {}
+    };
   }, [scene, floorId]);
 
   return null;
