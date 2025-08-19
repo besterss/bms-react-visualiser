@@ -336,6 +336,28 @@ const BuildingViewer = () => {
 
         if (isGrassMesh) {
           mesh.setEnabled(isViewingAllFloors || floorId >= 0);
+
+          // zachovej masku děr z původního materiálu
+          const prevOpacity = mesh.material && mesh.material.opacityTexture;
+
+          if (isViewingAllFloors) {
+            // All floors: zelená tráva
+            mesh.material = generator.materials.grass;
+          } else if (floorId === 0) {
+            // 1NP: tmavě šedá
+            mesh.material =
+              generator.materials.grass1NP || generator.materials.ground;
+          } else {
+            // ostatní patra: nech zelenou
+            mesh.material = generator.materials.grass;
+          }
+
+          if (prevOpacity) {
+            mesh.material.opacityTexture = prevOpacity;
+            mesh.material.transparencyMode =
+              BABYLON.Material.MATERIAL_ALPHABLEND;
+            mesh.material.needDepthPrePass = true;
+          }
         } else if (isTreeMesh) {
           // Enable tree meshes only when viewing "all floors" or for floor 7 and above
           mesh.setEnabled(isViewingAllFloors || floorId >= 6);

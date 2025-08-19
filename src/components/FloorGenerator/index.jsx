@@ -119,6 +119,16 @@ export class FloorGenerator {
       0
     );
 
+    const grass1NP = new BABYLON.StandardMaterial("grass1NP", this.scene);
+    grass1NP.diffuseColor = new BABYLON.Color3(0.44, 0.44, 0.44); // tmavě šedá
+    grass1NP.specularColor = new BABYLON.Color3(0, 0, 0);
+    grass1NP.alpha = 0.95;
+    grass1NP.backFaceCulling = false;
+    // kvůli masce děr (opacityTexture) ponecháme ALPHABLEND a depth pre-pass
+    grass1NP.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    grass1NP.needDepthPrePass = true;
+    this.materials.grass1NP = grass1NP;
+
     // Ground-like material (grasTransparent renamed for clarity)
     this.materials.ground = new BABYLON.StandardMaterial(
       "groundMat",
