@@ -111,7 +111,7 @@ export const CONFIG_DATA = {
           {
             //Schodiste02 - leva
             type: "partition",
-            start: { x: -9.925, z: 14.5 },
+            start: { x: -9.925, z: 15.6 },
             end: { x: -9.925, z: 9.6 },
             partitionWidth: 0.55,
           },
@@ -494,7 +494,7 @@ export const CONFIG_DATA = {
           {
             //Schodiste01 - prava
             type: "partition",
-            start: { x: 9.925, z: -15.67 },
+            start: { x: 9.925, z: -15.9 },
             end: { x: 9.925, z: -10.07 },
             partitionWidth: 0.55,
           },
@@ -509,7 +509,7 @@ export const CONFIG_DATA = {
             //Schodiste01 - leva
             type: "partition",
             start: { x: 6.875, z: -10.2 },
-            end: { x: 6.875, z: -15.67 },
+            end: { x: 6.875, z: -15.9 },
             partitionWidth: 0.55,
           },
           {
@@ -2357,7 +2357,7 @@ export const CONFIG_DATA = {
           {
             //Schodiste02 - leva
             type: "partition",
-            start: { x: -9.925, z: 14.5 },
+            start: { x: -9.925, z: 15.2 },
             end: { x: -9.925, z: 9.6 },
             partitionWidth: 0.55,
           },
@@ -5316,8 +5316,8 @@ export const CONFIG_DATA = {
       holes: [
         { x: 0.86, z: 1.2, width: 2.1, depth: 6.8 }, // 2.11 - leva
         { x: 2, z: 1.2, width: 4, depth: 6.8 }, //2.11 - prava],
-        { x: 8.4, z: -12.9, width: 2.6, depth: 5.2 },
-        { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
+        { x: 8.4, z: -13.1775, width: 2.6, depth: 5.045 },
+        { x: -8.4, z: 13.1775, width: 2.6, depth: 5.045 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
