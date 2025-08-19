@@ -26,6 +26,26 @@ export const CONFIG_DATA = {
         walls: [
           {
             type: "stairs",
+            position: { x: -31.5625, z: 46.8 },
+            stepWidth: 1.225,
+            stepDepth: 0.291,
+            partPosition: 1,
+            numSteps: 23,
+            totalSteps: 23,
+            direction: "bottom",
+          },
+          {
+            type: "stairs",
+            position: { x: 38.175, z: 47.107 },
+            stepWidth: 1.35,
+            stepDepth: 0.291,
+            partPosition: 1,
+            numSteps: 23,
+            totalSteps: 23,
+            direction: "bottom",
+          },
+          {
+            type: "stairs",
             position: { x: 9.075, z: -15.552 },
             stepWidth: 1.15,
             stepDepth: 0.296,
@@ -57,7 +77,7 @@ export const CONFIG_DATA = {
             numSteps: 13,
             totalSteps: 26,
             floorP1: { x: -7.15, z: 11.855 },
-            floorP2: { x: -9.65, z: 10.655 },
+            floorP2: { x: -9.65, z: 10.555 },
             direction: "bottom",
           },
           {
@@ -992,19 +1012,13 @@ export const CONFIG_DATA = {
             end: { x: -16.7, z: -8.9 },
             partitionWidth: 2.2,
           },
-          {
-            //sklad B2 leva strana
-            type: "partition",
-            start: { x: 37.325, z: 44.215 },
-            end: { x: 39.25, z: 44.215 },
-            partitionWidth: 0.15,
-          },
+
           {
             //sklad B2 leva strana
             type: "partition",
             start: { x: 37.325, z: 41.86 },
             end: { x: 37.325, z: 40.76 },
-            partitionWidth: 0.15,
+            partitionWidth: 0.35,
             yLevel: 2.1,
           },
           {
@@ -1012,7 +1026,7 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: 37.325, z: 41.86 },
             end: { x: 37.325, z: 47.5 },
-            partitionWidth: 0.15,
+            partitionWidth: 0.35,
           },
           {
             //Prvni anglicky dvorek spodni vyklenek
@@ -1150,16 +1164,16 @@ export const CONFIG_DATA = {
           {
             //šachta leva
             type: "partition",
-            start: { x: -32.365, z: 54.48 },
-            end: { x: -32.365, z: 51.03 },
-            partitionWidth: 0.37,
+            start: { x: -32.35, z: 54.48 },
+            end: { x: -32.35, z: 51.03 },
+            partitionWidth: 0.35,
           },
           {
             //šachta leva
             type: "partition",
-            start: { x: -32.4, z: 54.48 },
-            end: { x: -32.4, z: 45.895 },
-            partitionWidth: 0.25,
+            start: { x: -32.35, z: 54.48 },
+            end: { x: -32.35, z: 45.895 },
+            partitionWidth: 0.35,
             yLevel: 2.1,
           },
           {
@@ -1172,14 +1186,14 @@ export const CONFIG_DATA = {
           {
             //šachta spodni leva
             type: "partition",
-            start: { x: -32.55, z: 50.895 },
+            start: { x: -32.525, z: 50.895 },
             end: { x: -30.335, z: 50.895 },
             partitionWidth: 0.27,
           },
           {
             //šachta spodni leva
             type: "partition",
-            start: { x: -32.55, z: 50.895 },
+            start: { x: -32.525, z: 50.895 },
             end: { x: -29.1, z: 50.895 },
             partitionWidth: 0.27,
             yLevel: 2.1,
@@ -1215,9 +1229,9 @@ export const CONFIG_DATA = {
           {
             //nepristupny prostor vytah leva
             type: "partition",
-            start: { x: -32.425, z: 50.76 },
-            end: { x: -32.425, z: 48.71 },
-            partitionWidth: 0.25,
+            start: { x: -32.35, z: 50.76 },
+            end: { x: -32.35, z: 48.71 },
+            partitionWidth: 0.35,
           },
           {
             //nepristupny prostor vytah prava
@@ -1236,14 +1250,14 @@ export const CONFIG_DATA = {
           {
             //nepristupny vytah spodni leva
             type: "partition",
-            start: { x: -32.55, z: 48.81 },
+            start: { x: -32.525, z: 48.81 },
             end: { x: -30.335, z: 48.81 },
             partitionWidth: 0.2,
           },
           {
             //nepristupny vytah spodni leva pricka
             type: "partition",
-            start: { x: -32.55, z: 48.81 },
+            start: { x: -32.525, z: 48.81 },
             end: { x: -29.1, z: 48.81 },
             partitionWidth: 0.2,
             yLevel: 2.1,
@@ -1258,9 +1272,9 @@ export const CONFIG_DATA = {
           {
             //skladB1  leva
             type: "partition",
-            start: { x: -32.4, z: 47.81 },
-            end: { x: -32.4, z: 40.44 },
-            partitionWidth: 0.25,
+            start: { x: -32.35, z: 47.81 },
+            end: { x: -32.35, z: 40.44 },
+            partitionWidth: 0.35,
           },
           {
             //mschodiste jadro B1 prava
@@ -1305,13 +1319,6 @@ export const CONFIG_DATA = {
             end: { x: -30.775, z: 40.44 },
             partitionWidth: 0.35,
             yLevel: 2.1,
-          },
-          {
-            //mschodiste jadro B1 stredova vodorovna
-            type: "partition",
-            start: { x: -32.525, z: 44.845 },
-            end: { x: -30.95, z: 44.845 },
-            partitionWidth: 0.15,
           },
           {
             //sloup 1
@@ -1814,6 +1821,8 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -31.5625, z: 43.5205, width: 1.225, depth: 6.568 },
+        { x: 38.175, z: 43.8985, width: 1.35, depth: 6.568 },
       ],
       layout: {
         rooms_grid: {
@@ -1830,7 +1839,7 @@ export const CONFIG_DATA = {
             numSteps: 13,
             totalSteps: 26,
             floorP1: { x: 7.15, z: -11.855 },
-            floorP2: { x: 9.65, z: -10.655 },
+            floorP2: { x: 9.65, z: -10.555 },
             direction: "top",
           },
           {
@@ -1854,7 +1863,7 @@ export const CONFIG_DATA = {
             numSteps: 13,
             totalSteps: 26,
             floorP1: { x: -7.15, z: 11.855 },
-            floorP2: { x: -9.65, z: 10.655 },
+            floorP2: { x: -9.65, z: 10.555 },
             direction: "bottom",
           },
           {
@@ -1919,6 +1928,7 @@ export const CONFIG_DATA = {
             floorP1: { x: -0.4, z: 4.6 },
             floorP2: { x: 4, z: 2.37 },
             direction: "top",
+            railing: "yes",
           },
           {
             type: "stairs",
@@ -1931,6 +1941,7 @@ export const CONFIG_DATA = {
             floorP1: { x: -0.4, z: -2.37 },
             floorP2: { x: 4, z: -4.6 },
             direction: "bottom",
+            railing: "yes",
           },
           {
             //01.12 - prava 1 pricka
@@ -2326,29 +2337,22 @@ export const CONFIG_DATA = {
             partitionWidth: 0.2,
           },
           {
-            //schodiste11 vnejsi leva
-            type: "partition",
-            start: { x: -0.6, z: 4.775 },
-            end: { x: -0.6, z: -4.825 },
+            //schodiste11 zabradli vetsi
+            type: "pinkglass",
+            start: { x: 4.05, z: 4.62 },
+            end: { x: -0.45, z: 4.62 },
+            partitionWidth: 0.05,
+            yLevel: 1.55,
+            partitionHeight: 1,
           },
           {
-            //schodiste11 vnejsi prava
-            type: "partition",
-            start: { x: 4.2, z: -4.825 },
-            end: { x: 4.2, z: 4.775 },
-          },
-          {
-            //schodiste11 vnejsi vrchni
-            type: "partition",
-            start: { x: 4.225, z: 4.775 },
-            end: { x: -0.625, z: 4.775 },
-          },
-          {
-            //schodiste11 vnitrni
-            type: "partition",
-            start: { x: 1.8, z: 2.37 },
-            end: { x: 1.8, z: -2.37 },
-            partitionWidth: 0.2,
+            //schodiste11 zabradlni mensi
+            type: "pinkglass",
+            start: { x: 1.7, z: 2.35 },
+            end: { x: 1.85, z: 2.35 },
+            partitionWidth: 0.05,
+            yLevel: 1.55,
+            partitionHeight: 1,
           },
           {
             //Schodiste02 - leva
@@ -5333,7 +5337,7 @@ export const CONFIG_DATA = {
             numSteps: 13,
             totalSteps: 39,
             floorP1: { x: 7.15, z: -11.855 },
-            floorP2: { x: 9.65, z: -10.655 },
+            floorP2: { x: 9.65, z: -10.555 },
             direction: "top",
           },
           {
@@ -20058,7 +20062,7 @@ export const CONFIG_DATA = {
     wall_height: 3.1,
     wall_height_1NP: 5.3,
     floor_thickness: 0.2,
-    floor_spacing: -0.15,
+    floor_spacing: -0.2,
     wall_thickness: 0.15,
     room_floor_height: 0.05,
   },

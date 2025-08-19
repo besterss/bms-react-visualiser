@@ -875,22 +875,27 @@ export class FloorGenerator {
     railing
   ) {
     const stairMeshes = [];
-    const stepHeight = wallHeight / totalSteps;
+
+    // Core geometry: riser height is defined ONLY by totalSteps (landings don't add rise)
+    const stepHeight = wallHeight / Math.max(1, totalSteps);
     const stepDirection = direction === "top" ? 1 : -1;
-    const isLastPart = partPosition * numSteps >= totalSteps;
 
-    let startingYLevel;
-    if (partPosition === 1) {
-      startingYLevel = yLevel;
-    } else {
-      startingYLevel =
-        yLevel + (partPosition - 1) * (numSteps + 1) * stepHeight;
-    }
+    // Parts/steps bookkeeping
+    const parts = Math.max(1, Math.ceil(totalSteps / Math.max(1, numSteps)));
+    const stepsBeforeThisPart = (partPosition - 1) * numSteps;
+    const remainingSteps = Math.max(0, totalSteps - stepsBeforeThisPart);
+    const stepsThisPart = Math.min(numSteps, remainingSteps);
+    const isLastPart =
+      partPosition >= parts ||
+      stepsBeforeThisPart + stepsThisPart >= totalSteps;
 
-    // Create steps
-    for (let i = 0; i < numSteps; i++) {
+    // Create steps (centers at y = yLevel + (globalIndex + 0.5) * stepHeight)
+    for (let i = 0; i < stepsThisPart; i++) {
+      const globalIndex = stepsBeforeThisPart + i; // 0-based
+      const centerY = yLevel + (globalIndex + 0.5) * stepHeight;
+
       const stepMesh = BABYLON.MeshBuilder.CreateBox(
-        `stair_step_${i}`,
+        `stair_step_${name}_${partPosition}_${i}`,
         {
           width: stepWidth,
           height: stepHeight,
@@ -898,55 +903,72 @@ export class FloorGenerator {
         },
         this.scene
       );
+
       stepMesh.position.x = position.x;
-      stepMesh.position.y = startingYLevel + i * stepHeight;
+      stepMesh.position.y = centerY;
       stepMesh.position.z = position.z + i * stepDepth * stepDirection;
+
       stepMesh.material = this.materials.wallOpaque;
       stepMesh.isPickable = false;
       this.shadowGenerator.addShadowCaster(stepMesh);
       stairMeshes.push(stepMesh);
     }
 
+    // Landing (does NOT add elevation; its top aligns with the last step's walking surface)
+    // Place landing center at (surfaceY - landingHeight/2) so top = surfaceY
     let floorMesh;
-    let floorWidth = 0; // Initialize floorWidth
-    let floorDepth = 0; // Initialize floorDepth
-    if (!isLastPart) {
-      const floorHeight = stepHeight;
-      floorWidth = Math.abs(floorP2.x - floorP1.x); // Define floorWidth here
-      floorDepth = Math.abs(floorP2.z - floorP1.z); // Define floorDepth here
-      const floorPositionY = startingYLevel + numSteps * stepHeight;
+    let floorWidth = 0;
+    let floorDepth = 0;
+
+    if (!isLastPart && stepsThisPart > 0) {
+      const landingHeight = stepHeight; // keep whatever thickness you prefer
+      floorWidth = Math.abs(floorP2.x - floorP1.x);
+      floorDepth = Math.abs(floorP2.z - floorP1.z);
+
+      // Walking surface after the last step of this part:
+      const surfaceY =
+        yLevel + (stepsBeforeThisPart + stepsThisPart) * stepHeight;
+
       floorMesh = BABYLON.MeshBuilder.CreateBox(
-        `${name}_floor`,
+        `${name}_floor_${partPosition}`,
         {
           width: floorWidth,
-          height: floorHeight,
+          height: landingHeight,
           depth: floorDepth,
         },
         this.scene
       );
       floorMesh.position.x = (floorP1.x + floorP2.x) / 2;
-      floorMesh.position.y = floorPositionY;
+      floorMesh.position.y = surfaceY - landingHeight / 2; // top of landing = surfaceY
       floorMesh.position.z = (floorP1.z + floorP2.z) / 2;
+
       floorMesh.material = this.materials.wallOpaque;
       floorMesh.isPickable = false;
       this.shadowGenerator.addShadowCaster(floorMesh);
       stairMeshes.push(floorMesh);
     }
 
+    // Railings
     if (railing === "yes") {
-      console.log("Railing is enabled");
       const railingMaterial = new BABYLON.StandardMaterial(
-        "railingMaterial",
+        `railingMaterial_${name}_${partPosition}`,
         this.scene
       );
       railingMaterial.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
       railingMaterial.alpha = 0.5;
+
       const railingHeight = 1.0;
       const railingThickness = 0.05;
-      // Create railings for each step
-      for (let i = 0; i < numSteps; i++) {
+
+      // Railings on steps (sit on step top surface)
+      for (let i = 0; i < stepsThisPart; i++) {
+        const globalIndex = stepsBeforeThisPart + i;
+        const stepCenterY = yLevel + (globalIndex + 0.5) * stepHeight;
+        const stepSurfaceY = stepCenterY + stepHeight / 2;
+        const z = position.z + i * stepDepth * stepDirection;
+
         const railingLeft = BABYLON.MeshBuilder.CreateBox(
-          `railing_left_step_${i}`,
+          `railing_left_${name}_${partPosition}_${i}`,
           {
             width: railingThickness,
             height: railingHeight,
@@ -954,15 +976,16 @@ export class FloorGenerator {
           },
           this.scene
         );
-        railingLeft.position.x =
-          position.x - stepWidth / 2 - railingThickness / 2;
-        railingLeft.position.y =
-          startingYLevel + i * stepHeight + railingHeight / 2;
-        railingLeft.position.z = position.z + i * stepDepth * stepDirection;
+        railingLeft.position.set(
+          position.x - stepWidth / 2 - railingThickness / 2,
+          stepSurfaceY + railingHeight / 2,
+          z
+        );
         railingLeft.material = railingMaterial;
         stairMeshes.push(railingLeft);
+
         const railingRight = BABYLON.MeshBuilder.CreateBox(
-          `railing_right_step_${i}`,
+          `railing_right_${name}_${partPosition}_${i}`,
           {
             width: railingThickness,
             height: railingHeight,
@@ -970,21 +993,22 @@ export class FloorGenerator {
           },
           this.scene
         );
-        railingRight.position.x =
-          position.x + stepWidth / 2 + railingThickness / 2;
-        railingRight.position.y =
-          startingYLevel + i * stepHeight + railingHeight / 2;
-        railingRight.position.z = position.z + i * stepDepth * stepDirection;
+        railingRight.position.set(
+          position.x + stepWidth / 2 + railingThickness / 2,
+          stepSurfaceY + railingHeight / 2,
+          z
+        );
         railingRight.material = railingMaterial;
         stairMeshes.push(railingRight);
       }
-      // Only add railings to the floor if it's not the last part
+
+      // Railings along the landing sides (centered so they sit on landing top)
       if (!isLastPart && floorMesh) {
-        const floorEndYPosition =
-          startingYLevel + numSteps * stepHeight + railingHeight / 2;
-        // Fix the position of the left side railing on the floor
+        const surfaceY =
+          yLevel + (stepsBeforeThisPart + stepsThisPart) * stepHeight;
+
         const floorSideRailingLeft = BABYLON.MeshBuilder.CreateBox(
-          `floor_side_railing_left`,
+          `floor_side_railing_left_${name}_${partPosition}`,
           {
             width: railingThickness,
             height: railingHeight,
@@ -994,12 +1018,13 @@ export class FloorGenerator {
         );
         floorSideRailingLeft.position.x =
           floorMesh.position.x - floorWidth / 2 - railingThickness / 2;
-        floorSideRailingLeft.position.y = floorEndYPosition;
+        floorSideRailingLeft.position.y = surfaceY + railingHeight / 2;
         floorSideRailingLeft.position.z = floorMesh.position.z;
         floorSideRailingLeft.material = railingMaterial;
         stairMeshes.push(floorSideRailingLeft);
+
         const floorSideRailingRight = BABYLON.MeshBuilder.CreateBox(
-          `floor_side_railing_right`,
+          `floor_side_railing_right_${name}_${partPosition}`,
           {
             width: railingThickness,
             height: railingHeight,
@@ -1009,12 +1034,13 @@ export class FloorGenerator {
         );
         floorSideRailingRight.position.x =
           floorMesh.position.x + floorWidth / 2 + railingThickness / 2;
-        floorSideRailingRight.position.y = floorEndYPosition;
+        floorSideRailingRight.position.y = surfaceY + railingHeight / 2;
         floorSideRailingRight.position.z = floorMesh.position.z;
         floorSideRailingRight.material = railingMaterial;
         stairMeshes.push(floorSideRailingRight);
       }
     }
+
     const stairs = BABYLON.Mesh.MergeMeshes(
       stairMeshes,
       true,
@@ -1023,7 +1049,7 @@ export class FloorGenerator {
       false,
       true
     );
-    stairs.name = name;
+    if (stairs) stairs.name = name;
     return stairs;
   }
 
