@@ -35,26 +35,48 @@ const BuildingViewer = () => {
 
   // Pomocná funkce: uklid evakuačních meshů
   const clearEvacuationMeshes = (scn) => {
-    if (!scn || !scn.meshes) return;
-    const prefixes = [
+    if (!scn) return;
+
+    const meshPrefixes = [
       "evacuation_path_",
       "evacuation_bubble_",
       "start_bubble_",
       "end_bubble_",
+      "arrow_inst_", // přidáno
+      "arrow_template", // přidáno
     ];
-    scn.meshes
-      .filter(
-        (m) => m && m.name && prefixes.some((pref) => m.name.startsWith(pref))
-      )
-      .forEach((m) => {
-        try {
-          m.dispose();
-        } catch (e) {
-          // ignore
-        }
-      });
-  };
 
+    // Mesh-e (včetně instancí šipek)
+    if (scn.meshes && scn.meshes.length) {
+      scn.meshes
+        .filter(
+          (m) =>
+            m && m.name && meshPrefixes.some((pref) => m.name.startsWith(pref))
+        )
+        .forEach((m) => {
+          try {
+            m.dispose();
+          } catch {}
+        });
+    }
+
+    // TransformNode parenty (arrow_path_…)
+    if (scn.transformNodes && scn.transformNodes.length) {
+      scn.transformNodes
+        .filter(
+          (tn) =>
+            tn &&
+            tn.name &&
+            (tn.name.startsWith("arrow_path_") ||
+              tn.name.startsWith("evacuation_path_"))
+        )
+        .forEach((tn) => {
+          try {
+            tn.dispose(true, true);
+          } catch {}
+        });
+    }
+  };
   useEffect(() => {
     if (!canvasRef.current) return;
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
@@ -443,7 +465,11 @@ const BuildingViewer = () => {
       {scene &&
         activeDisplayOption === "evacuation" &&
         currentActiveFloor !== "all" && (
-          <EvacuationPath scene={scene} floorId={currentActiveFloor} />
+          <EvacuationPath
+            key={`evac-${currentActiveFloor}`}
+            scene={scene}
+            floorId={currentActiveFloor}
+          />
         )}
 
       {scene && activeDisplayOption === "roomBoxes" && (
