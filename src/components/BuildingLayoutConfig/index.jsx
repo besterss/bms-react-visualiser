@@ -5310,8 +5310,8 @@ export const CONFIG_DATA = {
         depth: 35.82,
       },
       holes: [
-        { x: 0.86, z: 0.8, width: 2.1, depth: 6.4 }, // 2.11 - leva
-        { x: 2, z: 0.8, width: 4, depth: 6.4 }, //2.11 - prava],
+        { x: 0.86, z: 1.2, width: 2.1, depth: 6.8 }, // 2.11 - leva
+        { x: 2, z: 1.2, width: 4, depth: 6.8 }, //2.11 - prava],
         { x: 8.4, z: -12.9, width: 2.6, depth: 5.2 },
         { x: -8.4, z: 12.9, width: 2.6, depth: 5.2 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
@@ -5424,6 +5424,7 @@ export const CONFIG_DATA = {
             yLevel: 3.65,
             partitionHeight: 1,
           },
+
           {
             type: "pinkglass",
             start: { x: 4.05, z: 4.6 },
@@ -5448,7 +5449,7 @@ export const CONFIG_DATA = {
           {
             //schodiste11 vnejsi leva
             type: "pinkglass",
-            start: { x: -0.3, z: 4 },
+            start: { x: -0.3, z: 4.6 },
             end: { x: -0.3, z: -4.4 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
@@ -5456,8 +5457,8 @@ export const CONFIG_DATA = {
           {
             //schodiste11 vnejsi vrchni leva
             type: "pinkglass",
-            start: { x: 4.03, z: 4 },
-            end: { x: -0.325, z: 4 },
+            start: { x: 4.05, z: 4.6 },
+            end: { x: -0.32, z: 4.6 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
           },
@@ -5466,7 +5467,7 @@ export const CONFIG_DATA = {
             //schodiste11 vnejsi prava
             type: "pinkglass",
             start: { x: 4.03, z: -4.4 },
-            end: { x: 4.03, z: 4 },
+            end: { x: 4.03, z: 4.6 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
           },
@@ -13453,7 +13454,7 @@ export const CONFIG_DATA = {
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
-          number: "5.17"
+          number: "5.17",
         },
         {
           name: "V1",
@@ -13484,7 +13485,7 @@ export const CONFIG_DATA = {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
-          number: "5.09a", 
+          number: "5.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
@@ -16757,158 +16758,158 @@ export const CONFIG_DATA = {
           //vrsek
           name: "SCHODIŠTĚ (JÁDRO C)",
           bounds: { minX: -9.7, minZ: 9.8, maxX: -7.2, maxZ: 16.75 },
-          number: "7.02"
+          number: "7.02",
         },
         {
           name: "V4",
           bounds: { minX: -6.6, minZ: 14.95, maxX: -4.05, maxZ: 16.6 },
-          number: "V4"
+          number: "V4",
         },
         {
           name: "V5",
           bounds: { minX: -6.6, minZ: 13.375, maxX: -4.05, maxZ: 14.95 },
-          number: "V5"
+          number: "V5",
         },
         {
           name: "ROZVODNA SLP",
           bounds: { minX: -6.6, minZ: 11.675, maxX: -4.05, maxZ: 13.375 },
-          number: "7.05"
+          number: "7.05",
         },
         {
           name: "BEZBARIEROVÉ WC",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
-          number: "7.27"
+          number: "7.27",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
           bounds: { minX: -3.85, minZ: 9.8, maxX: -1.15, maxZ: 16.6 },
-          number: "7.04"
+          number: "7.04",
         },
         {
           name: "KUCHYŇKA",
           bounds: { minX: -0.75, minZ: 14.2, maxX: 3.25, maxZ: 16.6 },
-          number: "7.06"
+          number: "7.06",
         },
         {
           name: "ÚKLID",
           bounds: { minX: 3.4, minZ: 14.2, maxX: 4.5, maxZ: 16.6 },
-          number: "7.03"
+          number: "7.03",
         },
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
-          number: "V1"
+          number: "V1",
         },
         {
           name: "V2",
           bounds: { minX: 1.16, minZ: 9.8, maxX: 2.75, maxZ: 11.7 },
-          number: "V2"
+          number: "V2",
         },
         {
           name: "V3",
           bounds: { minX: 2.95, minZ: 9.8, maxX: 4.7, maxZ: 11.7 },
-          number: "V3"
+          number: "V3",
         },
         {
           name: "WC MUŽI",
           bounds: { minX: 5.05, minZ: 9.8, maxX: 7.2, maxZ: 15.1 },
-          number: "7.07"
+          number: "7.07",
         },
         {
           name: "WC ŽENY",
           bounds: { minX: 7.4, minZ: 9.8, maxX: 9.65, maxZ: 15.1 },
-          number: "7.08"
+          number: "7.08",
         },
         {
           // rozvaděče
           name: "ROZVADĚČE",
           bounds: { minX: -13.5, minZ: -9.8, maxX: -11.85, maxZ: -8.2 },
-          number: "7.09a"
+          number: "7.09a",
         },
         {
           name: "ROZDĚLOVAČE PODLAHOVÉHO TOPENÍ",
           bounds: { minX: -11.85, minZ: -9.5, maxX: -10.2, maxZ: -8.5 },
-          number: "7.09b"
+          number: "7.09b",
         },
         {
           name: "SCHODIŠTĚ (JÁDRO B)",
           bounds: { minX: 7.15, minZ: -16.8, maxX: 9.65, maxZ: -10.325 },
-          number: "7.01"
+          number: "7.01",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ AKVIZICE KNIHOVNÍHO FONDU",
           bounds: { minX: -16.8, minZ: 6.7, maxX: -10.2, maxZ: 16.8 },
-          number: "7.12"
+          number: "7.12",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ AKVIZICE KNIHOVNÍHO FONDU",
           bounds: { minX: -16.8, minZ: -0.5, maxX: -10.275, maxZ: 6.5 },
-          number: "7.13"
+          number: "7.13",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI AKVIZIČNÍCH ČINNOSTI A OCHRANU KNIH. FONDU",
           bounds: { minX: -16.8, minZ: -4.1, maxX: -10.275, maxZ: -0.7 },
-          number: "7.14"
+          number: "7.14",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ SLUŽEB",
           bounds: { minX: -16.8, minZ: -7.7, maxX: -10.275, maxZ: -4.3 },
-          number: "7.15"
+          number: "7.15",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ INFORMAČNÍCH TECHNOLOGIÍ",
           bounds: { minX: -16.8, minZ: -16.8, maxX: -7.65, maxZ: -10.2 },
-          number: "7.16" 
+          number: "7.16",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO BIBLIOGRAFICKÉ A REŠERŠNÍ SLUŽBY",
           bounds: { minX: -7.55, minZ: -16.8, maxX: -0.475, maxZ: -10.275 },
-          number: "7.17"
+          number: "7.17",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO REFORMOVÁNÍ DOKUMENTŮ A SPRÁVU DIGITÁLNÍ SBÍRKY",
           bounds: { minX: -0.325, minZ: -16.8, maxX: 3.125, maxZ: -10.275 },
-          number: "7.18"
+          number: "7.18",
         },
         {
           name: "LABORATOŘ NA TESTOVÁNÍ KNIH",
           bounds: { minX: 3.275, minZ: -16.8, maxX: 6.875, maxZ: -10.275 },
-          number: "7.19"
+          number: "7.19",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO ZPRACOVÁNÍ KNIHOVNÍHO FONDU",
           bounds: { minX: 10.2, minZ: 6.675, maxX: 16.8, maxZ: 16.8 },
-          number: "7.23"
+          number: "7.23",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO ZPRACOVÁNÍ KNIHOVNÍHO FONDU",
           bounds: { minX: 10.275, minZ: -4.125, maxX: 16.8, maxZ: 6.525 },
-          number: "7.22"
+          number: "7.22",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI JMENNÉHO A VĚCNÉHO ZPRACOVÁNÍ DOKUMENTŮ 1",
           bounds: { minX: 10.275, minZ: -7.725, maxX: 16.8, maxZ: -4.275 },
-          number: "7.21"
+          number: "7.21",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO KOORDINACI JMENNÉHO A VĚCNÉHO ZPRACOVÁNÍ DOKUMENTŮ 2",
           bounds: { minX: 10.2, minZ: -16.8, maxX: 16.8, maxZ: -7.875 },
-          number: "7.20"
+          number: "7.20",
         },
         {
           name: "SÍŤOVÁ TISKÁRNA",
           bounds: { minX: -7.6, minZ: 4.6, maxX: -3.2, maxZ: 6.4 },
-          number: "7.28"
+          number: "7.28",
         },
         {
           name: "SKLAD VÝPOČETNÍ TECHNIKY",
           bounds: { minX: -7.6, minZ: 0.075, maxX: -3.2, maxZ: 4.45 },
-          number: "7.24"
+          number: "7.24",
         },
         {
           name: "DATOVÉ CENTRUM",
           bounds: { minX: -7.6, minZ: -7.6, maxX: -3.2, maxZ: -0.075 },
-          number: "7.25"
+          number: "7.25",
         },
       ],
       temperature_data: [0],
@@ -18546,7 +18547,7 @@ export const CONFIG_DATA = {
         {
           name: "WC ZAMĚSTNANCI",
           bounds: { minX: -6.6, minZ: 9.7, maxX: -4.05, maxZ: 11.675 },
-          NUMBER: "8.29"
+          NUMBER: "8.29",
         },
         {
           name: "MANIPULAČNÍ PROSTOR",
@@ -18566,7 +18567,7 @@ export const CONFIG_DATA = {
         {
           name: "V1",
           bounds: { minX: -0.75, minZ: 9.8, maxX: 0.97, maxZ: 11.7 },
-          nubmer: "V1", 
+          nubmer: "V1",
         },
         {
           name: "V2",
@@ -18667,7 +18668,7 @@ export const CONFIG_DATA = {
         {
           name: "KANCELÁŘ VEDOUCÍ ODDĚLENÍ EKONOMIKY A PROVOZU",
           bounds: { minX: 10.2, minZ: -4.1, maxX: 16.8, maxZ: -0.6 },
-          number: "8.23", 
+          number: "8.23",
         },
         {
           name: "ODBORNÉ PRACOVIŠTĚ PRO VZDĚLÁVÁNÍ UČITELŮ",
