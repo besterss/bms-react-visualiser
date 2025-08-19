@@ -559,7 +559,7 @@ export class FloorGenerator {
           const partitionThickness = wall.partitionWidth || wallThickness;
           const baseYLevel = yLevel;
           let partitionYLevel = baseYLevel;
-          let partitionHeight = wallHeight;
+          let partitionHeight = wall.partitionHeight || wallHeight;
           if (wall.yLevel) {
             partitionYLevel = baseYLevel + wall.yLevel;
             partitionHeight = wallHeight - wall.yLevel;

@@ -5329,6 +5329,41 @@ export const CONFIG_DATA = {
 
         walls: [
           {
+            type: "partition",
+            start: { x: 9.65, z: 9.65 },
+            end: { x: 8.784, z: 9.2 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 5.05, z: 9.65 },
+            end: { x: 5.916, z: 9.2 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -1.45, z: 9.65 },
+            end: { x: -2.316, z: 10.15 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -3.35, z: 9.65 },
+            end: { x: -2.484, z: 10.15 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -10.25, z: -9.5 },
+            end: { x: -9.75, z: -8.634 },
+            partitionWidth: 0.05,
+            partitionHeight: 2.1,
+          },
+          {
             type: "stairs",
             position: { x: 9.075, z: -15.552 },
             stepWidth: 1.15,
