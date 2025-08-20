@@ -1,14 +1,58 @@
 import React, { useEffect, useState } from "react";
 import * as BABYLON from "babylonjs";
+import EvacuationPath from "../EvacuationPath";
 
 const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
   const [selectedRoomInfo, setSelectedRoomInfo] = useState(null);
   const [selectedRoomNumber, setSelectedRoomNumber] = useState(null);
 
+  // Evakuace – jedna aktivní napříč patry
+  const [evacOn, setEvacOn] = useState(false);
+  const [evacRoomNumber, setEvacRoomNumber] = useState(null);
+  const [evacStartPoint, setEvacStartPoint] = useState(null);
+  const [evacFloorId, setEvacFloorId] = useState(null);
+
+  const computeRoomCenter = (room) => {
+    const rectCenterAndArea = (b) => {
+      const cx = (b.minX + b.maxX) / 2;
+      const cz = (b.minZ + b.maxZ) / 2;
+      const area = Math.max(0, b.maxX - b.minX) * Math.max(0, b.maxZ - b.minZ);
+      return { cx, cz, area };
+    };
+    let weightedX = 0,
+      weightedZ = 0,
+      sumA = 0;
+
+    if (room.baseBounds) {
+      const { cx, cz, area } = rectCenterAndArea(room.baseBounds);
+      weightedX += cx * area;
+      weightedZ += cz * area;
+      sumA += area;
+    }
+    if (
+      Array.isArray(room.extensionBoundsList) &&
+      room.extensionBoundsList.length
+    ) {
+      for (const eb of room.extensionBoundsList) {
+        const { cx, cz, area } = rectCenterAndArea(eb);
+        weightedX += cx * area;
+        weightedZ += cz * area;
+        sumA += area;
+      }
+    }
+    if (!sumA && room.bounds) {
+      const { cx, cz, area } = rectCenterAndArea(room.bounds);
+      weightedX += cx * area;
+      weightedZ += cz * area;
+      sumA += area;
+    }
+    if (!sumA) return null;
+    return { x: weightedX / sumA, z: weightedZ / sumA };
+  };
+
   useEffect(() => {
     if (!scene || !rooms || floorIndex === undefined) return;
 
-    // Compute yLevel as cumulative height of previous floors
     let yLevel = 0;
     for (let i = 0; i < floorIndex; i++) {
       const fc = config.floors[i];
@@ -22,7 +66,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         config.visualization.floor_spacing;
     }
 
-    // Box height for the current floor:
     const currentFloor = config?.floors?.[floorIndex];
     const is1NP = currentFloor ? currentFloor.id === 0 : floorIndex === 0;
     const boxHeight = is1NP
@@ -30,11 +73,9 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       : config.visualization.wall_height;
 
     let roomMeshes = [];
-
     const boxes = rooms.map((room, index) => {
       const roomName = room.name;
-      const roomNumber = room.number; // unique identifier
-
+      const roomNumber = room.number;
       const parentNode = new BABYLON.TransformNode(
         `parentNode-${roomNumber || index}`,
         scene
@@ -50,7 +91,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           { width, depth, height },
           scene
         );
-
         box.position.x = (bounds.minX + bounds.maxX) / 2;
         box.position.y = yLevel + height / 2;
         box.position.z = (bounds.minZ + bounds.maxZ) / 2;
@@ -67,7 +107,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         box.isPickable = true;
         box.actionManager = new BABYLON.ActionManager(scene);
         box.parent = parentNode;
-
         return box;
       };
 
@@ -92,52 +131,50 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           )
         );
       }
-
       roomMeshes = [...roomMeshes, ...meshes];
-      setupActions(roomName, roomNumber, meshes);
 
+      const setupActions = (roomName, roomNumber, meshes) => {
+        meshes.forEach((mesh) => {
+          mesh.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+              BABYLON.ActionManager.OnPointerOverTrigger,
+              () => {
+                if (selectedRoomNumber !== roomNumber) {
+                  meshes.forEach((m) => (m.material.alpha = 0.7));
+                }
+              }
+            )
+          );
+          mesh.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+              BABYLON.ActionManager.OnPointerOutTrigger,
+              () => {
+                if (selectedRoomNumber !== roomNumber) {
+                  meshes.forEach((m) => (m.material.alpha = 0.3));
+                }
+              }
+            )
+          );
+          mesh.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(
+              BABYLON.ActionManager.OnPickTrigger,
+              () => {
+                setSelectedRoomInfo((prev) => ({
+                  name: roomName,
+                  number: roomNumber,
+                  status: prev?.status || "Available",
+                }));
+                setSelectedRoomNumber(roomNumber);
+              }
+            )
+          );
+        });
+      };
+
+      setupActions(roomName, roomNumber, meshes);
       return { parentNode, roomName, roomNumber, meshes };
     });
 
-    function setupActions(roomName, roomNumber, meshes) {
-      meshes.forEach((mesh) => {
-        mesh.actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPointerOverTrigger,
-            () => {
-              if (selectedRoomNumber !== roomNumber) {
-                meshes.forEach((m) => (m.material.alpha = 0.7));
-              }
-            }
-          )
-        );
-        mesh.actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPointerOutTrigger,
-            () => {
-              if (selectedRoomNumber !== roomNumber) {
-                meshes.forEach((m) => (m.material.alpha = 0.3));
-              }
-            }
-          )
-        );
-        mesh.actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickTrigger,
-            () => {
-              setSelectedRoomInfo((prev) => ({
-                name: roomName,
-                number: roomNumber,
-                status: prev?.status || "Available",
-              }));
-              setSelectedRoomNumber(roomNumber);
-            }
-          )
-        );
-      });
-    }
-
-    // Highlight selection by room number (unique)
     boxes.forEach(({ roomNumber, meshes }) => {
       const isSelected = selectedRoomNumber === roomNumber;
       meshes.forEach((mesh) => {
@@ -145,12 +182,20 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       });
     });
 
-    // Click outside any box to clear selection
+    // Klik mimo – zruší výběr i evakuační trasu
+    const prevPointerDown = scene.onPointerDown;
     const onPointerDown = (evt, pickResult) => {
       if (!pickResult.hit || !roomMeshes.includes(pickResult.pickedMesh)) {
         setSelectedRoomNumber(null);
         setSelectedRoomInfo(null);
+
+        setEvacOn(false);
+        setEvacRoomNumber(null);
+        setEvacStartPoint(null);
+        setEvacFloorId(null);
       }
+      if (typeof prevPointerDown === "function")
+        prevPointerDown(evt, pickResult);
     };
     scene.onPointerDown = onPointerDown;
 
@@ -160,11 +205,33 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
     };
   }, [rooms, scene, floorIndex, config, selectedRoomNumber]);
 
-  // Reset selection when floor changes
   useEffect(() => {
     setSelectedRoomInfo(null);
     setSelectedRoomNumber(null);
   }, [floorIndex]);
+
+  const handleToggleEvac = () => {
+    if (!selectedRoomNumber) return;
+    const isOnForSelected = evacOn && evacRoomNumber === selectedRoomNumber;
+    if (isOnForSelected) {
+      setEvacOn(false);
+      setEvacRoomNumber(null);
+      setEvacStartPoint(null);
+      setEvacFloorId(null);
+    } else {
+      const room = rooms.find((r) => r.number === selectedRoomNumber);
+      const center = room ? computeRoomCenter(room) : null;
+      if (!center) return;
+      setEvacOn(true);
+      setEvacRoomNumber(selectedRoomNumber);
+      setEvacStartPoint(center);
+      const fid = config?.floors?.[floorIndex]?.id;
+      setEvacFloorId(fid);
+    }
+  };
+
+  const isEvacChecked =
+    selectedRoomNumber && evacOn && evacRoomNumber === selectedRoomNumber;
 
   return (
     <>
@@ -179,7 +246,25 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           <p>
             Status: <span>{selectedRoomInfo.status}</span>
           </p>
+
+          <label style={{ display: "block", marginTop: 8 }}>
+            <input
+              type="checkbox"
+              checked={!!isEvacChecked}
+              onChange={handleToggleEvac}
+            />
+            Show Evacuation Path
+          </label>
         </div>
+      )}
+
+      {evacOn && evacStartPoint && evacFloorId !== null && (
+        <EvacuationPath
+          scene={scene}
+          floorId={evacFloorId}
+          startPoint={evacStartPoint}
+          enabled={true}
+        />
       )}
     </>
   );

@@ -17,6 +17,15 @@ export const CONFIG_DATA = {
           position: { x: -41.4, z: 40.3 },
         }, //retencni nadrz
       ],
+      endPoints: [
+        { x: -9, z: 16, id: "B" },
+        { x: 9, z: -16, id: "B" },
+        { x: -31.5625, z: 48, id: "B" },
+        { x: 38.175, z: 48 },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -1824,6 +1833,14 @@ export const CONFIG_DATA = {
         { x: -31.5625, z: 43.5205, width: 1.225, depth: 6.568 },
         { x: 38.175, z: 43.8985, width: 1.35, depth: 6.568 },
       ],
+      endPoints: [
+        { x: -9, z: 15.4, id: "B" },
+        { x: 9, z: -15.2, id: "B" },
+        { x: 2.95, z: -2.9, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -5321,6 +5338,7 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [{ x: -2.6, z: 15.5, id: "B" }],
       layout: {
         rooms_grid: {
           columns: 1,
@@ -7140,6 +7158,14 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: 2.95, z: 3.6, id: "B" },
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -8730,6 +8756,14 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: 11.6, z: 8.1, id: "B" },
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -10243,6 +10277,14 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: -6.3, z: -11.7, id: "B" },
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -11921,11 +11963,20 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: -11.6, z: 6.25, id: "B" },
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
           rows: 1,
         },
+
         walls: [
           {
             type: "stairs",
@@ -13650,6 +13701,14 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: 11.6, z: 8.1, id: "B" },
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -15221,6 +15280,13 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -17019,6 +17085,13 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
+      endPoints: [
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,
@@ -18804,6 +18877,13 @@ export const CONFIG_DATA = {
         { x: 8.4, z: -14.4, width: 3, depth: 5 },
         { x: -8.4, z: 14.2, width: 3, depth: 4.7 },
       ],
+      endPoints: [
+        { x: -9.1, z: 11.2, id: "B" },
+        { x: 9.1, z: -11.2, id: "B" },
+      ],
+      nav: {
+        clearance: 0.35, // menší clearance, aby prošly i 0.8 m dveře (2 * 0.35 = 0.7)
+      },
       layout: {
         rooms_grid: {
           columns: 1,

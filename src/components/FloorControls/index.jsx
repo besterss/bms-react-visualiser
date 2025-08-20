@@ -70,15 +70,6 @@ const FloorControls = ({
           />
           Show Objects
         </label>
-        {/* Nový checkbox */}
-        <label>
-          <input
-            type="checkbox"
-            checked={activeDisplayOption === "evacuation"}
-            onChange={() => onOptionToggle("evacuation")}
-          />
-          Show Evacuation Paths
-        </label>
       </div>
     </div>
   );
