@@ -46,6 +46,7 @@ const collectObstacleRects = (
 ) => {
   const walls = floorData?.layout?.walls || [];
   const parts = walls.filter((w) => w.type === "partition" && w.start && w.end);
+
   const rects = [];
   const eps = 1e-6;
 
@@ -64,7 +65,6 @@ const collectObstacleRects = (
       z1 = p.start.z;
     const x2 = p.end.x,
       z2 = p.end.z;
-
     const w =
       typeof p.partitionWidth === "number"
         ? p.partitionWidth
@@ -72,6 +72,7 @@ const collectObstacleRects = (
     const half = w / 2 + clearance;
 
     if (Math.abs(z1 - z2) < eps) {
+      // horizontální
       rects.push({
         minX: Math.min(x1, x2) - clearance,
         maxX: Math.max(x1, x2) + clearance,
@@ -79,6 +80,7 @@ const collectObstacleRects = (
         maxZ: z1 + half,
       });
     } else if (Math.abs(x1 - x2) < eps) {
+      // vertikální
       rects.push({
         minX: x1 - half,
         maxX: x1 + half,
@@ -86,6 +88,7 @@ const collectObstacleRects = (
         maxZ: Math.max(z1, z2) + clearance,
       });
     } else {
+      // šikmá/náhradní AABB
       rects.push({
         minX: Math.min(x1, x2) - half,
         maxX: Math.max(x1, x2) + half,
@@ -130,7 +133,6 @@ const isPinkGlassMaterial = (mat) => {
 const collectPinkGlassRects = (scene, yLevel, clearance) => {
   const rects = [];
   if (!scene) return rects;
-
   const walkBandMin = yLevel - 0.1;
   const walkBandMax = yLevel + PASSABLE_UNDER_Y + 0.3;
 
@@ -140,6 +142,44 @@ const collectPinkGlassRects = (scene, yLevel, clearance) => {
     if (!(typeof m.isEnabled === "function" ? m.isEnabled() : m.isEnabled))
       continue;
     if (m.isVisible === false) continue;
+
+    m.computeWorldMatrix(true);
+    const bb = m.getBoundingInfo?.().boundingBox;
+    if (!bb) continue;
+    const min = bb.minimumWorld;
+    const max = bb.maximumWorld;
+
+    if (max.y < walkBandMin || min.y > walkBandMax) continue;
+
+    rects.push({
+      minX: min.x - clearance,
+      maxX: max.x + clearance,
+      minZ: min.z - clearance,
+      maxZ: max.z + clearance,
+    });
+  }
+  return rects;
+};
+
+// NOVÉ: Obdélníky z meshů podle názvu (curved/circular walls, railing)
+const collectNamedMeshRects = (scene, yLevel, clearance, nameIncludes = []) => {
+  const rects = [];
+  if (!scene || !Array.isArray(scene.meshes)) return rects;
+
+  const walkBandMin = yLevel - 0.1;
+  const walkBandMax = yLevel + PASSABLE_UNDER_Y + 0.3;
+
+  const includesAny = (name, arr) =>
+    arr.some((token) => name.includes(token.toLowerCase()));
+
+  for (const m of scene.meshes) {
+    if (!m) continue;
+    const enabled =
+      typeof m.isEnabled === "function" ? m.isEnabled() : m.isEnabled;
+    if (!enabled || m.isVisible === false) continue;
+
+    const name = (m.name || "").toLowerCase();
+    if (!includesAny(name, nameIncludes)) continue;
 
     m.computeWorldMatrix(true);
     const bb = m.getBoundingInfo?.().boundingBox;
@@ -175,6 +215,7 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   };
 
   for (const r of obstacleRects) {
+    // AABB rychlý test
     if (
       segBB.maxX < r.minX ||
       segBB.minX > r.maxX ||
@@ -182,6 +223,7 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
       segBB.minZ > r.maxZ
     )
       continue;
+
     for (let i = 1; i < steps; i++) {
       const t = i / steps;
       const x = a.x + dx * t;
@@ -204,6 +246,7 @@ const buildVisibilityNodes = (start, end, obstacleRects) => {
   };
   push(start, "start");
   push(end, "end");
+
   for (const r of obstacleRects) {
     [
       { x: r.minX, z: r.minZ },
@@ -212,6 +255,7 @@ const buildVisibilityNodes = (start, end, obstacleRects) => {
       { x: r.minX, z: r.maxZ },
     ].forEach((c, i) => push(c, `corner_${i}`));
   }
+
   return nodes;
 };
 
@@ -327,6 +371,7 @@ const straightPathfinding = (start, end, obstacleRects) => {
   const idToNode = buildVisibilityGraph(nodes, obstacleRects);
   const raw = aStar(nodes, idToNode, s, e);
   if (!raw.length) return [];
+
   const smoothed = smoothPath(raw, obstacleRects);
   if (smoothed.length >= 1) {
     smoothed[0] = s;
@@ -355,6 +400,7 @@ const createArrowTemplate = (scene) => {
     scene
   );
   shaft.position.z = -ARROW_HEAD_LEN / 2;
+
   const head = BABYLON.MeshBuilder.CreateCylinder(
     "arrow_head",
     {
@@ -367,6 +413,7 @@ const createArrowTemplate = (scene) => {
   );
   head.rotation.x = Math.PI / 2;
   head.position.z = ARROW_SHAFT_LEN / 2;
+
   const arrow = BABYLON.Mesh.MergeMeshes(
     [shaft, head],
     true,
@@ -376,11 +423,13 @@ const createArrowTemplate = (scene) => {
     true
   );
   arrow.name = "arrow_template";
+
   const mat = new BABYLON.StandardMaterial("arrow_mat", scene);
   mat.diffuseColor = new BABYLON.Color3(0, 0, 0);
   mat.emissiveColor = mat.diffuseColor;
   mat.specularColor = new BABYLON.Color3(0, 0, 0);
   arrow.material = mat;
+
   return arrow;
 };
 
@@ -392,11 +441,14 @@ const visualizeArrowPath = (
   startOffset = ARROW_START_OFFSET
 ) => {
   if (!path || path.length < 2) return null;
+
   const parent = new BABYLON.TransformNode(`arrow_path_${Date.now()}`, scene);
   const template = createArrowTemplate(scene);
   template.setEnabled(false);
   template.parent = parent;
+
   const y = yLevel + 1;
+
   let remainingToNext = Math.max(0, startOffset);
   for (let i = 0; i < path.length - 1; i++) {
     const a = path[i],
@@ -404,13 +456,16 @@ const visualizeArrowPath = (
     const dx = b.x - a.x,
       dz = b.z - a.z;
     const segLen = Math.sqrt(dx * dx + dz * dz);
+
     if (segLen < 1e-6) {
       remainingToNext = Math.max(0, remainingToNext - segLen);
       continue;
     }
+
     const ux = dx / segLen,
       uz = dz / segLen;
     const yaw = Math.atan2(ux, uz);
+
     let d = remainingToNext;
     while (d <= segLen) {
       const px = a.x + ux * d,
@@ -423,6 +478,7 @@ const visualizeArrowPath = (
     }
     remainingToNext = d - segLen;
   }
+
   return parent;
 };
 
@@ -435,6 +491,7 @@ const makeLabel = (scene, text, pos, y) => {
   );
   plane.position = new BABYLON.Vector3(pos.x, y, pos.z);
   plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+
   const dt = new BABYLON.DynamicTexture(
     `dt_${text}_${Date.now()}`,
     { width: 256, height: 256 },
@@ -454,6 +511,7 @@ const makeLabel = (scene, text, pos, y) => {
     true,
     true
   );
+
   const mat = new BABYLON.StandardMaterial(
     `label_mat_${text}_${Date.now()}`,
     scene
@@ -463,6 +521,7 @@ const makeLabel = (scene, text, pos, y) => {
   mat.emissiveTexture = dt;
   mat.disableLighting = true;
   mat.backFaceCulling = false;
+
   plane.material = mat;
   return plane;
 };
@@ -478,6 +537,7 @@ const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
     s.material = m;
     return s;
   };
+
   const startSphere = mkSphere(
     start,
     new BABYLON.Color3(0.1, 0.8, 0.2),
@@ -488,8 +548,10 @@ const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
     new BABYLON.Color3(0.9, 0.1, 0.1),
     `evac_end_${Date.now()}`
   );
+
   const startLabel = makeLabel(scene, "A", start, yLevel + 1.5);
   const endLabel = makeLabel(scene, endLabelText, end, yLevel + 1.5);
+
   return [startSphere, endSphere, startLabel, endLabel];
 };
 
@@ -564,6 +626,7 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
         floorId === null
       )
         return;
+
       const disposed =
         typeof scene.isDisposed === "function" ? scene.isDisposed() : false;
       if (disposed) return;
@@ -585,7 +648,7 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           CONFIG_DATA.visualization.floor_spacing;
       }
 
-      // Per-floor clearance (sníž ji pro úzké dveře, např. 0.35)
+      // Per-floor clearance
       const navClearance = getNavClearance(floorData);
 
       // Překážky
@@ -596,7 +659,26 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
       );
       const holeRects = collectHoleRects(floorData, navClearance);
       const glassRects = collectPinkGlassRects(scene, yLevel, navClearance);
-      const obstacles = [...wallRects, ...holeRects, ...glassRects];
+
+      // NOVÉ: curved/circular stěny a railing podle názvů meshů
+      const curvedRects = collectNamedMeshRects(scene, yLevel, navClearance, [
+        "_curved_",
+        "curved",
+        "_circular_",
+        "circular",
+      ]);
+      const railingRects = collectNamedMeshRects(scene, yLevel, navClearance, [
+        "_railing_",
+        "railing",
+      ]);
+
+      const obstacles = [
+        ...wallRects,
+        ...holeRects,
+        ...glassRects,
+        ...curvedRects,
+        ...railingRects,
+      ];
 
       // Kandidáti B z CONFIG_DATA
       const candidates = getFloorEndCandidates(floorData);
@@ -607,16 +689,19 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
         candidates,
         obstacles
       );
+
       if (path.length >= 2) {
         const endLabelText = target?.id ? String(target.id) : "B";
+
         endpointMeshes =
           visualizeEndpoints(
             scene,
-            path[0],
+            { x: startPoint.x, z: startPoint.z },
             path[path.length - 1],
             yLevel,
             endLabelText
           ) || [];
+
         arrowParent = visualizeArrowPath(
           scene,
           path,

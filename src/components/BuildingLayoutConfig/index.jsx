@@ -5338,7 +5338,14 @@ export const CONFIG_DATA = {
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
       ],
-      endPoints: [{ x: -2.6, z: 15.5, id: "B" }],
+      endPoints: [
+        { x: -2.6, z: 15.5, id: "B" },
+        { x: -6.3, z: -16.5, id: "B" },
+        { x: -3.3, z: -16.5, id: "B" },
+      ],
+      nav: {
+        clearance: 0.05,
+      },
       layout: {
         rooms_grid: {
           columns: 1,
