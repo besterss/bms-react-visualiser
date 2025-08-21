@@ -8049,6 +8049,7 @@ export const CONFIG_DATA = {
             start: { x: -4.93, z: -15.6 },
             end: { x: -2.43, z: -15.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.13 - nahore
@@ -8056,6 +8057,7 @@ export const CONFIG_DATA = {
             start: { x: -4.93, z: -11.4 },
             end: { x: -2.43, z: -11.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.13 - vlevo
@@ -8063,6 +8065,7 @@ export const CONFIG_DATA = {
             start: { x: -4.88, z: -11.4 },
             end: { x: -4.88, z: -15.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.13 - vpravo
@@ -8070,6 +8073,7 @@ export const CONFIG_DATA = {
             start: { x: -2.48, z: -12.3 },
             end: { x: -2.48, z: -15.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.14 - vlevo
           {
@@ -8077,6 +8081,7 @@ export const CONFIG_DATA = {
             start: { x: -10.2, z: -4.8 },
             end: { x: -10.2, z: -0.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.14 - vpravo
           {
@@ -8084,6 +8089,7 @@ export const CONFIG_DATA = {
             start: { x: -6, z: -4.8 },
             end: { x: -6, z: -1.3 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.14 - dole
           {
@@ -8091,6 +8097,7 @@ export const CONFIG_DATA = {
             start: { x: -5.95, z: -4.8 },
             end: { x: -10.25, z: -4.8 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.14 - nahore
           {
@@ -8098,6 +8105,7 @@ export const CONFIG_DATA = {
             start: { x: -5.95, z: -0.4 },
             end: { x: -10.25, z: -0.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.18 vlevo
           {
@@ -8105,6 +8113,7 @@ export const CONFIG_DATA = {
             start: { x: 8.3, z: 4.8 },
             end: { x: 8.3, z: 1.5 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.18 vpravo
           {
@@ -8112,6 +8121,7 @@ export const CONFIG_DATA = {
             start: { x: 5.9, z: 4.8 },
             end: { x: 5.9, z: 0.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.18 dole
           {
@@ -8119,6 +8129,7 @@ export const CONFIG_DATA = {
             start: { x: 5.85, z: 0.6 },
             end: { x: 8.35, z: 0.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           //2.18 nahore
           {
@@ -8126,6 +8137,7 @@ export const CONFIG_DATA = {
             start: { x: 5.85, z: 4.8 },
             end: { x: 8.35, z: 4.8 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.15 vlevo
@@ -8133,6 +8145,7 @@ export const CONFIG_DATA = {
             start: { x: -15.6, z: 13.8 },
             end: { x: -15.6, z: 9.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.15 vpravo
@@ -8140,6 +8153,7 @@ export const CONFIG_DATA = {
             start: { x: -11.4, z: 13.8 },
             end: { x: -11.4, z: 10.5 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.15 dole
@@ -8147,6 +8161,7 @@ export const CONFIG_DATA = {
             start: { x: -15.65, z: 9.6 },
             end: { x: -11.35, z: 9.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //2.15 nahore
@@ -8154,6 +8169,7 @@ export const CONFIG_DATA = {
             start: { x: -15.65, z: 13.8 },
             end: { x: -11.35, z: 13.8 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //Schodiste02 - leva
@@ -8266,10 +8282,11 @@ export const CONFIG_DATA = {
           {
             //2.15 pricka
             type: "partition",
-            start: { x: -11.4, z: 13.8 },
+            start: { x: -11.4, z: 10.5 },
             end: { x: -11.4, z: 9.6 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //ROZVADECE - pricka
@@ -8290,25 +8307,29 @@ export const CONFIG_DATA = {
           {
             //2.18 pricka
             type: "partition",
-            start: { x: 8.3, z: 4.8 },
-            end: { x: 8.3, z: 0.6 },
+            start: { x: 8.3, z: 1.5 },
+            end: { x: 8.3, z: 0.65 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             type: "partition",
-            start: { x: -6, z: -4.8 },
+            start: { x: -6, z: -1.3 },
             end: { x: -6, z: -0.4 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
           },
+
           {
             //2.13 - vpravo
             type: "partition",
             start: { x: -2.48, z: -11.4 },
-            end: { x: -2.48, z: -15.6 },
+            end: { x: -2.48, z: -12.3 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //V5 - vrchni
@@ -8947,17 +8968,19 @@ export const CONFIG_DATA = {
           {
             //3.12 leva spodni pricka
             type: "partition",
-            start: { x: -4.8, z: -0.8 },
-            end: { x: -4.8, z: -5 },
+            start: { x: -4.8, z: -0.85 },
+            end: { x: -4.8, z: -1.78 },
             partitionWidth: 0.05,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //3.11 prava vrchni pricka
             type: "partition",
             start: { x: -11.4, z: 0.4 },
-            end: { x: -11.4, z: 4.6 },
+            end: { x: -11.4, z: 1.4 },
             partitionWidth: 0.05,
+            materialType: "glass",
             yLevel: 2.1,
           },
           {
@@ -9981,6 +10004,7 @@ export const CONFIG_DATA = {
             start: { x: -15.6, z: 4.6 },
             end: { x: -15.6, z: 0.4 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.11 spodni stena
@@ -9988,6 +10012,7 @@ export const CONFIG_DATA = {
             start: { x: -15.625, z: 0.4 },
             end: { x: -11.375, z: 0.4 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.11 prava spodni
@@ -9995,6 +10020,7 @@ export const CONFIG_DATA = {
             start: { x: -11.4, z: 0.4 },
             end: { x: -11.4, z: 0.47 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.11 prava vrchni
@@ -10002,6 +10028,7 @@ export const CONFIG_DATA = {
             start: { x: -11.4, z: 1.37 },
             end: { x: -11.4, z: 4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.11 vrchni stena
@@ -10009,6 +10036,7 @@ export const CONFIG_DATA = {
             start: { x: -11.375, z: 4.6 },
             end: { x: -15.625, z: 4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.12 leva spodni
@@ -10016,6 +10044,7 @@ export const CONFIG_DATA = {
             start: { x: -4.8, z: -1.77 },
             end: { x: -4.8, z: -5 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.12 leva vrchni
@@ -10023,6 +10052,7 @@ export const CONFIG_DATA = {
             start: { x: -4.8, z: -0.8 },
             end: { x: -4.8, z: -0.87 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.12 spodni strana
@@ -10030,6 +10060,7 @@ export const CONFIG_DATA = {
             start: { x: -4.825, z: -5 },
             end: { x: -2.375, z: -5 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.12 prava strana
@@ -10037,6 +10068,7 @@ export const CONFIG_DATA = {
             start: { x: -2.4, z: -5 },
             end: { x: -2.4, z: -0.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //3.12 vrchni strana
@@ -10044,6 +10076,7 @@ export const CONFIG_DATA = {
             start: { x: -2.375, z: -0.8 },
             end: { x: -4.825, z: -0.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //Schodiste01 - prava
@@ -10490,10 +10523,20 @@ export const CONFIG_DATA = {
           {
             //4.11 - nahore pricka
             type: "partition",
-            start: { x: 2.97, z: 0 },
-            end: { x: -8.53, z: 0 },
+            start: { x: -6.68, z: 0 },
+            end: { x: -7.58, z: 0 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
+          },
+          {
+            //4.11 - nahore pricka
+            type: "partition",
+            start: { x: 1.27, z: 0 },
+            end: { x: 2.17, z: 0 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //4.13a - nahore pricka
@@ -10502,6 +10545,7 @@ export const CONFIG_DATA = {
             end: { x: -6.03, z: -6 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //4.12 vpravo pricka
@@ -10522,10 +10566,20 @@ export const CONFIG_DATA = {
           {
             //4.14 - vlevo pricka
             type: "partition",
-            start: { x: 11.4, z: 15.6 },
+            start: { x: 11.4, z: 10.52 },
             end: { x: 11.4, z: 9.62 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
+          },
+          {
+            //4.14 - vlevo pricka
+            type: "partition",
+            start: { x: 11.4, z: 15.6 },
+            end: { x: 11.4, z: 14.7 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //okna
@@ -11647,6 +11701,7 @@ export const CONFIG_DATA = {
             start: { x: -8.48, z: -4.8 },
             end: { x: -8.48, z: 0 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.11 - vpravo
@@ -11654,6 +11709,7 @@ export const CONFIG_DATA = {
             start: { x: 2.92, z: -4.8 },
             end: { x: 2.92, z: 0 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.11 - dole
@@ -11661,6 +11717,7 @@ export const CONFIG_DATA = {
             start: { x: 2.97, z: -4.8 },
             end: { x: -8.53, z: -4.8 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.11 - nahore
@@ -11668,6 +11725,7 @@ export const CONFIG_DATA = {
             start: { x: 2.97, z: 0 },
             end: { x: 2.17, z: 0 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.11 - nahore
@@ -11675,6 +11733,7 @@ export const CONFIG_DATA = {
             start: { x: 1.27, z: 0 },
             end: { x: -6.68, z: 0 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.11 - nahore
@@ -11682,6 +11741,7 @@ export const CONFIG_DATA = {
             start: { x: -7.58, z: 0 },
             end: { x: -8.53, z: 0 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
 
           {
@@ -11690,6 +11750,7 @@ export const CONFIG_DATA = {
             start: { x: -6.08, z: -4.8 },
             end: { x: -6.08, z: 0 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.13a - nahore
@@ -11697,6 +11758,7 @@ export const CONFIG_DATA = {
             start: { x: -8.53, z: -6 },
             end: { x: -8.22, z: -6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.13a - nahore
@@ -11704,6 +11766,7 @@ export const CONFIG_DATA = {
             start: { x: -7.42, z: -6 },
             end: { x: -7.04, z: -6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.13a - nahore
@@ -11711,6 +11774,7 @@ export const CONFIG_DATA = {
             start: { x: -6.24, z: -6 },
             end: { x: -6.03, z: -6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
 
           {
@@ -11719,6 +11783,7 @@ export const CONFIG_DATA = {
             start: { x: -8.53, z: -8.4 },
             end: { x: -6.03, z: -8.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.13a - vlevo
@@ -11726,6 +11791,7 @@ export const CONFIG_DATA = {
             start: { x: -8.48, z: -6 },
             end: { x: -8.48, z: -8.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.13a - vpravo
@@ -11733,6 +11799,7 @@ export const CONFIG_DATA = {
             start: { x: -6.08, z: -6 },
             end: { x: -6.08, z: -8.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.13a - STRED
@@ -11740,6 +11807,7 @@ export const CONFIG_DATA = {
             start: { x: -7.28, z: -6 },
             end: { x: -7.28, z: -8.4 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
 
           {
@@ -11748,6 +11816,7 @@ export const CONFIG_DATA = {
             start: { x: 15.6, z: 15.6 },
             end: { x: 15.6, z: 9.62 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.14 - vlevo
@@ -11755,6 +11824,7 @@ export const CONFIG_DATA = {
             start: { x: 11.4, z: 14.7 },
             end: { x: 11.4, z: 10.52 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.14 - nahore
@@ -11762,6 +11832,7 @@ export const CONFIG_DATA = {
             start: { x: 15.65, z: 15.6 },
             end: { x: 11.35, z: 15.6 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.14 - dole
@@ -11769,6 +11840,7 @@ export const CONFIG_DATA = {
             start: { x: 15.65, z: 9.62 },
             end: { x: 11.35, z: 9.62 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //4.14 - prostredek
@@ -11776,6 +11848,7 @@ export const CONFIG_DATA = {
             start: { x: 15.65, z: 12 },
             end: { x: 11.35, z: 12 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             type: "spiralStairs",
@@ -12175,26 +12248,38 @@ export const CONFIG_DATA = {
           {
             //5.13 a 5.15 - horni pricka
             type: "partition",
-            start: { x: -4.6, z: -5.8 },
-            end: { x: 5, z: -5.8 },
+            start: { x: 3.25, z: -5.8 },
+            end: { x: 4.15, z: -5.8 },
             partitionWidth: 0.05,
             yLevel: 2.1,
+            materialType: "glass",
+          },
+          {
+            //5.13 a 5.15 - horni pricka
+            type: "partition",
+            start: { x: -2.85, z: -5.8 },
+            end: { x: -3.75, z: -5.8 },
+            partitionWidth: 0.05,
+            yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - spodni pricka
             type: "partition",
-            start: { x: -4.6, z: -4.6 },
+            start: { x: -1.37, z: -4.6 },
             end: { x: -0.47, z: -4.6 },
             partitionWidth: 0.05,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - vrchni pricka
             type: "partition",
-            start: { x: -4.6, z: 5 },
+            start: { x: -1.37, z: 5 },
             end: { x: -0.4, z: 5 },
             partitionWidth: 0.05,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //5.19 - leva pricka
@@ -12203,6 +12288,7 @@ export const CONFIG_DATA = {
             end: { x: 4.4, z: -4.6 },
             partitionWidth: 0.05,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //5.19 - prava pricka
@@ -12211,6 +12297,7 @@ export const CONFIG_DATA = {
             end: { x: 8.6, z: -4.6 },
             partitionWidth: 0.05,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //okna
@@ -13289,6 +13376,7 @@ export const CONFIG_DATA = {
             start: { x: -4.6, z: -5.775 },
             end: { x: -4.6, z: -10.025 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.13 a 5.15 - spodni stena
@@ -13296,6 +13384,7 @@ export const CONFIG_DATA = {
             start: { x: -4.6, z: -10 },
             end: { x: 5, z: -10 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.13 a 5.15 - prava stena
@@ -13303,6 +13392,7 @@ export const CONFIG_DATA = {
             start: { x: 5, z: -10.025 },
             end: { x: 5, z: -5.775 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.13 a 5.15 - horni stena 1
@@ -13310,6 +13400,7 @@ export const CONFIG_DATA = {
             start: { x: -4.6, z: -5.8 },
             end: { x: -3.75, z: -5.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.13 a 5.15 - horni stena 2
@@ -13317,6 +13408,7 @@ export const CONFIG_DATA = {
             start: { x: -2.85, z: -5.8 },
             end: { x: 3.25, z: -5.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.13 a 5.15 - horni stena 2
@@ -13324,6 +13416,7 @@ export const CONFIG_DATA = {
             start: { x: 4.15, z: -5.8 },
             end: { x: 5, z: -5.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.13 a 5.15 - rozdeleni
@@ -13331,6 +13424,7 @@ export const CONFIG_DATA = {
             start: { x: 0.8, z: -5.8 },
             end: { x: 0.8, z: -10 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - leva stena
@@ -13338,6 +13432,7 @@ export const CONFIG_DATA = {
             start: { x: -4.6, z: 5.025 },
             end: { x: -4.6, z: -4.625 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - spodni stena 1
@@ -13345,6 +13440,7 @@ export const CONFIG_DATA = {
             start: { x: -4.6, z: -4.6 },
             end: { x: -1.37, z: -4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - spodni stena 2
@@ -13352,6 +13448,7 @@ export const CONFIG_DATA = {
             start: { x: -0.4, z: -4.6 },
             end: { x: -0.47, z: -4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - prava stena
@@ -13359,6 +13456,7 @@ export const CONFIG_DATA = {
             start: { x: -0.4, z: -4.625 },
             end: { x: -0.4, z: 5.025 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - vrchni stena 1
@@ -13366,6 +13464,7 @@ export const CONFIG_DATA = {
             start: { x: -1.37, z: 5 },
             end: { x: -4.6, z: 5 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - vrchni stena 2
@@ -13373,6 +13472,7 @@ export const CONFIG_DATA = {
             start: { x: -0.4, z: 5 },
             end: { x: -0.47, z: 5 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.12 a 5.14 - rozdeleni
@@ -13380,6 +13480,7 @@ export const CONFIG_DATA = {
             start: { x: -0.4, z: -0.4 },
             end: { x: -4.6, z: -0.4 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - leva stena 1
@@ -13387,6 +13488,7 @@ export const CONFIG_DATA = {
             start: { x: 4.4, z: -0.4 },
             end: { x: 4.4, z: -0.71 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - leva stena 2
@@ -13394,6 +13496,7 @@ export const CONFIG_DATA = {
             start: { x: 4.4, z: -1.51 },
             end: { x: 4.4, z: -2.11 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - leva stena 3
@@ -13401,6 +13504,7 @@ export const CONFIG_DATA = {
             start: { x: 4.4, z: -2.91 },
             end: { x: 4.4, z: -3.49 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - leva stena 4
@@ -13408,6 +13512,7 @@ export const CONFIG_DATA = {
             start: { x: 4.4, z: -4.29 },
             end: { x: 4.4, z: -4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - prava stena 1
@@ -13415,6 +13520,7 @@ export const CONFIG_DATA = {
             start: { x: 8.6, z: -0.4 },
             end: { x: 8.6, z: -0.71 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - prava stena 2
@@ -13422,6 +13528,7 @@ export const CONFIG_DATA = {
             start: { x: 8.6, z: -1.51 },
             end: { x: 8.6, z: -2.11 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - prava stena 3
@@ -13429,6 +13536,7 @@ export const CONFIG_DATA = {
             start: { x: 8.6, z: -2.91 },
             end: { x: 8.6, z: -3.49 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - prava stena 4
@@ -13436,6 +13544,7 @@ export const CONFIG_DATA = {
             start: { x: 8.6, z: -4.29 },
             end: { x: 8.6, z: -4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - vrchni stena
@@ -13443,6 +13552,7 @@ export const CONFIG_DATA = {
             start: { x: 8.625, z: -0.4 },
             end: { x: 4.375, z: -0.4 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - vodorovne rozdeleni 1
@@ -13450,6 +13560,7 @@ export const CONFIG_DATA = {
             start: { x: 6.5, z: -0.4 },
             end: { x: 6.5, z: -4.625 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             //5.19 - horizontalni rozdeleni 1
@@ -13457,6 +13568,7 @@ export const CONFIG_DATA = {
             start: { x: 4.4, z: -1.8 },
             end: { x: 6.45, z: -1.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - horizontalni rozdeleni 2
@@ -13464,6 +13576,7 @@ export const CONFIG_DATA = {
             start: { x: 4.4, z: -3.2 },
             end: { x: 6.45, z: -3.2 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - horizontalni rozdeleni 3
@@ -13471,6 +13584,7 @@ export const CONFIG_DATA = {
             start: { x: 4.375, z: -4.6 },
             end: { x: 6.45, z: -4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - horizontalni rozdeleni 4
@@ -13478,6 +13592,7 @@ export const CONFIG_DATA = {
             start: { x: 6.55, z: -1.8 },
             end: { x: 8.6, z: -1.8 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - horizontalni rozdeleni 5
@@ -13485,6 +13600,7 @@ export const CONFIG_DATA = {
             start: { x: 6.55, z: -3.2 },
             end: { x: 8.6, z: -3.2 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             //5.19 - horizontalni rozdeleni 6
@@ -13492,6 +13608,7 @@ export const CONFIG_DATA = {
             start: { x: 6.55, z: -4.6 },
             end: { x: 8.625, z: -4.6 },
             partitionWidth: 0.05,
+            materialType: "glass",
           },
           {
             type: "spiralStairs",
@@ -13840,17 +13957,37 @@ export const CONFIG_DATA = {
           {
             // Zasedací místnost - vpravo pricka
             type: "partition",
-            start: { x: 3, z: 6.68 },
+            start: { x: 3, z: -6.78 },
             end: { x: 3, z: -7.8 },
             partitionWidth: 0.1,
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
-            // Zasedací místnost - vlevo pricka
+            // Zasedací místnost - vpravo pricka
             type: "partition",
-            start: { x: -3.05, z: 6.68 },
-            end: { x: -3.05, z: -7.8 },
+            start: { x: 3, z: 6.68 },
+            end: { x: 3, z: 5.78 },
             partitionWidth: 0.1,
+            materialType: "glass",
+            yLevel: 2.1,
+          },
+          {
+            // Zasedací místnost - vpravo pricka
+            type: "partition",
+            start: { x: -3, z: -6.78 },
+            end: { x: -3, z: -7.8 },
+            partitionWidth: 0.1,
+            yLevel: 2.1,
+            materialType: "glass",
+          },
+          {
+            // Zasedací místnost - vpravo pricka
+            type: "partition",
+            start: { x: -3, z: 6.68 },
+            end: { x: -3, z: 5.78 },
+            partitionWidth: 0.1,
+            materialType: "glass",
             yLevel: 2.1,
           },
           {
@@ -15111,6 +15248,7 @@ export const CONFIG_DATA = {
             start: { x: -3, z: 5.78 },
             end: { x: -3, z: -6.78 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             // Zasedací místnost - vpravo
@@ -15118,6 +15256,7 @@ export const CONFIG_DATA = {
             start: { x: 3, z: 5.78 },
             end: { x: 3, z: -6.78 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             // Zasedací místnost - nahore
@@ -15125,6 +15264,7 @@ export const CONFIG_DATA = {
             start: { x: -3.05, z: 6.68 },
             end: { x: 3.05, z: 6.68 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
           {
             // Zasedací místnost - dole
@@ -15132,6 +15272,7 @@ export const CONFIG_DATA = {
             start: { x: 3.05, z: -7.8 },
             end: { x: -3.05, z: -7.8 },
             partitionWidth: 0.1,
+            materialType: "glass",
           },
         ],
       },
@@ -15471,6 +15612,7 @@ export const CONFIG_DATA = {
             start: { x: -10.2, z: 9.6 },
             end: { x: -10.2, z: -10.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //Kostka -  vpravo pricka
@@ -15478,6 +15620,7 @@ export const CONFIG_DATA = {
             start: { x: 10.2, z: 9.6 },
             end: { x: 10.2, z: -10.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //Kostka - dole pricka
@@ -15485,6 +15628,7 @@ export const CONFIG_DATA = {
             start: { x: -9.6, z: -10.2 },
             end: { x: 10.2, z: -10.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //7.25 - vlevo 1
@@ -16570,6 +16714,7 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -10.2, z: 8.85 },
             end: { x: -10.2, z: 9.6 },
+            materialType: "glass",
           },
 
           {
@@ -16577,164 +16722,191 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -10.2, z: 7.95 },
             end: { x: -10.2, z: 1.65 },
+            materialType: "glass",
           },
           {
             //leva strana stena 3
             type: "partition",
             start: { x: -10.2, z: 0.75 },
             end: { x: -10.2, z: -1.95 },
+            materialType: "glass",
           },
           {
             //leva strana stena 4
             type: "partition",
             start: { x: -10.2, z: -2.85 },
             end: { x: -10.2, z: -5.55 },
+            materialType: "glass",
           },
           {
             //leva strana stena 5
             type: "partition",
             start: { x: -10.2, z: -6.45 },
             end: { x: -10.2, z: -7.8 },
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 1 1
             type: "partition",
             start: { x: -16.8, z: 6.6 },
             end: { x: -11.17, z: 6.6 },
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 1 1
             type: "partition",
-            start: { x: -16.8, z: 6.6 },
+            start: { x: -11.17, z: 6.6 },
             end: { x: -10.2, z: 6.6 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 1 2
             type: "partition",
             start: { x: -10.27, z: 6.6 },
             end: { x: -10.2, z: 6.6 },
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 2 1
             type: "partition",
             start: { x: -16.8, z: -0.6 },
             end: { x: -11.17, z: -0.6 },
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 2 1
             type: "partition",
-            start: { x: -16.8, z: -0.6 },
+            start: { x: -11.17, z: -0.6 },
             end: { x: -10.2, z: -0.6 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 2 2
             type: "partition",
             start: { x: -10.27, z: -0.6 },
             end: { x: -10.2, z: -0.6 },
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 3
             type: "partition",
             start: { x: -16.8, z: -4.2 },
             end: { x: -10.2, z: -4.2 },
+            materialType: "glass",
           },
           {
             //leva strana rozdeleni 4
             type: "partition",
             start: { x: -16.8, z: -7.8 },
             end: { x: -10.2, z: -7.8 },
+            materialType: "glass",
           },
           {
             //spodni strana stena 1
             type: "partition",
             start: { x: -10.2, z: -10.2 },
             end: { x: -9.41, z: -10.2 },
+            materialType: "glass",
           },
           {
             //spodni strana stena 2
             type: "partition",
             start: { x: -8.51, z: -10.2 },
             end: { x: -2.85, z: -10.2 },
+            materialType: "glass",
           },
           {
             //spodni strana stena 3
             type: "partition",
             start: { x: -1.95, z: -10.2 },
             end: { x: 0.75, z: -10.2 },
+            materialType: "glass",
           },
           {
             //spodni strana stena 4
             type: "partition",
             start: { x: 1.65, z: -10.2 },
             end: { x: 4.35, z: -10.2 },
+            materialType: "glass",
           },
           {
             //spodni strana stena 5
             type: "partition",
             start: { x: 5.25, z: -10.2 },
             end: { x: 6.6, z: -10.2 },
+            materialType: "glass",
           },
           {
             //spodni strana rozdeleni 1
             type: "partition",
             start: { x: -7.8, z: -10.2 },
             end: { x: -7.8, z: -16.8 },
+            materialType: "glass",
           },
           {
             //spodni strana rozdeleni 2
             type: "partition",
             start: { x: -0.6, z: -10.2 },
             end: { x: -0.6, z: -16.8 },
+            materialType: "glass",
           },
           {
             //spodni strana rozdeleni 3
             type: "partition",
             start: { x: 3, z: -10.2 },
             end: { x: 3, z: -16.8 },
+            materialType: "glass",
           },
           {
             //prava strana stena 1
             type: "partition",
             start: { x: 10.2, z: -10.2 },
             end: { x: 10.2, z: -9.41 },
+            materialType: "glass",
           },
           {
             //prava strana stena 2
             type: "partition",
             start: { x: 10.2, z: -8.51 },
             end: { x: 10.2, z: -6.45 },
+            materialType: "glass",
           },
           {
             //prava strana stena 3
             type: "partition",
             start: { x: 10.2, z: -5.55 },
             end: { x: 10.2, z: -0.45 },
+            materialType: "glass",
           },
           {
             //prava strana stena 4
             type: "partition",
             start: { x: 10.2, z: 0.45 },
             end: { x: 10.2, z: 7.95 },
+            materialType: "glass",
           },
           {
             //prava strana stena 4
             type: "partition",
             start: { x: 10.2, z: 8.85 },
             end: { x: 10.2, z: 9.6 },
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 1 1
             type: "partition",
             start: { x: 10.2, z: -7.8 },
             end: { x: 10.27, z: -7.8 },
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 1 2
             type: "partition",
             start: { x: 11.17, z: 6.6 },
             end: { x: 16.8, z: 6.6 },
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 1 2
@@ -16742,18 +16914,21 @@ export const CONFIG_DATA = {
             start: { x: 10.2, z: 6.6 },
             end: { x: 16.8, z: 6.6 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 2 1
             type: "partition",
             start: { x: 10.2, z: -4.2 },
             end: { x: 10.27, z: -4.2 },
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 2 2
             type: "partition",
             start: { x: 11.17, z: -4.2 },
             end: { x: 16.8, z: -4.2 },
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 2 2
@@ -16761,12 +16936,14 @@ export const CONFIG_DATA = {
             start: { x: 10.2, z: -4.2 },
             end: { x: 16.8, z: -4.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //prava strana rozdeleni 3
             type: "partition",
             start: { x: 10.2, z: -7.8 },
             end: { x: 16.8, z: -7.8 },
+            materialType: "glass",
           },
           {
             //7.25 - vlevo 1
@@ -17263,6 +17440,7 @@ export const CONFIG_DATA = {
             start: { x: -10.2, z: 9.6 },
             end: { x: -10.2, z: -10.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //Kostka -  vpravo pricka
@@ -17270,6 +17448,7 @@ export const CONFIG_DATA = {
             start: { x: 10.2, z: 9.6 },
             end: { x: 10.2, z: -10.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //Kostka - dole pricka
@@ -17277,6 +17456,7 @@ export const CONFIG_DATA = {
             start: { x: -9.6, z: -10.2 },
             end: { x: 10.2, z: -10.2 },
             yLevel: 2.1,
+            materialType: "glass",
           },
           {
             //Spisovna/Tiskarna - vlevo
@@ -18362,72 +18542,84 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -10.2, z: 9.6 },
             end: { x: -10.2, z: 8.85 },
+            materialType: "glass",
           },
           {
             //Kostka - vlevo2
             type: "partition",
             start: { x: -10.2, z: 5.25 },
             end: { x: -10.2, z: 7.95 },
+            materialType: "glass",
           },
           {
             //Kostka - vlevo3
             type: "partition",
             start: { x: -10.2, z: 4.35 },
             end: { x: -10.2, z: 1.65 },
+            materialType: "glass",
           },
           {
             //Kostka - vlevo4
             type: "partition",
             start: { x: -10.2, z: 0.75 },
             end: { x: -10.2, z: -1.95 },
+            materialType: "glass",
           },
           {
             //Kostka - vlevo4
             type: "partition",
             start: { x: -10.2, z: -2.85 },
             end: { x: -10.2, z: -5.55 },
+            materialType: "glass",
           },
           {
             //Kostka - vlevo4
             type: "partition",
             start: { x: -10.2, z: -6.45 },
             end: { x: -10.2, z: -8.5 },
+            materialType: "glass",
           },
           {
             //Kostka - dole
             type: "partition",
             start: { x: -10.2, z: -10.2 },
             end: { x: -9.41, z: -10.2 },
+            materialType: "glass",
           },
           {
             //Kostka - dole
             type: "partition",
             start: { x: -8.51, z: -10.2 },
             end: { x: -6.45, z: -10.2 },
+            materialType: "glass",
           },
           {
             //Kostka - dole
             type: "partition",
             start: { x: -5.55, z: -10.2 },
             end: { x: -1.65, z: -10.2 },
+            materialType: "glass",
           },
           {
             //Kostka - dole
             type: "partition",
             start: { x: -0.75, z: -10.2 },
             end: { x: 1.95, z: -10.2 },
+            materialType: "glass",
           },
           {
             //Kostka - dole
             type: "partition",
             start: { x: 2.85, z: -10.2 },
             end: { x: 4.95, z: -10.2 },
+            materialType: "glass",
           },
           {
             //Kostka - dole
             type: "partition",
             start: { x: 5.85, z: -10.2 },
             end: { x: 6.85, z: -10.2 },
+            materialType: "glass",
           },
 
           {
@@ -18435,42 +18627,49 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: 10.2, z: 9.6 },
             end: { x: 10.2, z: 8.85 },
+            materialType: "glass",
           },
           {
             //Kostka - vpravo
             type: "partition",
             start: { x: 10.2, z: 5.25 },
             end: { x: 10.2, z: 7.95 },
+            materialType: "glass",
           },
           {
             //Kostka - vpravo
             type: "partition",
             start: { x: 10.2, z: 4.35 },
             end: { x: 10.2, z: 1.65 },
+            materialType: "glass",
           },
           {
             //Kostka - vpravo
             type: "partition",
             start: { x: 10.2, z: 0.75 },
             end: { x: 10.2, z: -1.95 },
+            materialType: "glass",
           },
           {
             //Kostka - vpravo
             type: "partition",
             start: { x: 10.2, z: -2.85 },
             end: { x: 10.2, z: -5.55 },
+            materialType: "glass",
           },
           {
             //Kostka - vpravo
             type: "partition",
             start: { x: 10.2, z: -6.45 },
             end: { x: 10.2, z: -8.8 },
+            materialType: "glass",
           },
           {
             //Kostka - vpravo
             type: "partition",
             start: { x: 10.2, z: -9.8 },
             end: { x: 10.2, z: -10.2 },
+            materialType: "glass",
           },
 
           {
@@ -18560,84 +18759,98 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -16.8, z: 6.6 },
             end: { x: -10.2, z: 6.6 },
+            materialType: "glass",
           },
           {
             //jednaci prostor - spodni
             type: "partition",
             start: { x: -16.8, z: 3 },
             end: { x: -10.2, z: 3 },
+            materialType: "glass",
           },
           {
             //kancelar projektoveho manazera - spodni
             type: "partition",
             start: { x: -16.8, z: -0.6 },
             end: { x: -10.2, z: -0.6 },
+            materialType: "glass",
           },
           {
             //pracoviste PR a organizace akci pro verejnost - spodni
             type: "partition",
             start: { x: -16.8, z: -4.2 },
             end: { x: -10.2, z: -4.2 },
+            materialType: "glass",
           },
           {
             //graficke studio - spodni
             type: "partition",
             start: { x: -16.8, z: -7.8 },
             end: { x: -10.2, z: -7.8 },
+            materialType: "glass",
           },
           {
             //reditelna - vpravo
             type: "partition",
             start: { x: -7.8, z: -16.8 },
             end: { x: -7.8, z: -10.2 },
+            materialType: "glass",
           },
           {
             //sekretariat - vpravo
             type: "partition",
             start: { x: -4.2, z: -16.8 },
             end: { x: -4.2, z: -10.2 },
+            materialType: "glass",
           },
           {
             //kancelar zastupce reditele - vpravo
             type: "partition",
             start: { x: 0.6, z: -16.8 },
             end: { x: 0.6, z: -10.2 },
+            materialType: "glass",
           },
           {
             //kancelar spravy budovy - vpravo
             type: "partition",
             start: { x: 4.2, z: -16.8 },
             end: { x: 4.2, z: -10.2 },
+            materialType: "glass",
           },
           {
             //účtárna - nahore
             type: "partition",
             start: { x: 10.2, z: -7.8 },
             end: { x: 16.8, z: -7.8 },
+            materialType: "glass",
           },
           {
             //sklad pro účtárnu - nahore
             type: "partition",
             start: { x: 10.2, z: -4.2 },
             end: { x: 16.8, z: -4.2 },
+            materialType: "glass",
           },
           {
             //kancelář vedoucí ekonomiky a provozu - nahore
             type: "partition",
             start: { x: 10.2, z: -0.6 },
             end: { x: 16.8, z: -0.6 },
+            materialType: "glass",
           },
           {
             //odborné pracoviště pro vzdělání uživatelů - nahore
             type: "partition",
             start: { x: 10.2, z: 3 },
             end: { x: 16.8, z: 3 },
+            materialType: "glass",
           },
           {
             //odborné pracoviště pro vědu, výzkum a vývoj - nahore
             type: "partition",
             start: { x: 10.2, z: 6.6 },
             end: { x: 16.8, z: 6.6 },
+            materialType: "glass",
           },
         ],
       },

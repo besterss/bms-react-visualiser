@@ -124,7 +124,6 @@ export class FloorGenerator {
     grass1NP.specularColor = new BABYLON.Color3(0, 0, 0);
     grass1NP.alpha = 0.95;
     grass1NP.backFaceCulling = false;
-    // kvůli masce děr (opacityTexture) ponecháme ALPHABLEND a depth pre-pass
     grass1NP.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     grass1NP.needDepthPrePass = true;
     this.materials.grass1NP = grass1NP;
@@ -729,8 +728,18 @@ export class FloorGenerator {
     const angle = Math.atan2(direction.x, direction.z);
     wall.rotation.y = angle;
 
-    if (materialType === "glass") wall.material = this.materials.glass;
-    else wall.material = this.materials.wallOpaque;
+    // Assign the material based on the given materialType
+    switch (materialType) {
+      case "glass":
+        wall.material = this.materials.glass;
+        break;
+      case "opaque":
+        wall.material = this.materials.wallOpaque;
+        break;
+      default:
+        wall.material = this.materials.wallOpaque;
+        break;
+    }
 
     wall.isPickable = false;
     this.shadowGenerator.addShadowCaster(wall);
