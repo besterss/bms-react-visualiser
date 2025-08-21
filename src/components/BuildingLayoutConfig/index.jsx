@@ -8736,6 +8736,12 @@ export const CONFIG_DATA = {
           { x: -1, z: 11, value: 20 },
           { x: 8, z: -5, value: 25 },
           { x: -10, z: 2, value: 19 },
+          { x: -2, z: 1, value: 28 },
+          { x: 16, z: 3, value: 22 },
+          { x: -8, z: 5, value: 13 },
+          { x: -3, z: -11, value: 26 },
+          { x: 5, z: 1, value: 21 },
+          { x: -12, z: -2, value: 14 },
         ],
         wifi: [{ x: 24, z: 12, value: 80 }],
         airQuality: [
@@ -17207,7 +17213,11 @@ export const CONFIG_DATA = {
         temperature: [
           { x: 1, z: -14, value: 19 },
           { x: -3, z: 6, value: 28 },
-          { x: 12, z: 0, value: 25 },
+          { x: 10, z: 4, value: 25 },
+          { x: 16, z: 2, value: 24 },
+          { x: 11, z: 8, value: 22 },
+          { x: 2, z: 7, value: 19 },
+          { x: 3, z: 2, value: 28 },
         ],
         wifi: [{ x: 20, z: 3, value: 68 }],
         airQuality: [
