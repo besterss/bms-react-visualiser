@@ -38,14 +38,7 @@ const FloorControls = ({
           />
           Show Temperature
         </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={activeDisplayOption === "wifi"}
-            onChange={() => onOptionToggle("wifi")}
-          />
-          Show WiFi Signal Quality
-        </label>
+
         <label>
           <input
             type="checkbox"

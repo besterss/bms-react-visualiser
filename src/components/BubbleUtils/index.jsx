@@ -183,22 +183,6 @@ export const showBubblesOnActiveFloor = (
             getTemperatureColor
           );
         }
-        if (showWifi && activeFloorConfig.sensors.wifi.length > 0) {
-          createBubblesForFloor(
-            scene,
-            mesh,
-            0.75,
-            spacing,
-            1.5,
-            activeFloorConfig.sensors.wifi,
-            maxInfluenceDistance,
-            (influence) =>
-              getGradientColor(
-                BABYLON.Color3.FromHexString("#313695"),
-                influence
-              ) // Blue base for WiFi
-          );
-        }
         if (showAirQuality && activeFloorConfig.sensors.airQuality.length > 0) {
           createBubblesForFloor(
             scene,
