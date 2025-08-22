@@ -1019,8 +1019,19 @@ export class FloorGenerator {
     }
 
     if (railing === "yes") {
-      // Use centralized railing material so it follows dark mode behavior
-      const railingMaterial = this.materials.railing;
+      // IMPORTANT: stairs and their railings must remain pink and NOT be affected by dark mode
+      // Use the centralized pinkGlass material (so color is consistent and preserved)
+      const railingMaterial =
+        this.materials.pinkGlass ||
+        new BABYLON.StandardMaterial(`pinkGlassFallback_${name}`, this.scene);
+      if (!this.materials.pinkGlass) {
+        // If fallback created, set its pink color
+        railingMaterial.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
+        railingMaterial.alpha = 0.5;
+        railingMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        railingMaterial.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+        railingMaterial.needDepthPrePass = true;
+      }
 
       const railingHeight = 1.0;
       const railingThickness = 0.05;
@@ -1045,8 +1056,7 @@ export class FloorGenerator {
         );
         railingLeft.material = railingMaterial;
         stairMeshes.push(railingLeft);
-        // track for toggling
-        this._railingMeshes.push(railingLeft);
+        // do NOT push stair railings into _railingMeshes -> they must remain pink always
 
         const railingRight = BABYLON.MeshBuilder.CreateBox(
           `railing_right_${name}_${partPosition}_${i}`,
@@ -1064,7 +1074,7 @@ export class FloorGenerator {
         );
         railingRight.material = railingMaterial;
         stairMeshes.push(railingRight);
-        this._railingMeshes.push(railingRight);
+        // do NOT push into _railingMeshes
       }
 
       if (!isLastPart && floorMesh) {
@@ -1085,7 +1095,7 @@ export class FloorGenerator {
         floorSideRailingLeft.position.z = floorMesh.position.z;
         floorSideRailingLeft.material = railingMaterial;
         stairMeshes.push(floorSideRailingLeft);
-        this._railingMeshes.push(floorSideRailingLeft);
+        // do NOT push into _railingMeshes
 
         const floorSideRailingRight = BABYLON.MeshBuilder.CreateBox(
           `floor_side_railing_right_${name}_${partPosition}`,
@@ -1102,7 +1112,7 @@ export class FloorGenerator {
         floorSideRailingRight.position.z = floorMesh.position.z;
         floorSideRailingRight.material = railingMaterial;
         stairMeshes.push(floorSideRailingRight);
-        this._railingMeshes.push(floorSideRailingRight);
+        // do NOT push into _railingMeshes
       }
     }
 
