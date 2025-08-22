@@ -33,20 +33,20 @@ const BuildingViewer = () => {
   });
   const [circleDisplayMode, setCircleDisplayMode] = useState("click");
 
+  // NEW: dark mode state
+  const [darkMode, setDarkMode] = useState(false);
+
   // Pomocná funkce: uklid evakuačních meshů
   const clearEvacuationMeshes = (scn) => {
     if (!scn) return;
-
     const meshPrefixes = [
       "evacuation_path_",
       "evacuation_bubble_",
       "start_bubble_",
       "end_bubble_",
-      "arrow_inst_", // přidáno
-      "arrow_template", // přidáno
+      "arrow_inst_",
+      "arrow_template",
     ];
-
-    // Mesh-e (včetně instancí šipek)
     if (scn.meshes && scn.meshes.length) {
       scn.meshes
         .filter(
@@ -59,8 +59,6 @@ const BuildingViewer = () => {
           } catch {}
         });
     }
-
-    // TransformNode parenty (arrow_path_…)
     if (scn.transformNodes && scn.transformNodes.length) {
       scn.transformNodes
         .filter(
@@ -77,6 +75,7 @@ const BuildingViewer = () => {
         });
     }
   };
+
   useEffect(() => {
     if (!canvasRef.current) return;
     const babylonEngine = new BABYLON.Engine(canvasRef.current, true, {
@@ -99,6 +98,11 @@ const BuildingViewer = () => {
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
+
+    // synchronizace darkMode pro případ, že je darkMode jiný než výchozí
+    if (typeof darkMode !== "undefined") {
+      generator.setDarkMode(darkMode);
+    }
 
     setupCamera(babylonScene, result.floorData);
 
@@ -132,7 +136,15 @@ const BuildingViewer = () => {
       window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Effect: když máme floorGenerator nebo se změní darkMode, aplikuj do generatoru
+  useEffect(() => {
+    if (floorGenerator) {
+      floorGenerator.setDarkMode(darkMode);
+    }
+  }, [floorGenerator, darkMode]);
 
   useEffect(() => {
     if (
@@ -181,7 +193,6 @@ const BuildingViewer = () => {
   // Úklid evakuačních cest při vypnutí checkboxu nebo při změně patra
   useEffect(() => {
     if (!scene) return;
-    // Když se vypne evakuace, všechno uklidit
     if (activeDisplayOption !== "evacuation") {
       clearEvacuationMeshes(scene);
     }
@@ -189,7 +200,6 @@ const BuildingViewer = () => {
 
   useEffect(() => {
     if (!scene) return;
-    // Při přepnutí patra s aktivní evakuací uklidit staré, nové se vykreslí znovu
     if (activeDisplayOption === "evacuation") {
       clearEvacuationMeshes(scene);
     }
@@ -202,18 +212,15 @@ const BuildingViewer = () => {
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-
     const activeFloorIndex = floors.findIndex(
       (floor) => floor.id === currentActiveFloor
     );
-
     const activeFloorHeight =
       activeFloorIndex >= 0
         ? activeFloorIndex *
           (CONFIG_DATA.visualization.wall_height +
             CONFIG_DATA.visualization.floor_thickness)
         : totalHeight / 2;
-
     let camera = scene.getCameraByName("camera");
     if (camera) {
       camera.setPosition(
@@ -312,7 +319,6 @@ const BuildingViewer = () => {
       (CONFIG_DATA.visualization.wall_height +
         CONFIG_DATA.visualization.floor_thickness +
         CONFIG_DATA.visualization.floor_spacing);
-
     if (scene) {
       const camera = scene.getCameraByName("camera");
       if (camera) {
@@ -324,34 +330,23 @@ const BuildingViewer = () => {
         );
       }
     }
-
-    // Iterate over all floor meshes
     meshes.forEach((floorMeshes, index) => {
       const floorInfo = floors[index];
       if (!floorInfo) return;
-
       floorMeshes.forEach((mesh) => {
         const isGrassMesh = mesh.name.includes("grassArea");
         const isTreeMesh = mesh.name.startsWith("tree_");
-
         if (isGrassMesh) {
           mesh.setEnabled(isViewingAllFloors || floorId >= 0);
-
-          // zachovej masku děr z původního materiálu
           const prevOpacity = mesh.material && mesh.material.opacityTexture;
-
           if (isViewingAllFloors) {
-            // All floors: zelená tráva
             mesh.material = generator.materials.grass;
           } else if (floorId === 0) {
-            // 1NP: tmavě šedá
             mesh.material =
               generator.materials.grass1NP || generator.materials.ground;
           } else {
-            // ostatní patra: nech zelenou
             mesh.material = generator.materials.grass;
           }
-
           if (prevOpacity) {
             mesh.material.opacityTexture = prevOpacity;
             mesh.material.transparencyMode =
@@ -359,14 +354,11 @@ const BuildingViewer = () => {
             mesh.material.needDepthPrePass = true;
           }
         } else if (isTreeMesh) {
-          // Enable tree meshes only when viewing "all floors" or for floor 7 and above
           mesh.setEnabled(isViewingAllFloors || floorId >= 6);
         } else {
-          // Show the current floor and all floors below
           const shouldEnable =
             isViewingAllFloors || floorInfo.floorNumber <= floorId;
           mesh.setEnabled(shouldEnable);
-
           if (shouldEnable) {
             if (
               mesh.name.includes("_segment") &&
@@ -442,13 +434,13 @@ const BuildingViewer = () => {
           const circleName = `range-circle-${icon.label}`;
           const circleMesh = scene.getMeshByName(circleName);
           if (circleMesh) {
-            circleMesh.setEnabled(true); // Enable mesh if mode is "all"
+            circleMesh.setEnabled(true);
           }
         });
       } else {
         scene.meshes
           .filter((mesh) => mesh.name.startsWith("range-circle"))
-          .forEach((circleMesh) => circleMesh.setEnabled(false)); // Disable otherwise
+          .forEach((circleMesh) => circleMesh.setEnabled(false));
       }
     }
   }, [scene, activeDisplayOption, circleDisplayMode, currentActiveFloor]);
@@ -474,16 +466,16 @@ const BuildingViewer = () => {
         onFloorChange={handleFloorChange}
         activeDisplayOption={activeDisplayOption}
         onOptionToggle={handleOptionToggle}
+        // NEW: pass darkMode and handler into controls
+        darkMode={darkMode}
+        onDarkModeToggle={(enabled) => setDarkMode(enabled)}
         onCircleDisplayModeChange={setCircleDisplayMode}
       />
-
       <canvas
         ref={canvasRef}
         className="render-canvas"
         style={{ width: "100%", height: "100%" }}
       />
-
-      {/* Evakuační cesty jen když je aktivní checkbox a je vybrán konkrétní floor (ne "all") */}
       {scene &&
         activeDisplayOption === "evacuation" &&
         currentActiveFloor !== "all" && (
@@ -493,7 +485,6 @@ const BuildingViewer = () => {
             floorId={currentActiveFloor}
           />
         )}
-
       {scene && activeDisplayOption === "roomBoxes" && (
         <RoomBoxes
           rooms={activeRooms}
@@ -502,11 +493,9 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       )}
-
       {scene && currentFloorParking.length > 0 && (
         <ParkingSpots scene={scene} parkingConfig={currentFloorParking} />
       )}
-
       {labelData.map((label, index) => (
         <LabelComponent
           key={index}
@@ -518,7 +507,6 @@ const BuildingViewer = () => {
           config={CONFIG_DATA}
         />
       ))}
-
       {scene &&
         activeDisplayOption === "icons" &&
         activeIcons.map((icon, index) => (
@@ -564,7 +552,6 @@ const BuildingViewer = () => {
             healthStatus={icon.healthStatus}
           />
         ))}
-
       {selectedIconInfo && (
         <div className="hover-info-box">
           <p>
@@ -580,9 +567,7 @@ const BuildingViewer = () => {
           )}
         </div>
       )}
-
       <InfoBox roomInfo={roomInfo} />
-
       {activeDisplayOption === "icons" && (
         <CircleDisplayBox
           currentMode={circleDisplayMode}
