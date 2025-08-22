@@ -5,7 +5,6 @@ import EvacuationPath from "../EvacuationPath";
 const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
   const [selectedRoomInfo, setSelectedRoomInfo] = useState(null);
   const [selectedRoomNumber, setSelectedRoomNumber] = useState(null);
-
   // Evakuace – jedna aktivní napříč patry
   const [evacOn, setEvacOn] = useState(false);
   const [evacRoomNumber, setEvacRoomNumber] = useState(null);
@@ -22,7 +21,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
     let weightedX = 0,
       weightedZ = 0,
       sumA = 0;
-
     if (room.baseBounds) {
       const { cx, cz, area } = rectCenterAndArea(room.baseBounds);
       weightedX += cx * area;
@@ -73,6 +71,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       : config.visualization.wall_height;
 
     let roomMeshes = [];
+
     const boxes = rooms.map((room, index) => {
       const roomName = room.name;
       const roomNumber = room.number;
@@ -85,7 +84,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         const width = bounds.maxX - bounds.minX;
         const depth = bounds.maxZ - bounds.minZ;
         const height = boxHeight - 0.1;
-
         const box = BABYLON.MeshBuilder.CreateBox(
           name,
           { width, depth, height },
@@ -94,7 +92,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         box.position.x = (bounds.minX + bounds.maxX) / 2;
         box.position.y = yLevel + height / 2;
         box.position.z = (bounds.minZ + bounds.maxZ) / 2;
-
         const material = new BABYLON.StandardMaterial(
           `material-${name}`,
           scene
@@ -103,7 +100,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1);
         material.specularColor = new BABYLON.Color3(0, 0, 0);
         box.material = material;
-
         box.isPickable = true;
         box.actionManager = new BABYLON.ActionManager(scene);
         box.parent = parentNode;
@@ -131,6 +127,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           )
         );
       }
+
       roomMeshes = [...roomMeshes, ...meshes];
 
       const setupActions = (roomName, roomNumber, meshes) => {
@@ -170,11 +167,12 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           );
         });
       };
-
       setupActions(roomName, roomNumber, meshes);
+
       return { parentNode, roomName, roomNumber, meshes };
     });
 
+    // Apply selection visual
     boxes.forEach(({ roomNumber, meshes }) => {
       const isSelected = selectedRoomNumber === roomNumber;
       meshes.forEach((mesh) => {
@@ -182,26 +180,73 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       });
     });
 
-    // Klik mimo – zruší výběr i evakuační trasu
-    const prevPointerDown = scene.onPointerDown;
-    const onPointerDown = (evt, pickResult) => {
-      if (!pickResult.hit || !roomMeshes.includes(pickResult.pickedMesh)) {
-        setSelectedRoomNumber(null);
-        setSelectedRoomInfo(null);
-
-        setEvacOn(false);
-        setEvacRoomNumber(null);
-        setEvacStartPoint(null);
-        setEvacFloorId(null);
-      }
-      if (typeof prevPointerDown === "function")
-        prevPointerDown(evt, pickResult);
+    // Klik mimo – zruší výběr i evakuační trasu, ale NE při drag/rotaci kamery.
+    // Navíc: výběr smažeme pouze při krátkém levém kliknutí (button === 0).
+    let pointerState = {
+      isDown: false,
+      button: null,
+      startX: 0,
+      startY: 0,
+      moved: false,
     };
-    scene.onPointerDown = onPointerDown;
+
+    const MOVE_THRESHOLD_PX = 5;
+
+    const pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
+      const ev = pointerInfo.event;
+      switch (pointerInfo.type) {
+        case BABYLON.PointerEventTypes.POINTERDOWN:
+          pointerState.isDown = true;
+          // event.button: 0 = left, 1 = middle, 2 = right
+          pointerState.button =
+            typeof ev.button === "number" ? ev.button : null;
+          pointerState.moved = false;
+          pointerState.startX = ev.clientX;
+          pointerState.startY = ev.clientY;
+          break;
+        case BABYLON.PointerEventTypes.POINTERMOVE:
+          if (pointerState.isDown) {
+            const dx = ev.clientX - pointerState.startX;
+            const dy = ev.clientY - pointerState.startY;
+            if (Math.sqrt(dx * dx + dy * dy) > MOVE_THRESHOLD_PX) {
+              pointerState.moved = true;
+            }
+          }
+          break;
+        case BABYLON.PointerEventTypes.POINTERUP: {
+          const pickInfo = pointerInfo.pickInfo;
+          // Pokud to nebyl drag (moved === false) a šlo o LEVÉ tlačítko (0), tak reagujeme jako "klik mimo"
+          const wasLeftClick = pointerState.button === 0;
+          if (!pointerState.moved && wasLeftClick) {
+            if (
+              !pickInfo ||
+              !pickInfo.hit ||
+              !roomMeshes.includes(pickInfo.pickedMesh)
+            ) {
+              setSelectedRoomNumber(null);
+              setSelectedRoomInfo(null);
+              setEvacOn(false);
+              setEvacRoomNumber(null);
+              setEvacStartPoint(null);
+              setEvacFloorId(null);
+            }
+          }
+          // Reset state
+          pointerState.isDown = false;
+          pointerState.button = null;
+          pointerState.moved = false;
+          break;
+        }
+        default:
+          break;
+      }
+    });
 
     return () => {
       boxes.forEach(({ parentNode }) => parentNode.dispose());
-      scene.onPointerDown = null;
+      if (pointerObserver) {
+        scene.onPointerObservable.remove(pointerObserver);
+      }
     };
   }, [rooms, scene, floorIndex, config, selectedRoomNumber]);
 
@@ -246,7 +291,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           <p>
             Status: <span>{selectedRoomInfo.status}</span>
           </p>
-
           <label style={{ display: "block", marginTop: 8 }}>
             <input
               type="checkbox"
@@ -257,7 +301,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
           </label>
         </div>
       )}
-
       {evacOn && evacStartPoint && evacFloorId !== null && (
         <EvacuationPath
           scene={scene}
