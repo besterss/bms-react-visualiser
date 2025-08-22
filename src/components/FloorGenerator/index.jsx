@@ -9,10 +9,22 @@ export class FloorGenerator {
     this.allFloorMeshes = [];
     this.floorData = [];
     this.materials = {};
+
+    // initialize centralized materials (creates this.materials.glass, pinkGlass, ...)
     this.initializeMaterials();
+
+    // additional materials and defaults
     this.materials.grass = this.initializeGrassMaterial();
     this.materials.water = this.initializeWaterMaterial();
-    this.materials.railing = this.initializeRailingMaterial();
+
+    // create a dark variant specifically for railings (used only in dark mode)
+    this.materials.railingDark = this.initializeRailingMaterial();
+
+    // default "railing" reference: in normal mode we want railings to be the same as glass
+    this.materials.railing = this.materials.glass;
+
+    // Track created railing meshes so we can swap their material when toggling dark mode
+    this._railingMeshes = [];
 
     // Store original glass/pinkGlass props so we can revert later
     this._originalGlassProps = {};
@@ -24,6 +36,7 @@ export class FloorGenerator {
         specularColor: this.materials.glass.specularColor.clone(),
         backFaceCulling: this.materials.glass.backFaceCulling,
         needDepthPrePass: this.materials.glass.needDepthPrePass,
+        specularPower: this.materials.glass.specularPower,
       };
     }
     if (this.materials.pinkGlass) {
@@ -34,11 +47,11 @@ export class FloorGenerator {
         specularColor: this.materials.pinkGlass.specularColor.clone(),
         backFaceCulling: this.materials.pinkGlass.backFaceCulling,
         needDepthPrePass: this.materials.pinkGlass.needDepthPrePass,
+        specularPower: this.materials.pinkGlass.specularPower,
       };
     }
 
     this.darkMode = false;
-
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
   }
@@ -53,8 +66,9 @@ export class FloorGenerator {
   }
 
   initializeRailingMaterial() {
+    // returns a material we will use as the dark variant for railings
     const railingMaterial = new BABYLON.StandardMaterial(
-      "railingMat",
+      "railingMatDark",
       this.scene
     );
     railingMaterial.diffuseColor = new BABYLON.Color3(
@@ -197,16 +211,14 @@ export class FloorGenerator {
 
   setDarkMode(enabled) {
     this.darkMode = !!enabled;
-
-    // světlejší šedá pro sklo/railing (víc do šeda, ne úplně tmavé)
     const lightGray = new BABYLON.Color3(0.35, 0.36, 0.37);
 
     // --- GLASS ---
     if (this.materials && this.materials.glass) {
       if (this.darkMode) {
-        this.materials.glass.diffuseColor = lightGray;
+        this.materials.glass.diffuseColor = lightGray.clone();
         this.materials.glass.alpha = 0.6; // semi-transparent
-        this.materials.glass.specularColor = new BABYLON.Color3(0, 0, 0); // žádné odlesky
+        this.materials.glass.specularColor = new BABYLON.Color3(0, 0, 0);
         this.materials.glass.specularPower = 4; // nízký lesk
         this.materials.glass.backFaceCulling = false; // vidět i zevnitř
         this.materials.glass.transparencyMode =
@@ -227,34 +239,45 @@ export class FloorGenerator {
     }
 
     // --- RAILING ---
-    if (this.materials && this.materials.railing) {
-      if (this.darkMode) {
-        // nastav podobné vlastnosti jako pro glass, ale můžeš ladit alpha pokud chceš jinou míru průhlednosti
-        this.materials.railing.diffuseColor = lightGray;
-        this.materials.railing.alpha = 0.55;
-        this.materials.railing.specularColor = new BABYLON.Color3(0, 0, 0);
-        this.materials.railing.specularPower = 4;
-        this.materials.railing.backFaceCulling = false;
-        this.materials.railing.transparencyMode =
-          BABYLON.Material.MATERIAL_ALPHABLEND;
-        this.materials.railing.needDepthPrePass = true;
-      } else {
-        const origR =
-          this._originalGlassProps && this._originalGlassProps.railing;
-        if (origR) {
-          this.materials.railing.diffuseColor = origR.diffuseColor.clone();
-          this.materials.railing.alpha = origR.alpha;
-          this.materials.railing.specularColor = origR.specularColor.clone();
-          this.materials.railing.specularPower = origR.specularPower;
-          this.materials.railing.backFaceCulling = origR.backFaceCulling;
-          this.materials.railing.transparencyMode = origR.transparencyMode;
-          this.materials.railing.needDepthPrePass = origR.needDepthPrePass;
-        }
+    if (this.darkMode) {
+      // ensure railingDark exists
+      if (!this.materials.railingDark) {
+        this.materials.railingDark = this.initializeRailingMaterial();
       }
+      // adjust dark variant properties (you can tune these values)
+      this.materials.railingDark.diffuseColor = lightGray.clone();
+      this.materials.railingDark.alpha = 0.55;
+      this.materials.railingDark.specularColor = new BABYLON.Color3(0, 0, 0);
+      this.materials.railingDark.specularPower = 4;
+      this.materials.railingDark.backFaceCulling = false;
+      this.materials.railingDark.transparencyMode =
+        BABYLON.Material.MATERIAL_ALPHABLEND;
+      this.materials.railingDark.needDepthPrePass = true;
+
+      // set default reference to railingDark
+      this.materials.railing = this.materials.railingDark;
+    } else {
+      // default to glass in normal mode
+      this.materials.railing = this.materials.glass;
     }
 
-    // --- PINK GLASS: NEZASAHUJEME (ponechá růžovou) ---
-    // pokud chceš po návratu z dark mode explicitně obnovit pinkGlass, následující kód to udělá:
+    // Update already created railing meshes to use the newly selected material
+    if (Array.isArray(this._railingMeshes)) {
+      const newMat = this.darkMode
+        ? this.materials.railingDark
+        : this.materials.glass;
+      this._railingMeshes.forEach((m) => {
+        try {
+          if (m && !m.isDisposed()) {
+            m.material = newMat;
+          }
+        } catch (e) {
+          // ignore disposed meshes
+        }
+      });
+    }
+
+    // --- PINK GLASS: restore original when leaving dark mode (if needed) ---
     if (
       !this.darkMode &&
       this.materials &&
@@ -489,7 +512,6 @@ export class FloorGenerator {
       }
       this.allFloorMeshes[firstAboveGroundIndex].push(grassMesh);
     }
-
     return {
       allFloorMeshes: this.allFloorMeshes,
       floorData: this.floorData,
@@ -907,7 +929,16 @@ export class FloorGenerator {
     const direction = p2.subtract(p1).normalize();
     const angle = Math.atan2(direction.x, direction.z);
     railing.rotation.y = angle;
-    railing.material = this.materials.railing;
+
+    // Use either the dark railing material (in dark mode) or glass (in normal mode)
+    const mat = this.darkMode
+      ? this.materials.railingDark || this.materials.glass
+      : this.materials.glass;
+    railing.material = mat;
+
+    // track for future toggles
+    this._railingMeshes.push(railing);
+
     railing.isPickable = false;
     this.shadowGenerator.addShadowCaster(railing);
     return railing;
@@ -988,12 +1019,9 @@ export class FloorGenerator {
     }
 
     if (railing === "yes") {
-      const railingMaterial = new BABYLON.StandardMaterial(
-        `railingMaterial_${name}_${partPosition}`,
-        this.scene
-      );
-      railingMaterial.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
-      railingMaterial.alpha = 0.5;
+      // Use centralized railing material so it follows dark mode behavior
+      const railingMaterial = this.materials.railing;
+
       const railingHeight = 1.0;
       const railingThickness = 0.05;
       for (let i = 0; i < stepsThisPart; i++) {
@@ -1017,6 +1045,9 @@ export class FloorGenerator {
         );
         railingLeft.material = railingMaterial;
         stairMeshes.push(railingLeft);
+        // track for toggling
+        this._railingMeshes.push(railingLeft);
+
         const railingRight = BABYLON.MeshBuilder.CreateBox(
           `railing_right_${name}_${partPosition}_${i}`,
           {
@@ -1033,7 +1064,9 @@ export class FloorGenerator {
         );
         railingRight.material = railingMaterial;
         stairMeshes.push(railingRight);
+        this._railingMeshes.push(railingRight);
       }
+
       if (!isLastPart && floorMesh) {
         const surfaceY =
           yLevel + (stepsBeforeThisPart + stepsThisPart) * stepHeight;
@@ -1052,6 +1085,8 @@ export class FloorGenerator {
         floorSideRailingLeft.position.z = floorMesh.position.z;
         floorSideRailingLeft.material = railingMaterial;
         stairMeshes.push(floorSideRailingLeft);
+        this._railingMeshes.push(floorSideRailingLeft);
+
         const floorSideRailingRight = BABYLON.MeshBuilder.CreateBox(
           `floor_side_railing_right_${name}_${partPosition}`,
           {
@@ -1067,6 +1102,7 @@ export class FloorGenerator {
         floorSideRailingRight.position.z = floorMesh.position.z;
         floorSideRailingRight.material = railingMaterial;
         stairMeshes.push(floorSideRailingRight);
+        this._railingMeshes.push(floorSideRailingRight);
       }
     }
 
@@ -1144,7 +1180,6 @@ export class FloorGenerator {
     const spiralStairs = [];
     const stepHeight = height / numSteps;
     const railingHeight = 1.1;
-
     // Use centralized glass material so dark mode affects it
     const glassMaterial =
       this.materials.glass ||
