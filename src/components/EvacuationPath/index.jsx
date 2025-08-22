@@ -14,7 +14,11 @@ const ARROW_START_OFFSET = 0.3;
 const DEFAULT_WALL_THICKNESS = 0.2;
 const BASE_GRAPH_MARGIN = 18;
 
-// ---------- Helpers ----------
+// strip viz defaults
+const PATH_STRIP_WIDTH = 0.75;
+const PATH_STRIP_THICKNESS = 0.04;
+const PATH_STRIP_Y_OFFSET = 0.08; // nad úrovní patra (yLevel + offset)
+
 class VGNode {
   constructor(position, id) {
     this.position = position;
@@ -365,12 +369,12 @@ const ensureSceneCache = (scene) => {
       labelCache: new Map(),
       arrowInstanceCounter: 0,
       baseVG: null,
+      pathStripMat: null,
     };
   }
   return scene.__evacCache;
 };
 
-// getOrBuildBaseVisibilityGraphForFloor(scene, floorId, obstacles, candidates, clearance, yLevel, extraPoints = [])
 const getOrBuildBaseVisibilityGraphForFloor = (
   scene,
   floorId,
@@ -421,7 +425,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
     }
   };
   for (let i = 0; i < candidates.length; i++) push(candidates[i], `cand_${i}`);
-
   for (const r of obstacles) {
     if (!rectIntersectsBBox(r, bbox)) continue;
     push({ x: r.minX, z: r.minZ }, "corner");
@@ -429,7 +432,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
     push({ x: r.maxX, z: r.maxZ }, "corner");
     push({ x: r.minX, z: r.maxZ }, "corner");
   }
-
   if (nodes.length === candidates.length) {
     push({ x: bbox.minX, z: bbox.minZ }, "bbox");
     push({ x: bbox.maxX, z: bbox.minZ }, "bbox");
@@ -457,7 +459,7 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   return value;
 };
 
-// Dijkstra to any of target node ids (simple PQ via Set)
+// Dijkstra ...
 const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   const dist = new Map(nodes.map((n) => [n.id, Infinity]));
   const prev = new Map();
@@ -579,7 +581,6 @@ const bestPathToCandidates = (
   const s = nudgeOutOfRects(start, obstacles);
   const nudgedCands = validCands.map((c) => nudgeOutOfRects(c, obstacles));
 
-  // direct quick test
   let bestDirect = null;
   for (let i = 0; i < nudgedCands.length; i++) {
     const c = nudgedCands[i];
@@ -591,7 +592,6 @@ const bestPathToCandidates = (
   }
   if (bestDirect) return bestDirect;
 
-  // build or reuse base visibility graph — include start in bbox to ensure region between start and candidates is covered
   let base = null;
   try {
     if (scene && typeof floorId !== "undefined" && floorId !== null) {
@@ -610,7 +610,6 @@ const bestPathToCandidates = (
   }
 
   if (!base) {
-    // fallback to full build
     const nodes = buildVisibilityNodes_multi(s, nudgedCands, obstacles);
     const idToNode = buildVisibilityGraph(nodes, obstacles);
     const startNode = nodes.find(
@@ -645,7 +644,6 @@ const bestPathToCandidates = (
     return { path: [], target: null, length: Infinity };
   }
 
-  // connect start to base nodes (without mutating cached nodes)
   const nodesCopy = base.nodes.slice();
   const idToNodeCopy = new Map(base.idToNode);
   const startId = `start_${s.x.toFixed(4)}_${s.z.toFixed(4)}`;
@@ -658,7 +656,6 @@ const bestPathToCandidates = (
     }
   }
 
-  // if start has no neighbors, fallback to full build to guarantee correctness
   if (startNode.neighbors.length === 0) {
     const nodes = buildVisibilityNodes_multi(s, nudgedCands, obstacles);
     const idToNode = buildVisibilityGraph(nodes, obstacles);
@@ -758,7 +755,8 @@ const createArrowTemplate = (scene) => {
   );
   arrow.name = "arrow_template";
   const mat = new BABYLON.StandardMaterial("arrow_mat", scene);
-  mat.diffuseColor = new BABYLON.Color3(0, 0, 0);
+  // změněno na červenou
+  mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
   mat.emissiveColor = mat.diffuseColor;
   mat.specularColor = new BABYLON.Color3(0, 0, 0);
   arrow.material = mat;
@@ -768,6 +766,7 @@ const createArrowTemplate = (scene) => {
 };
 
 // ---------- Visualize arrow path (uses cached template) ----------
+// nyní i kreslí žlutý strip podél segmentů a šipky jsou červené
 const visualizeArrowPath = (
   scene,
   path,
@@ -779,8 +778,24 @@ const visualizeArrowPath = (
   const parent = new BABYLON.TransformNode(`arrow_path_${Date.now()}`, scene);
   const template = createArrowTemplate(scene);
   const cache = ensureSceneCache(scene);
-  const y = yLevel + 1;
+
+  // ensure path strip material cached
+  if (!cache.pathStripMat) {
+    const m = new BABYLON.StandardMaterial("path_strip_mat", scene);
+    m.diffuseColor = new BABYLON.Color3(1, 1, 0); // yellow
+    m.emissiveColor = new BABYLON.Color3(1, 1, 0);
+    m.disableLighting = true;
+    m.backFaceCulling = false;
+    cache.pathStripMat = m;
+  }
+
+  const stripMat = cache.pathStripMat;
+
+  // arrow Y (stále nad zemí, pro lepší viditelnost)
+  const arrowY = yLevel + 1;
+  const stripY = yLevel + PATH_STRIP_Y_OFFSET;
   let remainingToNext = Math.max(0, startOffset);
+
   for (let i = 0; i < path.length - 1; i++) {
     const a = path[i],
       b = path[i + 1];
@@ -794,6 +809,29 @@ const visualizeArrowPath = (
     const ux = dx / segLen,
       uz = dz / segLen;
     const yaw = Math.atan2(ux, uz);
+
+    // vytvoříme strip pro tento segment
+    try {
+      const midX = a.x + ux * (segLen / 2);
+      const midZ = a.z + uz * (segLen / 2);
+      const strip = BABYLON.MeshBuilder.CreateBox(
+        `path_strip_${i}_${Date.now()}`,
+        {
+          width: PATH_STRIP_WIDTH,
+          height: PATH_STRIP_THICKNESS,
+          depth: Math.max(0.001, segLen),
+        },
+        scene
+      );
+      strip.material = stripMat;
+      strip.parent = parent;
+      strip.position = new BABYLON.Vector3(midX, stripY, midZ);
+      strip.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
+    } catch (e) {
+      // ignore strip creation errors
+    }
+
+    // vytvoření instancí šipek po segmentu
     let d = remainingToNext;
     while (d <= segLen) {
       const px = a.x + ux * d,
@@ -807,7 +845,7 @@ const visualizeArrowPath = (
       }
       if (!inst) break;
       inst.parent = parent;
-      inst.position = new BABYLON.Vector3(px, y, pz);
+      inst.position = new BABYLON.Vector3(px, arrowY, pz);
       inst.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
       d += spacing;
     }
@@ -905,7 +943,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
       if (disposed) return;
       const floorData = CONFIG_DATA.floors.find((f) => f.id === floorId);
       if (!floorData) return;
-      // yLevel pro toto patro
       let yLevel = 0;
       for (let i = 0; i < CONFIG_DATA.floors.length; i++) {
         if (CONFIG_DATA.floors[i].id === floorId) break;
@@ -918,16 +955,13 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           CONFIG_DATA.visualization.floor_thickness +
           CONFIG_DATA.visualization.floor_spacing;
       }
-      // Per-floor clearance
       const navClearance = getNavClearance(floorData);
-      // Překážky (cached)
       const obstacles = getCachedObstacleRectsForFloor(
         scene,
         floorData,
         navClearance,
         yLevel
       );
-      // Kandidáti B z CONFIG_DATA
       const candidates = getFloorEndCandidates(floorData);
       if (!candidates.length) return;
       const { path, target } = bestPathToCandidates(
