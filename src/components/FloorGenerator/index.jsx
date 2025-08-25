@@ -1,6 +1,5 @@
 import * as BABYLON from "babylonjs";
 import { setupSceneLighting } from "../LightingUtils";
-
 export class FloorGenerator {
   constructor(scene, engine, configData) {
     this.scene = scene;
@@ -50,7 +49,6 @@ export class FloorGenerator {
     // ensure furniture material exists
     this.initializeFurnitureMaterial();
   }
-
   // ----------------- MATERIALS -----------------
   initializeGrassMaterial() {
     const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
@@ -89,7 +87,6 @@ export class FloorGenerator {
     );
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
-
     this.materials.floorDefault = new BABYLON.StandardMaterial(
       "floorDefaultMat",
       this.scene
@@ -102,7 +99,6 @@ export class FloorGenerator {
     this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.floorDefault.backFaceCulling = false;
     this.materials.floorDefault.alpha = 1;
-
     this.materials.aboveGroundTransparent = new BABYLON.StandardMaterial(
       "aboveGroundTransparentMat",
       this.scene
@@ -122,7 +118,6 @@ export class FloorGenerator {
       0,
       0
     );
-
     this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
       "undergroundTransparentMat",
       this.scene
@@ -142,7 +137,6 @@ export class FloorGenerator {
       0,
       0
     );
-
     const grass1NP = new BABYLON.StandardMaterial("grass1NP", this.scene);
     grass1NP.diffuseColor = new BABYLON.Color3(0.44, 0.44, 0.44);
     grass1NP.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -151,7 +145,6 @@ export class FloorGenerator {
     grass1NP.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     grass1NP.needDepthPrePass = true;
     this.materials.grass1NP = grass1NP;
-
     this.materials.ground = new BABYLON.StandardMaterial(
       "groundMat",
       this.scene
@@ -163,7 +156,6 @@ export class FloorGenerator {
       BABYLON.Material.MATERIAL_ALPHABLEND;
     this.materials.ground.needDepthPrePass = true;
     this.materials.ground.specularColor = new BABYLON.Color3(0, 0, 0);
-
     this.materials.glass = new BABYLON.StandardMaterial("glassMat", this.scene);
     this.materials.glass.diffuseColor = new BABYLON.Color3(
       203 / 255,
@@ -176,7 +168,6 @@ export class FloorGenerator {
     this.materials.glass.transparencyMode =
       BABYLON.Material.MATERIAL_ALPHABLEND;
     this.materials.glass.needDepthPrePass = true;
-
     const pinkGlass = new BABYLON.StandardMaterial("pinkGlass", this.scene);
     pinkGlass.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
     pinkGlass.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -184,18 +175,15 @@ export class FloorGenerator {
     pinkGlass.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     pinkGlass.needDepthPrePass = true;
     this.materials.pinkGlass = pinkGlass;
-
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
-
     // also create furniture material here
     this.initializeFurnitureMaterial();
   }
-
   initializeFurnitureMaterial() {
     if (!this.materials.furniture) {
       const mat = new BABYLON.StandardMaterial("furnitureMat", this.scene);
@@ -205,7 +193,6 @@ export class FloorGenerator {
       this.materials.furniture = mat;
     }
   }
-
   // ----------------- DARK MODE -----------------
   setDarkMode(enabled) {
     this.darkMode = !!enabled;
@@ -284,7 +271,6 @@ export class FloorGenerator {
       this.materials.pinkGlass.needDepthPrePass = origPink.needDepthPrePass;
     }
   }
-
   // ----------------- UTIL COLOR HELPERS -----------------
   getColorFromTemperature(temp, alpha = 1.0) {
     let r, g, b;
@@ -350,10 +336,8 @@ export class FloorGenerator {
     }
     return new BABYLON.Color4(r, g, b, alpha);
   }
-
   // ----------------- FURNITURE: SIMPLE PRIMITIVES -----------------
   // jednoduchý materiál pro nábytek je vytvořen v initializeFurnitureMaterial()
-
   // createTable: now circular — width parameter is used as diameter; legs placed inside top
   createTable(
     name,
@@ -367,7 +351,6 @@ export class FloorGenerator {
     this.initializeFurnitureMaterial();
     material = material || this.materials.furniture;
     const parts = [];
-
     // top (cylinder) centered at local origin
     const top = BABYLON.MeshBuilder.CreateCylinder(
       `${name}_top`,
@@ -382,7 +365,6 @@ export class FloorGenerator {
     top.material = material;
     top.isPickable = false;
     parts.push(top);
-
     // legs inside the top
     const legDiameter = Math.max(0.03, width * 0.04);
     const legHeight = Math.max(0.4, height - 0.05);
@@ -410,7 +392,6 @@ export class FloorGenerator {
       leg.isPickable = false;
       parts.push(leg);
     });
-
     const merged = BABYLON.Mesh.MergeMeshes(
       parts,
       true,
@@ -430,7 +411,6 @@ export class FloorGenerator {
     }
     return merged;
   }
-
   // createChair: local geometry; forward +Z; position is local relative to root
   createChair(
     name,
@@ -444,7 +424,6 @@ export class FloorGenerator {
     this.initializeFurnitureMaterial();
     material = material || this.materials.furniture;
     const parts = [];
-
     const seat = BABYLON.MeshBuilder.CreateBox(
       `${name}_seat`,
       { width: seatWidth, height: 0.04, depth: seatDepth },
@@ -454,7 +433,6 @@ export class FloorGenerator {
     seat.material = material;
     seat.isPickable = false;
     parts.push(seat);
-
     const back = BABYLON.MeshBuilder.CreateBox(
       `${name}_back`,
       { width: seatWidth, height: seatHeight, depth: 0.04 },
@@ -464,7 +442,6 @@ export class FloorGenerator {
     back.material = material;
     back.isPickable = false;
     parts.push(back);
-
     const legW = 0.03;
     const legH = seatHeight;
     const offsets = [
@@ -484,7 +461,6 @@ export class FloorGenerator {
       leg.isPickable = false;
       parts.push(leg);
     });
-
     const merged = BABYLON.Mesh.MergeMeshes(
       parts,
       true,
@@ -504,7 +480,6 @@ export class FloorGenerator {
     }
     return merged;
   }
-
   // createTableWithChairs: now with chairAngleOffset and closer chairs by default
   createTableWithChairs(
     name,
@@ -518,20 +493,16 @@ export class FloorGenerator {
   ) {
     const diameter = tableOpts.width || 1.2;
     const height = tableOpts.height || 0.75;
-
     // default radius: half diameter + smaller gap (closer chairs)
     const defaultRadius = diameter / 2 + 0.25; // was 0.35 before
     const radius = chairOffsetRadius || defaultRadius;
-
     // default angle offset: shift so chairs are not at exact clock positions
     const angleOffsetDefault = Math.PI / (chairsCount * 2); // e.g. for 4 chairs -> 45deg offset
     const angleOffset =
       typeof chairAngleOffset === "number"
         ? chairAngleOffset
         : angleOffsetDefault;
-
     const root = new BABYLON.TransformNode(name, this.scene);
-
     const tableMesh = this.createTable(
       `${name}_table`,
       diameter,
@@ -546,7 +517,6 @@ export class FloorGenerator {
       tableMesh.rotation.y = rotationY || 0;
       tableMesh.position = new BABYLON.Vector3(0, 0, 0);
     }
-
     const chairMeshes = [];
     for (let i = 0; i < chairsCount; i++) {
       const ang =
@@ -569,10 +539,8 @@ export class FloorGenerator {
         chairMeshes.push(chair);
       }
     }
-
     // place root in world at requested yLevel
     root.position = new BABYLON.Vector3(position.x, position.y, position.z);
-
     try {
       if (tableMesh) this.shadowGenerator.addShadowCaster(tableMesh);
       chairMeshes.forEach((c) => {
@@ -581,10 +549,8 @@ export class FloorGenerator {
         } catch {}
       });
     } catch {}
-
     return root;
   }
-
   // ----------------- OPTIONAL: model loading (glTF) -----------------
   async loadModelToScene(
     url,
@@ -619,7 +585,6 @@ export class FloorGenerator {
       return null;
     }
   }
-
   // ----------------- COMMON CREATION HELPERS -----------------
   createGrassArea(dimensions, yLevel) {
     const grassMesh = BABYLON.MeshBuilder.CreateGround(
@@ -690,7 +655,6 @@ export class FloorGenerator {
     holeMesh.isPickable = false;
     return holeMesh;
   }
-
   // ----------------- FLOOR GENERATION -----------------
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
@@ -721,9 +685,30 @@ export class FloorGenerator {
       );
       if (floorConfig.layout && floorConfig.layout.trees) {
         floorConfig.layout.trees.forEach((treeConfig) => {
-          const tree = this.createTree(treeConfig.position, treeConfig.scale);
-          tree.position.y = yLevel + tree.position.y;
-          this.allFloorMeshes[index].push(tree);
+          // treeConfig may contain: position {x,z}, scale, type: "tree" | "bush"
+          const scale =
+            typeof treeConfig.scale === "number" ? treeConfig.scale : 1;
+          const pos = {
+            x:
+              typeof treeConfig.position?.x === "number"
+                ? treeConfig.position.x
+                : 0,
+            z:
+              typeof treeConfig.position?.z === "number"
+                ? treeConfig.position.z
+                : 0,
+          };
+          let planted = null;
+          if (treeConfig.type === "bush") {
+            planted = this.createBushInPot(pos, scale);
+          } else {
+            planted = this.createTree(pos, scale);
+          }
+          if (planted) {
+            // raise to correct floor yLevel (createTree/createBushInPot place object at ground-level)
+            planted.position.y = yLevel + planted.position.y;
+            this.allFloorMeshes[index].push(planted);
+          }
         });
       }
       floorResult.meshes.forEach((mesh) => {
@@ -776,7 +761,6 @@ export class FloorGenerator {
       floorData: this.floorData,
     };
   }
-
   createFloorFromConfig(floorConfig, yLevel, isUnderground, is1NP) {
     const floorMeshes = [];
     const floorName = `floor_${floorConfig.id}`;
@@ -851,7 +835,6 @@ export class FloorGenerator {
           roomIdx++;
         }
       }
-
       // --- FURNITURE ---
       if (layout.furniture && Array.isArray(layout.furniture)) {
         layout.furniture.forEach((furn, idx) => {
@@ -919,7 +902,6 @@ export class FloorGenerator {
         });
       }
     }
-
     // holes
     if (Array.isArray(floorConfig.holes)) {
       floorConfig.holes.forEach((hole) => {
@@ -944,7 +926,6 @@ export class FloorGenerator {
         holeBox.dispose();
       });
     }
-
     // walls and other geometry unchanged...
     if (layout && layout.walls) {
       layout.walls.forEach((wall, index) => {
@@ -1100,7 +1081,6 @@ export class FloorGenerator {
         }
       });
     }
-
     const area = floorConfig.segments
       ? floorConfig.segments.reduce(
           (total, segment) => total + segment.width * segment.depth,
@@ -1112,7 +1092,6 @@ export class FloorGenerator {
       area: area,
     };
   }
-
   createWallSegment(
     p1,
     p2,
@@ -1205,7 +1184,6 @@ export class FloorGenerator {
     this.shadowGenerator.addShadowCaster(curvedWall);
     return curvedWall;
   }
-
   createCircularWall(
     center,
     radius,
@@ -1251,7 +1229,6 @@ export class FloorGenerator {
     this.shadowGenerator.addShadowCaster(circularWall);
     return circularWall;
   }
-
   createRailingSegment(p1, p2, name, yLevel, railingHeight, isUnderground) {
     const railingLength = BABYLON.Vector3.Distance(p1, p2);
     const railing = BABYLON.MeshBuilder.CreateBox(
@@ -1277,7 +1254,6 @@ export class FloorGenerator {
     this.shadowGenerator.addShadowCaster(railing);
     return railing;
   }
-
   createStairs(
     position,
     stepWidth,
@@ -1453,7 +1429,6 @@ export class FloorGenerator {
     if (stairs) stairs.name = name;
     return stairs;
   }
-
   createTree(position, scale) {
     const trunkHeight = 2 * scale;
     const trunkDiameter = 0.3 * scale;
@@ -1501,6 +1476,171 @@ export class FloorGenerator {
     tree.isPickable = false;
     tree.name = `tree_${position.x}_${position.z}`;
     return tree;
+  }
+
+  // NEW: createBushInPot (keř v květináči) — vrací TransformNode s dětmi (pot, soil, foliage)
+  createBushInPot(position, scale = 1) {
+    // materials (cached in this.materials)
+    if (!this.materials.pot) {
+      const potMat = new BABYLON.StandardMaterial("potMat", this.scene);
+      potMat.diffuseColor = new BABYLON.Color3(0.55, 0.27, 0.07); // terracotta
+      potMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+      this.materials.pot = potMat;
+    }
+    if (!this.materials.soil) {
+      const soilMat = new BABYLON.StandardMaterial("soilMat", this.scene);
+      soilMat.diffuseColor = new BABYLON.Color3(0.12, 0.07, 0.03); // dark soil
+      soilMat.specularColor = new BABYLON.Color3(0, 0, 0);
+      this.materials.soil = soilMat;
+    }
+    if (!this.materials.bushLeaves) {
+      const leavesMat = new BABYLON.StandardMaterial(
+        "bushLeavesMat",
+        this.scene
+      );
+      leavesMat.diffuseColor = new BABYLON.Color3(0.07, 0.45, 0.07); // green
+      leavesMat.specularColor = new BABYLON.Color3(0, 0, 0);
+      this.materials.bushLeaves = leavesMat;
+    }
+
+    const nameBase = `bush_${position.x}_${position.z}`;
+
+    // root node (group)
+    const root = new BABYLON.TransformNode(nameBase, this.scene);
+    root.position = new BABYLON.Vector3(
+      typeof position.x === "number" ? position.x : 0,
+      typeof position.y === "number" ? position.y : 0,
+      typeof position.z === "number" ? position.z : 0
+    );
+
+    // dimensions (local units)
+    const potHeight = 0.35 * scale;
+    const potTopDia = 0.45 * scale;
+    const potBottomDia = 0.32 * scale;
+    const rimInset = 0.04 * scale;
+
+    // Create outer and inner cylinders for pot (centered at origin)
+    const outer = BABYLON.MeshBuilder.CreateCylinder(
+      `${nameBase}_outer_tmp`,
+      {
+        diameterTop: potTopDia,
+        diameterBottom: potBottomDia,
+        height: potHeight,
+        tessellation: 32,
+      },
+      this.scene
+    );
+    const inner = BABYLON.MeshBuilder.CreateCylinder(
+      `${nameBase}_inner_tmp`,
+      {
+        diameterTop: Math.max(0.01, potTopDia - rimInset * 2),
+        diameterBottom: Math.max(0.01, potBottomDia - rimInset * 2),
+        height: potHeight - 0.02,
+        tessellation: 32,
+      },
+      this.scene
+    );
+    // Slightly raise inner so rim remains
+    inner.position.y = 0.01;
+
+    // CSG subtract inner from outer to get a hollow pot
+    let pot;
+    try {
+      pot = BABYLON.CSG.FromMesh(outer)
+        .subtract(BABYLON.CSG.FromMesh(inner))
+        .toMesh(`${nameBase}_pot`, this.materials.pot, this.scene);
+    } catch (e) {
+      // Fallback: if CSG not available for some reason, just use outer as pot
+      pot = outer;
+      pot.name = `${nameBase}_pot`;
+      pot.material = this.materials.pot;
+      inner.dispose();
+    }
+    // Dispose temp meshes if still present
+    try {
+      outer.dispose();
+    } catch {}
+    try {
+      inner.dispose();
+    } catch {}
+
+    // Position pot relative to root (so bottom sits at y=0)
+    pot.parent = root;
+    pot.position = new BABYLON.Vector3(0, potHeight / 2, 0);
+    pot.isPickable = false;
+
+    // soil fill (small cylinder inside pot)
+    const soilHeight = 0.08 * scale;
+    const soilDia = Math.max(0.01, potTopDia - rimInset * 1.2);
+    const soil = BABYLON.MeshBuilder.CreateCylinder(
+      `${nameBase}_soil`,
+      { diameter: soilDia, height: soilHeight, tessellation: 24 },
+      this.scene
+    );
+    soil.material = this.materials.soil;
+    soil.parent = root;
+    soil.position = new BABYLON.Vector3(
+      0,
+      potHeight - soilHeight / 2 - 0.01,
+      0
+    );
+    soil.isPickable = false;
+
+    // foliage: overlapping spheres with small offsets (relative to root)
+    const foliage = [];
+    const foliageBalls = 4 + Math.floor(Math.random() * 3); // 4..6
+    const baseFoliageDiameter = 0.4 * scale;
+    const foliageBaseY = potHeight + 0.02; // slightly above pot rim
+    for (let i = 0; i < foliageBalls; i++) {
+      const d = baseFoliageDiameter * (0.85 + Math.random() * 0.3);
+      const ball = BABYLON.MeshBuilder.CreateSphere(
+        `${nameBase}_leaf_${i}`,
+        { diameter: d, segments: 16 },
+        this.scene
+      );
+      const offsetX = (Math.random() - 0.5) * potTopDia * 0.6;
+      const offsetZ = (Math.random() - 0.5) * potTopDia * 0.6;
+      const offsetY =
+        foliageBaseY +
+        (Math.random() * 0.2 - 0.05) * scale +
+        d / 2 -
+        0.1 * scale;
+      ball.parent = root;
+      ball.position = new BABYLON.Vector3(offsetX, offsetY, offsetZ);
+      ball.material = this.materials.bushLeaves;
+      ball.isPickable = false;
+      foliage.push(ball);
+    }
+
+    // add a small decorative rim (optional, thin torus-like using torus if available)
+    try {
+      const rim = BABYLON.MeshBuilder.CreateTorus(
+        `${nameBase}_rim`,
+        {
+          diameter: potTopDia - 0.01,
+          thickness: 0.03 * scale,
+          tessellation: 24,
+        },
+        this.scene
+      );
+      rim.parent = root;
+      rim.material = this.materials.pot;
+      rim.position = new BABYLON.Vector3(0, potHeight - 0.01, 0);
+      rim.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
+      rim.isPickable = false;
+    } catch (e) {
+      // torus might not be available in some builds — ignore if error
+    }
+
+    // add shadows if possible
+    try {
+      this.shadowGenerator.addShadowCaster(pot);
+      this.shadowGenerator.addShadowCaster(...foliage);
+    } catch (e) {
+      /* ignore */
+    }
+
+    return root;
   }
 
   createSpiralStairs(
@@ -1601,7 +1741,6 @@ export class FloorGenerator {
       true
     );
   }
-
   createPinkGlassPartition(start, end, width, yLevel, height) {
     const length = new BABYLON.Vector3(
       end.x - start.x,

@@ -1,7 +1,6 @@
 import * as BABYLON from "babylonjs";
 import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import React, { useEffect } from "react";
-
 const DEFAULT_CLEARANCE = 0.5;
 let SAMPLE_STEP = 0.08;
 const PASSABLE_UNDER_Y = 2.0;
@@ -13,11 +12,12 @@ const ARROW_HEAD_DIAM = 0.3;
 const ARROW_START_OFFSET = 0.3;
 const DEFAULT_WALL_THICKNESS = 0.2;
 const BASE_GRAPH_MARGIN = 18;
-
 // strip viz defaults
 const PATH_STRIP_WIDTH = 0.75;
 const PATH_STRIP_THICKNESS = 0.04;
 const PATH_STRIP_Y_OFFSET = 0.08; // nad úrovní patra (yLevel + offset)
+const RIBBON_SAMPLING_STEP = 0.15; // vzdálenost mezi vzorky pro hladký sampling
+const PATCH_EXTRA_LEN = 0.2; // přidaná délka patchi ke šířce šipky (pro lepší vizuál)
 
 class VGNode {
   constructor(position, id) {
@@ -45,7 +45,6 @@ const rectIntersectsBBox = (r, bbox) =>
     r.maxZ < bbox.minZ ||
     r.minZ > bbox.maxZ
   );
-
 // ---------- Obstacles ----------
 const collectObstacleRects = (
   floorData,
@@ -181,7 +180,6 @@ const collectNamedMeshRects = (scene, yLevel, clearance, nameIncludes = []) => {
   }
   return rects;
 };
-
 // ---------- Visibility + path ----------
 const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   const dx = b.x - a.x;
@@ -356,7 +354,6 @@ const pathLength = (path) => {
     L += getDistance(path[i], path[i + 1]);
   return L;
 };
-
 // ---------- Scene cache & base graph builder ----------
 const ensureSceneCache = (scene) => {
   if (!scene.__evacCache) {
@@ -374,7 +371,6 @@ const ensureSceneCache = (scene) => {
   }
   return scene.__evacCache;
 };
-
 const getOrBuildBaseVisibilityGraphForFloor = (
   scene,
   floorId,
@@ -385,7 +381,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   extraPoints = []
 ) => {
   const cache = ensureSceneCache(scene);
-
   const bbox = {
     minX: Infinity,
     maxX: -Infinity,
@@ -406,7 +401,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   bbox.maxX += BASE_GRAPH_MARGIN;
   bbox.minZ -= BASE_GRAPH_MARGIN;
   bbox.maxZ += BASE_GRAPH_MARGIN;
-
   const regionKey = `${Math.floor(bbox.minX / BASE_GRAPH_MARGIN)}_${Math.floor(
     bbox.minZ / BASE_GRAPH_MARGIN
   )}_${Math.floor(bbox.maxX / BASE_GRAPH_MARGIN)}_${Math.floor(
@@ -414,7 +408,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   )}`;
   const key = `baseVG_${floorId}_${candidates.length}_${clearance}_${yLevel}_${regionKey}`;
   if (cache.baseVG && cache.baseVG.key === key) return cache.baseVG.value;
-
   const nodes = [];
   const seen = new Set();
   const push = (pt, label) => {
@@ -438,9 +431,7 @@ const getOrBuildBaseVisibilityGraphForFloor = (
     push({ x: bbox.maxX, z: bbox.maxZ }, "bbox");
     push({ x: bbox.minX, z: bbox.maxZ }, "bbox");
   }
-
   const idToNode = buildVisibilityGraph(nodes, obstacles);
-
   const candidateNodeIds = new Set();
   const mapNodeIdToCandidateIdx = new Map();
   for (let i = 0; i < candidates.length; i++) {
@@ -453,12 +444,10 @@ const getOrBuildBaseVisibilityGraphForFloor = (
       mapNodeIdToCandidateIdx.set(found.id, i);
     }
   }
-
   const value = { nodes, idToNode, candidateNodeIds, mapNodeIdToCandidateIdx };
   cache.baseVG = { key, value };
   return value;
 };
-
 // Dijkstra ...
 const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   const dist = new Map(nodes.map((n) => [n.id, Infinity]));
@@ -500,7 +489,6 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   }
   return [];
 };
-
 // ---------- Best-of-candidates (optimized multi-target) ----------
 const getFloorEndCandidates = (floorData) => {
   const list =
@@ -563,7 +551,6 @@ const getCachedObstacleRectsForFloor = (
   cache.obstacleByFloor.set(key, all);
   return all;
 };
-
 const bestPathToCandidates = (
   start,
   candidates,
@@ -577,10 +564,8 @@ const bestPathToCandidates = (
     (p) => p && typeof p.x === "number" && typeof p.z === "number"
   );
   if (!validCands.length) return { path: [], target: null, length: Infinity };
-
   const s = nudgeOutOfRects(start, obstacles);
   const nudgedCands = validCands.map((c) => nudgeOutOfRects(c, obstacles));
-
   let bestDirect = null;
   for (let i = 0; i < nudgedCands.length; i++) {
     const c = nudgedCands[i];
@@ -591,7 +576,6 @@ const bestPathToCandidates = (
     }
   }
   if (bestDirect) return bestDirect;
-
   let base = null;
   try {
     if (scene && typeof floorId !== "undefined" && floorId !== null) {
@@ -608,7 +592,6 @@ const bestPathToCandidates = (
   } catch (e) {
     base = null;
   }
-
   if (!base) {
     const nodes = buildVisibilityNodes_multi(s, nudgedCands, obstacles);
     const idToNode = buildVisibilityGraph(nodes, obstacles);
@@ -643,7 +626,6 @@ const bestPathToCandidates = (
     }
     return { path: [], target: null, length: Infinity };
   }
-
   const nodesCopy = base.nodes.slice();
   const idToNodeCopy = new Map(base.idToNode);
   const startId = `start_${s.x.toFixed(4)}_${s.z.toFixed(4)}`;
@@ -655,7 +637,6 @@ const bestPathToCandidates = (
       startNode.neighbors.push({ id: n.id, cost: d });
     }
   }
-
   if (startNode.neighbors.length === 0) {
     const nodes = buildVisibilityNodes_multi(s, nudgedCands, obstacles);
     const idToNode = buildVisibilityGraph(nodes, obstacles);
@@ -690,13 +671,11 @@ const bestPathToCandidates = (
     }
     return { path: [], target: null, length: Infinity };
   }
-
   nodesCopy.push(startNode);
   idToNodeCopy.set(startId, startNode);
   const candidateNodeIds = new Set(base.candidateNodeIds);
   if (candidateNodeIds.size === 0)
     return { path: [], target: null, length: Infinity };
-
   const raw = dijkstraToAnyTarget(
     nodesCopy,
     idToNodeCopy,
@@ -716,7 +695,6 @@ const bestPathToCandidates = (
   }
   return { path: [], target: null, length: Infinity };
 };
-
 // ---------- Arrow template caching ----------
 const createArrowTemplate = (scene) => {
   if (!scene) return null;
@@ -755,7 +733,7 @@ const createArrowTemplate = (scene) => {
   );
   arrow.name = "arrow_template";
   const mat = new BABYLON.StandardMaterial("arrow_mat", scene);
-  // změněno na červenou
+  // šipky červené
   mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
   mat.emissiveColor = mat.diffuseColor;
   mat.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -764,9 +742,29 @@ const createArrowTemplate = (scene) => {
   cache.arrowTemplate = arrow;
   return arrow;
 };
-
+// ---------- Helper: sample path densely ----------
+const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
+  if (!path || path.length < 2) return path ? [...path] : [];
+  const out = [];
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = path[i];
+    const b = path[i + 1];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const segLen = Math.sqrt(dx * dx + dz * dz);
+    if (segLen < 1e-6) continue;
+    const steps = Math.max(1, Math.ceil(segLen / step));
+    for (let s = 0; s < steps; s++) {
+      const t = s / steps;
+      out.push({ x: a.x + dx * t, z: a.z + dz * t });
+    }
+  }
+  // push last
+  out.push({ x: path[path.length - 1].x, z: path[path.length - 1].z });
+  return out;
+};
 // ---------- Visualize arrow path (uses cached template) ----------
-// nyní i kreslí žlutý strip podél segmentů a šipky jsou červené
+// Vytváří žluté patchy pouze pod šipkami a šipky jsou nad nimi (embedded look).
 const visualizeArrowPath = (
   scene,
   path,
@@ -778,7 +776,6 @@ const visualizeArrowPath = (
   const parent = new BABYLON.TransformNode(`arrow_path_${Date.now()}`, scene);
   const template = createArrowTemplate(scene);
   const cache = ensureSceneCache(scene);
-
   // ensure path strip material cached
   if (!cache.pathStripMat) {
     const m = new BABYLON.StandardMaterial("path_strip_mat", scene);
@@ -788,72 +785,117 @@ const visualizeArrowPath = (
     m.backFaceCulling = false;
     cache.pathStripMat = m;
   }
-
   const stripMat = cache.pathStripMat;
-
-  // arrow Y (stále nad zemí, pro lepší viditelnost)
-  const arrowY = yLevel + 1;
+  // arrow Y (stále nad páskem, pro lepší viditelnost)
   const stripY = yLevel + PATH_STRIP_Y_OFFSET;
-  let remainingToNext = Math.max(0, startOffset);
+  const arrowY = stripY + PATH_STRIP_THICKNESS / 2 + 0.02; // malé odsazení nad páskem
 
-  for (let i = 0; i < path.length - 1; i++) {
-    const a = path[i],
-      b = path[i + 1];
-    const dx = b.x - a.x,
-      dz = b.z - a.z;
+  // densify centerline for stable sampling
+  const center = densifyPath(path, RIBBON_SAMPLING_STEP);
+  if (center.length < 2) return parent;
+
+  // Prepare to create small patch meshes under each arrow and then merge
+  const patches = [];
+  let remaining = Math.max(0, startOffset);
+  for (let i = 0; i < center.length - 1; i++) {
+    const a = center[i];
+    const b = center[i + 1];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
     const segLen = Math.sqrt(dx * dx + dz * dz);
     if (segLen < 1e-6) {
-      remainingToNext = Math.max(0, remainingToNext - segLen);
+      remaining = Math.max(0, remaining - segLen);
       continue;
     }
-    const ux = dx / segLen,
-      uz = dz / segLen;
+    const ux = dx / segLen;
+    const uz = dz / segLen;
     const yaw = Math.atan2(ux, uz);
-
-    // vytvoříme strip pro tento segment
-    try {
-      const midX = a.x + ux * (segLen / 2);
-      const midZ = a.z + uz * (segLen / 2);
-      const strip = BABYLON.MeshBuilder.CreateBox(
-        `path_strip_${i}_${Date.now()}`,
-        {
-          width: PATH_STRIP_WIDTH,
-          height: PATH_STRIP_THICKNESS,
-          depth: Math.max(0.001, segLen),
-        },
-        scene
-      );
-      strip.material = stripMat;
-      strip.parent = parent;
-      strip.position = new BABYLON.Vector3(midX, stripY, midZ);
-      strip.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
-    } catch (e) {
-      // ignore strip creation errors
-    }
-
-    // vytvoření instancí šipek po segmentu
-    let d = remainingToNext;
+    let d = remaining;
     while (d <= segLen) {
-      const px = a.x + ux * d,
-        pz = a.z + uz * d;
-      const instName = `arrow_inst_${cache.arrowInstanceCounter++}`;
+      const px = a.x + ux * d;
+      const pz = a.z + uz * d;
+
+      // create small patch (box) under the arrow: width x patchLen x thickness
+      const patchLen = Math.max(ARROW_SHAFT_LEN, spacing) + PATCH_EXTRA_LEN;
+      try {
+        const patch = BABYLON.MeshBuilder.CreateBox(
+          `path_patch_${i}_${d}_${Date.now()}`,
+          {
+            width: PATH_STRIP_WIDTH,
+            height: PATH_STRIP_THICKNESS,
+            depth: patchLen,
+          },
+          scene
+        );
+        patch.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(
+          0,
+          yaw,
+          0
+        );
+        patch.position = new BABYLON.Vector3(px, stripY, pz);
+        patch.material = stripMat;
+        patches.push(patch);
+      } catch (e) {
+        // ignore patch creation failure for this instance
+      }
+
+      // create arrow instance
+      const instName = `arrow_inst_${cache.arrowInstanceCounter++}_${Date.now()}`;
       let inst = null;
       try {
         inst = template.createInstance(instName);
       } catch (e) {
-        inst = template.clone(instName, parent, true);
+        try {
+          inst = template.clone(instName, parent, true);
+        } catch (ee) {
+          inst = null;
+        }
       }
-      if (!inst) break;
-      inst.parent = parent;
-      inst.position = new BABYLON.Vector3(px, arrowY, pz);
-      inst.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
+      if (inst) {
+        inst.parent = parent;
+        inst.position = new BABYLON.Vector3(px, arrowY, pz);
+        inst.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
+      }
+
       d += spacing;
     }
-    remainingToNext = d - segLen;
+    remaining = d - segLen;
   }
+
+  // sloučení všech patch do jednoho mesh (pokud existují)
+  let mergedStrip = null;
+  if (patches.length === 1) {
+    mergedStrip = patches[0];
+    mergedStrip.parent = parent;
+    mergedStrip.material = stripMat;
+  } else if (patches.length > 1) {
+    try {
+      // MergeMeshes(disposeSource=true) => vytvoří nový mesh a zruší zdrojové patche
+      mergedStrip = BABYLON.Mesh.MergeMeshes(
+        patches,
+        true,
+        true,
+        undefined,
+        false,
+        true
+      );
+      if (mergedStrip) {
+        mergedStrip.name = `merged_path_strip_${Date.now()}`;
+        mergedStrip.parent = parent;
+        mergedStrip.material = stripMat;
+      }
+    } catch (e) {
+      // Pokud merge selže, parentujeme jednotlivé patche
+      for (const p of patches) {
+        try {
+          p.parent = parent;
+        } catch {}
+      }
+    }
+  }
+
   return parent;
 };
-
 // ---------- Endpoints viz and label caching ----------
 const makeLabel = (scene, text, pos, y) => {
   const cache = ensureSceneCache(scene);
@@ -923,7 +965,6 @@ const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
   const endLabel = makeLabel(scene, endLabelText, end, yLevel + 1.5);
   return [startSphere, endSphere, startLabel, endLabel];
 };
-
 // ---------- Component ----------
 const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
   useEffect(() => {

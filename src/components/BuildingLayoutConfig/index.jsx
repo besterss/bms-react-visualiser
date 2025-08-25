@@ -15633,14 +15633,17 @@ export const CONFIG_DATA = {
           {
             position: { x: 2.5, z: 2.5 }, // Position where you want the tree
             scale: 3.0, // Scale size of the tree
+            type: "bush",
           },
           {
             position: { x: 2, z: -1 }, // Position where you want the tree
             scale: 2.0, // Scale size of the tree
+            type: "bush",
           },
           {
             position: { x: 4, z: -4 }, // Position where you want the tree
             scale: 2.5, // Scale size of the tree
+            type: "bush",
           },
         ],
         walls: [
@@ -17203,7 +17206,7 @@ export const CONFIG_DATA = {
             start: { x: -0.45, z: 6.4 },
             end: { x: -0.45, z: -7.44 },
             partitionWidth: 0.05,
-            railingHeight: 1.2,
+            railingHeight: 3.1,
           },
           {
             //dira - vpravo
@@ -17211,7 +17214,7 @@ export const CONFIG_DATA = {
             start: { x: 6.19, z: 6.4 },
             end: { x: 6.19, z: -7.44 },
             partitionWidth: 0.05,
-            railingHeight: 1.2,
+            railingHeight: 3.1,
           },
           {
             //dira - nahore
@@ -17219,7 +17222,7 @@ export const CONFIG_DATA = {
             start: { x: -0.475, z: 6.4 },
             end: { x: 6.215, z: 6.4 },
             partitionWidth: 0.05,
-            railingHeight: 1.2,
+            railingHeight: 3.1,
           },
           {
             //dira - dole
@@ -17227,7 +17230,7 @@ export const CONFIG_DATA = {
             start: { x: -0.475, z: -7.44 },
             end: { x: 6.215, z: -7.44 },
             partitionWidth: 0.05,
-            railingHeight: 1.2,
+            railingHeight: 3.1,
           },
         ],
       },

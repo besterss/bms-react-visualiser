@@ -32,47 +32,108 @@ const BuildingViewer = () => {
     activeFloor: "N/A",
   });
   const [circleDisplayMode, setCircleDisplayMode] = useState("click");
-
   // NEW: dark mode state
   const [darkMode, setDarkMode] = useState(false);
 
-  // Pomocná funkce: uklid evakuačních meshů
+  // Pomocná funkce: uklid evakuačních meshů (rozšířená)
   const clearEvacuationMeshes = (scn) => {
     if (!scn) return;
-    const meshPrefixes = [
+
+    // Prefixy/klíčová slova pro mesh jména, která chceme odstranit
+    const namePrefixes = [
       "evacuation_path_",
       "evacuation_bubble_",
       "start_bubble_",
       "end_bubble_",
+      "evac_start_",
+      "evac_end_",
       "arrow_inst_",
       "arrow_template",
+      "path_strip_",
+      "path_ribbon_",
+      "path_patch_",
+      "merged_path_strip_",
+      "path_patch_",
+      "evac_route_",
+      "evac_label_", // pokud EvacuationPath používá tento prefix pro své labely
     ];
+    // klíčová slova, která mohou být kdekoli v názvu
+    const nameTokens = [
+      "evac",
+      "arrow",
+      "path",
+      "patch",
+      "ribbon",
+      "bubble",
+      "merged_path_strip",
+    ];
+
+    // odstranit mesh, pokud začíná některým prefixem nebo obsahuje některý token
     if (scn.meshes && scn.meshes.length) {
       scn.meshes
-        .filter(
-          (m) =>
-            m && m.name && meshPrefixes.some((pref) => m.name.startsWith(pref))
-        )
+        .filter((m) => {
+          if (!m || !m.name) return false;
+          const nm = m.name;
+          const starts = namePrefixes.some((pref) => nm.startsWith(pref));
+          const contains = nameTokens.some((tok) => nm.includes(tok));
+          // vynech některé běžné mesh jména, která by náhodou obsahovala tokeny (pokud máš takové, přidej sem výjimky)
+          // např. necháme meshy začínající "label" nedotčeny (pokud nechceš mazat room labely)
+          // zde tedy nepouštíme obecné "label" do contains testu
+          return starts || contains;
+        })
         .forEach((m) => {
           try {
             m.dispose();
-          } catch {}
+          } catch (e) {
+            // ignore
+          }
         });
     }
+
+    // odstranit transformNodes (parenty/přes group), pokud obsahují evak klíč
     if (scn.transformNodes && scn.transformNodes.length) {
       scn.transformNodes
-        .filter(
-          (tn) =>
-            tn &&
-            tn.name &&
-            (tn.name.startsWith("arrow_path_") ||
-              tn.name.startsWith("evacuation_path_"))
-        )
+        .filter((tn) => {
+          if (!tn || !tn.name) return false;
+          const nm = tn.name.toLowerCase();
+          return (
+            nm.startsWith("arrow_path_") ||
+            nm.startsWith("evacuation_path_") ||
+            nm.includes("evac") ||
+            nm.includes("arrow") ||
+            nm.includes("path")
+          );
+        })
         .forEach((tn) => {
           try {
+            // dispose children + itself
             tn.dispose(true, true);
-          } catch {}
+          } catch (e) {
+            // ignore
+          }
         });
+    }
+
+    // případně odstranit materiály/textury, které by byly použity pouze pro tyto vizualizace
+    try {
+      const matNames = [
+        "path_strip_mat",
+        "arrow_mat",
+        "evac_mat",
+        "evac_label_mat",
+      ];
+      matNames.forEach((mn) => {
+        const mat =
+          scn.getMaterialByName?.(mn) ||
+          scn.materials?.find?.((m) => m && m.name === mn);
+        if (mat) {
+          try {
+            mat.dispose();
+          } catch {}
+        }
+      });
+    } catch (e) {
+      // ignore
     }
   };
 
@@ -85,27 +146,22 @@ const BuildingViewer = () => {
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
-
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
       CONFIG_DATA
     );
     const result = generator.generateFloors();
-
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
-
     // synchronizace darkMode pro případ, že je darkMode jiný než výchozí
     if (typeof darkMode !== "undefined") {
       generator.setDarkMode(darkMode);
     }
-
     setupCamera(babylonScene, result.floorData);
-
     if (result.floorData.length > 0) {
       showFloor(
         result.floorData[0].floorNumber,
@@ -120,18 +176,14 @@ const BuildingViewer = () => {
         floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
-
     setupEventHandlers(babylonScene);
-
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
     });
-
     const handleResize = () => {
       babylonEngine.resize();
     };
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
       babylonEngine.dispose();
@@ -201,6 +253,7 @@ const BuildingViewer = () => {
   useEffect(() => {
     if (!scene) return;
     if (activeDisplayOption === "evacuation") {
+      // při změně patra necháme vždy uklidit staré evakuační prvky
       clearEvacuationMeshes(scene);
     }
   }, [scene, currentActiveFloor, activeDisplayOption]);
@@ -309,6 +362,17 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
+
+    // --- NOVÉ: vyčistit evakuační meshe (vše: šipky, žluté patchy/ribbony, bubliny, endpointy) ---
+    if (scene) {
+      try {
+        clearEvacuationMeshes(scene);
+      } catch (e) {
+        // ignore
+      }
+    }
+    // --- konec nové části
+
     setCurrentActiveFloor(floorId);
     const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
@@ -385,7 +449,6 @@ const BuildingViewer = () => {
         }
       });
     });
-
     if (!isViewingAllFloors) {
       const selectedFloor = floors.find((f) => f && f.floorNumber === floorId);
       if (selectedFloor) {
@@ -407,6 +470,15 @@ const BuildingViewer = () => {
   };
 
   const handleFloorChange = (floorId) => {
+    // --- NOVÉ: vyčistit evakuační meshe při požadavku na změnu patra ---
+    if (scene) {
+      try {
+        clearEvacuationMeshes(scene);
+      } catch (e) {
+        // ignore
+      }
+    }
+    // --- konec nové části ---
     showFloor(floorId);
     setRoomInfo((prev) => ({
       ...prev,
@@ -417,6 +489,8 @@ const BuildingViewer = () => {
 
   const clearLabels = (scene) => {
     if (!scene || !scene.meshes) return;
+    // Pozor: necháme room-labely (ty máš jinde), proto zde mažeme pouze mesh whose name starts with "label"
+    // Pokud chceš zachovat i ty endpoint labely vytvořené EvacuationPath, je lepší EvacuationPath vytvářet je s prefixem "evac_label_".
     scene.meshes
       .filter((mesh) => mesh.name.startsWith("label"))
       .forEach((mesh) => {
