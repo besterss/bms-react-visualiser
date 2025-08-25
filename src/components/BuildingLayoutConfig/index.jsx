@@ -5355,66 +5355,183 @@ export const CONFIG_DATA = {
         furniture: [
           {
             type: "table",
-            x: -10,
-            z: 0,
+            x: 12,
+            z: -12,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
+            z: -12,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
             chairs: 4,
             chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
           },
           {
             type: "table",
-            x: -12,
-            z: -3,
+            x: 12,
+            z: -15,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
+            z: -15,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
             chairs: 4,
             chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
           },
           {
             type: "table",
-            x: -10,
+            x: 12,
+            z: -9,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
+            z: -9,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 12,
+            z: -6,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
             z: -6,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
             chairs: 4,
             chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
           },
           {
             type: "table",
-            x: -12,
-            z: 3,
+            x: 12,
+            z: 15,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
+            z: 15,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
             chairs: 4,
             chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
           },
           {
             type: "table",
-            x: -10,
+            x: 12,
+            z: 12,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
+            z: 12,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 12,
+            z: 9,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
+            z: 9,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 12,
+            z: 6,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
             z: 6,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
             chairs: 4,
             chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
           },
           {
             type: "table",
-            x: -8,
+            x: 12,
+            z: 3,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1,
+            chairAngleOffset: Math.PI / 4,
+          },
+          {
+            type: "table",
+            x: 15,
             z: 3,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
             chairs: 4,
             chairRadius: 1.1, // vzdálenost židlí od středu stolu
-          },
-          {
-            type: "table",
-            x: -8,
-            z: -3,
-            rotation: 0,
-            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
-            chairs: 4,
-            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+            chairAngleOffset: Math.PI / 4,
           },
         ],
 
