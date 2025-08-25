@@ -5352,6 +5352,72 @@ export const CONFIG_DATA = {
           rows: 1,
         },
 
+        furniture: [
+          {
+            type: "table",
+            x: -10,
+            z: 0,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+          {
+            type: "table",
+            x: -12,
+            z: -3,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+          {
+            type: "table",
+            x: -10,
+            z: -6,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+          {
+            type: "table",
+            x: -12,
+            z: 3,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+          {
+            type: "table",
+            x: -10,
+            z: 6,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+          {
+            type: "table",
+            x: -8,
+            z: 3,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+          {
+            type: "table",
+            x: -8,
+            z: -3,
+            rotation: 0,
+            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
+            chairs: 4,
+            chairRadius: 1.1, // vzdálenost židlí od středu stolu
+          },
+        ],
+
         walls: [
           {
             type: "partition",

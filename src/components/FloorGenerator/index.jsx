@@ -9,23 +9,17 @@ export class FloorGenerator {
     this.allFloorMeshes = [];
     this.floorData = [];
     this.materials = {};
-
     // initialize centralized materials (creates this.materials.glass, pinkGlass, ...)
     this.initializeMaterials();
-
     // additional materials and defaults
     this.materials.grass = this.initializeGrassMaterial();
     this.materials.water = this.initializeWaterMaterial();
-
     // create a dark variant specifically for railings (used only in dark mode)
     this.materials.railingDark = this.initializeRailingMaterial();
-
     // default "railing" reference: in normal mode we want railings to be the same as glass
     this.materials.railing = this.materials.glass;
-
     // Track created railing meshes so we can swap their material when toggling dark mode
     this._railingMeshes = [];
-
     // Store original glass/pinkGlass props so we can revert later
     this._originalGlassProps = {};
     if (this.materials.glass) {
@@ -50,12 +44,14 @@ export class FloorGenerator {
         specularPower: this.materials.pinkGlass.specularPower,
       };
     }
-
     this.darkMode = false;
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
+    // ensure furniture material exists
+    this.initializeFurnitureMaterial();
   }
 
+  // ----------------- MATERIALS -----------------
   initializeGrassMaterial() {
     const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
     grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
@@ -64,9 +60,7 @@ export class FloorGenerator {
     grassMaterial.backFaceCulling = false;
     return grassMaterial;
   }
-
   initializeRailingMaterial() {
-    // returns a material we will use as the dark variant for railings
     const railingMaterial = new BABYLON.StandardMaterial(
       "railingMatDark",
       this.scene
@@ -81,7 +75,6 @@ export class FloorGenerator {
     railingMaterial.backFaceCulling = false;
     return railingMaterial;
   }
-
   initializeWaterMaterial() {
     const waterMaterial = new BABYLON.StandardMaterial("waterMat", this.scene);
     waterMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.3, 1.0);
@@ -89,18 +82,14 @@ export class FloorGenerator {
     waterMaterial.backFaceCulling = false;
     return waterMaterial;
   }
-
   initializeMaterials() {
-    // Wall material
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.wallOpaque.alpha = 1;
 
-    // Default floor material
     this.materials.floorDefault = new BABYLON.StandardMaterial(
       "floorDefaultMat",
       this.scene
@@ -114,7 +103,6 @@ export class FloorGenerator {
     this.materials.floorDefault.backFaceCulling = false;
     this.materials.floorDefault.alpha = 1;
 
-    // Above ground transparent
     this.materials.aboveGroundTransparent = new BABYLON.StandardMaterial(
       "aboveGroundTransparentMat",
       this.scene
@@ -135,7 +123,6 @@ export class FloorGenerator {
       0
     );
 
-    // Underground transparent
     this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
       "undergroundTransparentMat",
       this.scene
@@ -165,7 +152,6 @@ export class FloorGenerator {
     grass1NP.needDepthPrePass = true;
     this.materials.grass1NP = grass1NP;
 
-    // Ground-like
     this.materials.ground = new BABYLON.StandardMaterial(
       "groundMat",
       this.scene
@@ -178,7 +164,6 @@ export class FloorGenerator {
     this.materials.ground.needDepthPrePass = true;
     this.materials.ground.specularColor = new BABYLON.Color3(0, 0, 0);
 
-    // Glass (centralized)
     this.materials.glass = new BABYLON.StandardMaterial("glassMat", this.scene);
     this.materials.glass.diffuseColor = new BABYLON.Color3(
       203 / 255,
@@ -200,19 +185,31 @@ export class FloorGenerator {
     pinkGlass.needDepthPrePass = true;
     this.materials.pinkGlass = pinkGlass;
 
-    // (re)define wallOpaque to be consistent
     this.materials.wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
+
+    // also create furniture material here
+    this.initializeFurnitureMaterial();
   }
 
+  initializeFurnitureMaterial() {
+    if (!this.materials.furniture) {
+      const mat = new BABYLON.StandardMaterial("furnitureMat", this.scene);
+      mat.diffuseColor = new BABYLON.Color3(1, 1, 1); // dřevěný tón
+      mat.specularColor = new BABYLON.Color3(0, 0, 0);
+      mat.backFaceCulling = true;
+      this.materials.furniture = mat;
+    }
+  }
+
+  // ----------------- DARK MODE -----------------
   setDarkMode(enabled) {
     this.darkMode = !!enabled;
     const lightGray = new BABYLON.Color3(0.35, 0.36, 0.37);
-
     // --- GLASS ---
     if (this.materials && this.materials.glass) {
       if (this.darkMode) {
@@ -237,14 +234,11 @@ export class FloorGenerator {
         }
       }
     }
-
     // --- RAILING ---
     if (this.darkMode) {
-      // ensure railingDark exists
       if (!this.materials.railingDark) {
         this.materials.railingDark = this.initializeRailingMaterial();
       }
-      // adjust dark variant properties (you can tune these values)
       this.materials.railingDark.diffuseColor = lightGray.clone();
       this.materials.railingDark.alpha = 0.55;
       this.materials.railingDark.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -253,14 +247,10 @@ export class FloorGenerator {
       this.materials.railingDark.transparencyMode =
         BABYLON.Material.MATERIAL_ALPHABLEND;
       this.materials.railingDark.needDepthPrePass = true;
-
-      // set default reference to railingDark
       this.materials.railing = this.materials.railingDark;
     } else {
-      // default to glass in normal mode
       this.materials.railing = this.materials.glass;
     }
-
     // Update already created railing meshes to use the newly selected material
     if (Array.isArray(this._railingMeshes)) {
       const newMat = this.darkMode
@@ -276,8 +266,7 @@ export class FloorGenerator {
         }
       });
     }
-
-    // --- PINK GLASS: restore original when leaving dark mode (if needed) ---
+    // PINK GLASS restore
     if (
       !this.darkMode &&
       this.materials &&
@@ -296,6 +285,7 @@ export class FloorGenerator {
     }
   }
 
+  // ----------------- UTIL COLOR HELPERS -----------------
   getColorFromTemperature(temp, alpha = 1.0) {
     let r, g, b;
     if (temp <= 0) {
@@ -329,7 +319,6 @@ export class FloorGenerator {
     }
     return new BABYLON.Color4(r, g, b, alpha);
   }
-
   getColorFromWifiSignal(signal, alpha = 1.0) {
     let r, g, b;
     switch (signal) {
@@ -362,6 +351,276 @@ export class FloorGenerator {
     return new BABYLON.Color4(r, g, b, alpha);
   }
 
+  // ----------------- FURNITURE: SIMPLE PRIMITIVES -----------------
+  // jednoduchý materiál pro nábytek je vytvořen v initializeFurnitureMaterial()
+
+  // createTable: now circular — width parameter is used as diameter; legs placed inside top
+  createTable(
+    name,
+    width = 1.2, // diameter
+    depth = 0.8,
+    height = 0.75,
+    position = { x: 0, y: 0, z: 0 },
+    rotationY = 0,
+    material
+  ) {
+    this.initializeFurnitureMaterial();
+    material = material || this.materials.furniture;
+    const parts = [];
+
+    // top (cylinder) centered at local origin
+    const top = BABYLON.MeshBuilder.CreateCylinder(
+      `${name}_top`,
+      {
+        diameter: width,
+        height: 0.05,
+        tessellation: 48,
+      },
+      this.scene
+    );
+    top.position.set(0, height - 0.05 / 2, 0);
+    top.material = material;
+    top.isPickable = false;
+    parts.push(top);
+
+    // legs inside the top
+    const legDiameter = Math.max(0.03, width * 0.04);
+    const legHeight = Math.max(0.4, height - 0.05);
+    // ensure leg centers are inside table radius (subtract half leg diameter and tiny margin)
+    const legOffset = Math.max(0.01, width / 3 - legDiameter / 2 - 0.02);
+    const legPositions = [
+      { x: legOffset, z: legOffset },
+      { x: -legOffset, z: legOffset },
+      { x: legOffset, z: -legOffset },
+      { x: -legOffset, z: -legOffset },
+    ];
+    legPositions.forEach((off, i) => {
+      const leg = BABYLON.MeshBuilder.CreateCylinder(
+        `${name}_leg${i}`,
+        {
+          diameterTop: legDiameter,
+          diameterBottom: legDiameter,
+          height: legHeight,
+          tessellation: 12,
+        },
+        this.scene
+      );
+      leg.position.set(off.x, legHeight / 2, off.z);
+      leg.material = material;
+      leg.isPickable = false;
+      parts.push(leg);
+    });
+
+    const merged = BABYLON.Mesh.MergeMeshes(
+      parts,
+      true,
+      true,
+      undefined,
+      false,
+      true
+    );
+    if (merged) {
+      merged.name = name;
+      if (rotationY) merged.rotation.y = rotationY;
+      merged.position = new BABYLON.Vector3(position.x, position.y, position.z);
+      try {
+        this.shadowGenerator.addShadowCaster(merged);
+      } catch {}
+      merged.isPickable = false;
+    }
+    return merged;
+  }
+
+  // createChair: local geometry; forward +Z; position is local relative to root
+  createChair(
+    name,
+    seatWidth = 0.45,
+    seatDepth = 0.45,
+    seatHeight = 0.45,
+    position = { x: 0, y: 0, z: 0 }, // local position
+    rotationY = 0,
+    material
+  ) {
+    this.initializeFurnitureMaterial();
+    material = material || this.materials.furniture;
+    const parts = [];
+
+    const seat = BABYLON.MeshBuilder.CreateBox(
+      `${name}_seat`,
+      { width: seatWidth, height: 0.04, depth: seatDepth },
+      this.scene
+    );
+    seat.position.set(0, seatHeight, 0);
+    seat.material = material;
+    seat.isPickable = false;
+    parts.push(seat);
+
+    const back = BABYLON.MeshBuilder.CreateBox(
+      `${name}_back`,
+      { width: seatWidth, height: seatHeight, depth: 0.04 },
+      this.scene
+    );
+    back.position.set(0, seatHeight + seatHeight / 2, -seatDepth / 2 + 0.02);
+    back.material = material;
+    back.isPickable = false;
+    parts.push(back);
+
+    const legW = 0.03;
+    const legH = seatHeight;
+    const offsets = [
+      { x: seatWidth / 2 - legW / 2, z: seatDepth / 2 - legW / 2 },
+      { x: -seatWidth / 2 + legW / 2, z: seatDepth / 2 - legW / 2 },
+      { x: seatWidth / 2 - legW / 2, z: -seatDepth / 2 + legW / 2 },
+      { x: -seatWidth / 2 + legW / 2, z: -seatDepth / 2 + legW / 2 },
+    ];
+    offsets.forEach((off, i) => {
+      const leg = BABYLON.MeshBuilder.CreateBox(
+        `${name}_leg${i}`,
+        { width: legW, height: legH, depth: legW },
+        this.scene
+      );
+      leg.position.set(off.x, legH / 2, off.z);
+      leg.material = material;
+      leg.isPickable = false;
+      parts.push(leg);
+    });
+
+    const merged = BABYLON.Mesh.MergeMeshes(
+      parts,
+      true,
+      true,
+      undefined,
+      false,
+      true
+    );
+    if (merged) {
+      merged.name = name;
+      if (rotationY) merged.rotation.y = rotationY;
+      merged.position = new BABYLON.Vector3(position.x, position.y, position.z);
+      try {
+        this.shadowGenerator.addShadowCaster(merged);
+      } catch {}
+      merged.isPickable = false;
+    }
+    return merged;
+  }
+
+  // createTableWithChairs: now with chairAngleOffset and closer chairs by default
+  createTableWithChairs(
+    name,
+    tableOpts = { width: 1.2, depth: 0.8, height: 0.75 }, // width is diameter
+    chairsCount = 4,
+    chairOffsetRadius = null,
+    position = { x: 0, y: 0, z: 0 }, // world
+    rotationY = 0,
+    material,
+    chairAngleOffset = undefined // optional: rotates all chairs by this offset (radians)
+  ) {
+    const diameter = tableOpts.width || 1.2;
+    const height = tableOpts.height || 0.75;
+
+    // default radius: half diameter + smaller gap (closer chairs)
+    const defaultRadius = diameter / 2 + 0.25; // was 0.35 before
+    const radius = chairOffsetRadius || defaultRadius;
+
+    // default angle offset: shift so chairs are not at exact clock positions
+    const angleOffsetDefault = Math.PI / (chairsCount * 2); // e.g. for 4 chairs -> 45deg offset
+    const angleOffset =
+      typeof chairAngleOffset === "number"
+        ? chairAngleOffset
+        : angleOffsetDefault;
+
+    const root = new BABYLON.TransformNode(name, this.scene);
+
+    const tableMesh = this.createTable(
+      `${name}_table`,
+      diameter,
+      diameter,
+      height,
+      { x: 0, y: 0, z: 0 },
+      rotationY,
+      material
+    );
+    if (tableMesh) {
+      tableMesh.parent = root;
+      tableMesh.rotation.y = rotationY || 0;
+      tableMesh.position = new BABYLON.Vector3(0, 0, 0);
+    }
+
+    const chairMeshes = [];
+    for (let i = 0; i < chairsCount; i++) {
+      const ang =
+        (i / chairsCount) * Math.PI * 2 + (rotationY || 0) + angleOffset;
+      const cxLocal = Math.cos(ang) * radius;
+      const czLocal = Math.sin(ang) * radius;
+      // yaw so +Z points to center (0,0)
+      const yaw = Math.atan2(0 - cxLocal, 0 - czLocal);
+      const chair = this.createChair(
+        `${name}_chair${i}`,
+        0.45,
+        0.45,
+        0.45,
+        { x: cxLocal, y: 0, z: czLocal },
+        yaw,
+        material
+      );
+      if (chair) {
+        chair.parent = root;
+        chairMeshes.push(chair);
+      }
+    }
+
+    // place root in world at requested yLevel
+    root.position = new BABYLON.Vector3(position.x, position.y, position.z);
+
+    try {
+      if (tableMesh) this.shadowGenerator.addShadowCaster(tableMesh);
+      chairMeshes.forEach((c) => {
+        try {
+          this.shadowGenerator.addShadowCaster(c);
+        } catch {}
+      });
+    } catch {}
+
+    return root;
+  }
+
+  // ----------------- OPTIONAL: model loading (glTF) -----------------
+  async loadModelToScene(
+    url,
+    position = { x: 0, y: 0, z: 0 },
+    rotationY = 0,
+    scale = 1,
+    name = "gltfRoot"
+  ) {
+    try {
+      const result = await BABYLON.SceneLoader.ImportMeshAsync(
+        "",
+        url,
+        "",
+        this.scene
+      );
+      const root = new BABYLON.TransformNode(name, this.scene);
+      result.meshes.forEach((m) => {
+        if (m !== this.scene && m !== null) {
+          m.parent = root;
+        }
+      });
+      root.position = new BABYLON.Vector3(position.x, position.y, position.z);
+      root.rotation = new BABYLON.Vector3(0, rotationY, 0);
+      root.scaling = new BABYLON.Vector3(scale, scale, scale);
+      root.isPickable = false;
+      try {
+        this.shadowGenerator.addShadowCaster(root);
+      } catch {}
+      return root;
+    } catch (e) {
+      console.warn("loadModelToScene error", e);
+      return null;
+    }
+  }
+
+  // ----------------- COMMON CREATION HELPERS -----------------
   createGrassArea(dimensions, yLevel) {
     const grassMesh = BABYLON.MeshBuilder.CreateGround(
       "grassArea",
@@ -372,7 +631,6 @@ export class FloorGenerator {
     grassMesh.material = this.materials.grass;
     return grassMesh;
   }
-
   applyGrassHolesMask(grassMesh, holes, dimensions, textureSize = 1024) {
     if (!grassMesh || !holes || holes.length === 0) return;
     const width = dimensions.width;
@@ -421,7 +679,6 @@ export class FloorGenerator {
     grassMesh.material.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     grassMesh.material.needDepthPrePass = true;
   }
-
   createHoleBox(hole, yLevel) {
     const thickness = this.config.visualization.room_floor_height + 0.02;
     const holeMesh = BABYLON.MeshBuilder.CreateBox(
@@ -434,6 +691,7 @@ export class FloorGenerator {
     return holeMesh;
   }
 
+  // ----------------- FLOOR GENERATION -----------------
   generateFloors() {
     this.config.floors.forEach((floorConfig, index) => {
       if (!this.allFloorMeshes[index]) {
@@ -469,8 +727,10 @@ export class FloorGenerator {
         });
       }
       floorResult.meshes.forEach((mesh) => {
-        if (mesh.name.includes("floor")) {
-          mesh.receiveShadows = true;
+        if (mesh.name && mesh.name.includes("floor")) {
+          try {
+            mesh.receiveShadows = true;
+          } catch {}
         }
       });
       this.allFloorMeshes[index].push(...floorResult.meshes);
@@ -482,7 +742,6 @@ export class FloorGenerator {
         isUnderground,
       });
     });
-
     // Grass on 1NP
     const firstAboveGroundIndex = this.config.floors.findIndex(
       (floorConfig) => floorConfig.id === 0
@@ -527,7 +786,6 @@ export class FloorGenerator {
       : this.config.visualization.wall_height;
     const wallThickness = this.config.visualization.wall_thickness;
     const roomFloorHeight = this.config.visualization.room_floor_height;
-
     if (floorConfig.segments) {
       floorConfig.segments.forEach((segmentConfig) => {
         const { width, depth, position } = segmentConfig;
@@ -552,7 +810,9 @@ export class FloorGenerator {
         ) {
           segmentMesh.material = this.materials.water;
         }
-        this.shadowGenerator.addShadowCaster(segmentMesh);
+        try {
+          this.shadowGenerator.addShadowCaster(segmentMesh);
+        } catch {}
         floorMeshes.push(segmentMesh);
       });
     } else if (floorConfig.dimensions && layout) {
@@ -581,7 +841,9 @@ export class FloorGenerator {
           roomFloorMesh.position.y = yLevel + roomFloorHeight / 2;
           roomFloorMesh.isPickable = true;
           roomFloorMesh.material = this.materials.floorDefault;
-          this.shadowGenerator.addShadowCaster(roomFloorMesh);
+          try {
+            this.shadowGenerator.addShadowCaster(roomFloorMesh);
+          } catch {}
           roomFloorMesh.metadata = {
             floorNumber: floorConfig.id,
           };
@@ -589,19 +851,92 @@ export class FloorGenerator {
           roomIdx++;
         }
       }
+
+      // --- FURNITURE ---
+      if (layout.furniture && Array.isArray(layout.furniture)) {
+        layout.furniture.forEach((furn, idx) => {
+          const pos = {
+            x: typeof furn.x === "number" ? furn.x : 0,
+            y: yLevel,
+            z: typeof furn.z === "number" ? furn.z : 0,
+          };
+          const rot = furn.rotation || 0;
+          const mat =
+            furn.materialType === "pink"
+              ? this.materials.pinkGlass
+              : this.materials.furniture;
+          if (furn.type === "table") {
+            const tableOpts = furn.tableOptions || {
+              width: 1.2,
+              depth: 0.8,
+              height: 0.75,
+            };
+            const chairs = typeof furn.chairs === "number" ? furn.chairs : 4;
+            const chairRadius =
+              typeof furn.chairRadius === "number"
+                ? furn.chairRadius
+                : Math.max(tableOpts.width, tableOpts.depth) / 2 + 0.25; // closer default
+            // optional angle offset from config
+            const chairAngleOffset =
+              typeof furn.chairAngleOffset === "number"
+                ? furn.chairAngleOffset
+                : undefined;
+            const tbl = this.createTableWithChairs(
+              `furn_${floorConfig.id}_${idx}`,
+              tableOpts,
+              chairs,
+              chairRadius,
+              pos,
+              rot,
+              mat,
+              chairAngleOffset
+            );
+            if (tbl) floorMeshes.push(tbl);
+          } else if (furn.type === "chair") {
+            const ch = this.createChair(
+              `furn_${floorConfig.id}_${idx}`,
+              furn.width || 0.45,
+              furn.depth || 0.45,
+              furn.seatHeight || 0.45,
+              pos,
+              rot,
+              mat
+            );
+            if (ch) floorMeshes.push(ch);
+          } else if (furn.type === "model" && furn.url) {
+            this.loadModelToScene(
+              furn.url,
+              pos,
+              rot,
+              furn.scale || 1,
+              `furn_model_${floorConfig.id}_${idx}`
+            )
+              .then((node) => {
+                if (node) floorMeshes.push(node);
+              })
+              .catch(() => {});
+          }
+        });
+      }
     }
 
+    // holes
     if (Array.isArray(floorConfig.holes)) {
       floorConfig.holes.forEach((hole) => {
         const holeBox = this.createHoleBox(hole, yLevel);
         floorMeshes.forEach((mesh, i) => {
-          if (mesh.name.includes("_floor") || mesh.name.includes("_segment")) {
+          if (
+            mesh.name &&
+            (mesh.name.includes("_floor") || mesh.name.includes("_segment"))
+          ) {
             const cut = BABYLON.CSG.FromMesh(mesh)
               .subtract(BABYLON.CSG.FromMesh(holeBox))
               .toMesh(mesh.name, mesh.material, this.scene);
             cut.receiveShadows = mesh.receiveShadows;
             cut.metadata = mesh.metadata;
-            this.shadowGenerator.addShadowCaster(cut);
+            try {
+              this.shadowGenerator.addShadowCaster(cut);
+            } catch {}
             mesh.dispose();
             floorMeshes[i] = cut;
           }
@@ -610,6 +945,7 @@ export class FloorGenerator {
       });
     }
 
+    // walls and other geometry unchanged...
     if (layout && layout.walls) {
       layout.walls.forEach((wall, index) => {
         let wallMesh;
@@ -758,7 +1094,9 @@ export class FloorGenerator {
           floorMeshes.push(spiral);
         }
         if (wallMesh) {
-          this.shadowGenerator.addShadowCaster(wallMesh);
+          try {
+            this.shadowGenerator.addShadowCaster(wallMesh);
+          } catch {}
         }
       });
     }
@@ -813,7 +1151,6 @@ export class FloorGenerator {
     this.shadowGenerator.addShadowCaster(wall);
     return wall;
   }
-
   createCurvedWall(
     center,
     radius,
@@ -929,16 +1266,13 @@ export class FloorGenerator {
     const direction = p2.subtract(p1).normalize();
     const angle = Math.atan2(direction.x, direction.z);
     railing.rotation.y = angle;
-
     // Use either the dark railing material (in dark mode) or glass (in normal mode)
     const mat = this.darkMode
       ? this.materials.railingDark || this.materials.glass
       : this.materials.glass;
     railing.material = mat;
-
     // track for future toggles
     this._railingMeshes.push(railing);
-
     railing.isPickable = false;
     this.shadowGenerator.addShadowCaster(railing);
     return railing;
@@ -969,7 +1303,6 @@ export class FloorGenerator {
     const isLastPart =
       partPosition >= parts ||
       stepsBeforeThisPart + stepsThisPart >= totalSteps;
-
     for (let i = 0; i < stepsThisPart; i++) {
       const globalIndex = stepsBeforeThisPart + i;
       const centerY = yLevel + (globalIndex + 0.5) * stepHeight;
@@ -990,7 +1323,6 @@ export class FloorGenerator {
       this.shadowGenerator.addShadowCaster(stepMesh);
       stairMeshes.push(stepMesh);
     }
-
     let floorMesh;
     let floorWidth = 0;
     let floorDepth = 0;
@@ -1017,7 +1349,6 @@ export class FloorGenerator {
       this.shadowGenerator.addShadowCaster(floorMesh);
       stairMeshes.push(floorMesh);
     }
-
     if (railing === "yes") {
       // IMPORTANT: stairs and their railings must remain pink and NOT be affected by dark mode
       // Use the centralized pinkGlass material (so color is consistent and preserved)
@@ -1032,7 +1363,6 @@ export class FloorGenerator {
         railingMaterial.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
         railingMaterial.needDepthPrePass = true;
       }
-
       const railingHeight = 1.0;
       const railingThickness = 0.05;
       for (let i = 0; i < stepsThisPart; i++) {
@@ -1057,7 +1387,6 @@ export class FloorGenerator {
         railingLeft.material = railingMaterial;
         stairMeshes.push(railingLeft);
         // do NOT push stair railings into _railingMeshes -> they must remain pink always
-
         const railingRight = BABYLON.MeshBuilder.CreateBox(
           `railing_right_${name}_${partPosition}_${i}`,
           {
@@ -1076,7 +1405,6 @@ export class FloorGenerator {
         stairMeshes.push(railingRight);
         // do NOT push into _railingMeshes
       }
-
       if (!isLastPart && floorMesh) {
         const surfaceY =
           yLevel + (stepsBeforeThisPart + stepsThisPart) * stepHeight;
@@ -1096,7 +1424,6 @@ export class FloorGenerator {
         floorSideRailingLeft.material = railingMaterial;
         stairMeshes.push(floorSideRailingLeft);
         // do NOT push into _railingMeshes
-
         const floorSideRailingRight = BABYLON.MeshBuilder.CreateBox(
           `floor_side_railing_right_${name}_${partPosition}`,
           {
@@ -1115,7 +1442,6 @@ export class FloorGenerator {
         // do NOT push into _railingMeshes
       }
     }
-
     const stairs = BABYLON.Mesh.MergeMeshes(
       stairMeshes,
       true,
@@ -1194,7 +1520,6 @@ export class FloorGenerator {
     const glassMaterial =
       this.materials.glass ||
       new BABYLON.StandardMaterial("glassFallback", this.scene);
-
     for (let i = 0; i < numSteps; i++) {
       const angle = (i * 2.585 * Math.PI) / numSteps + start;
       const x = center.x + radius * 2 * Math.cos(angle);
@@ -1217,7 +1542,6 @@ export class FloorGenerator {
       this.shadowGenerator.addShadowCaster(step);
       spiralStairs.push(step);
     }
-
     const outerPath = [];
     const innerPath = [];
     for (let i = 0; i <= numSteps; i++) {
@@ -1240,7 +1564,6 @@ export class FloorGenerator {
         new BABYLON.Vector3(innerX, y + railingHeight + 0.1, innerZ)
       );
     }
-
     const outerGlassWall = BABYLON.MeshBuilder.CreateRibbon(
       "outerGlassWall",
       {
@@ -1255,7 +1578,6 @@ export class FloorGenerator {
     outerGlassWall.material = glassMaterial;
     outerGlassWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(outerGlassWall);
-
     const innerGlassWall = BABYLON.MeshBuilder.CreateRibbon(
       "innerGlassWall",
       {
@@ -1270,7 +1592,6 @@ export class FloorGenerator {
     innerGlassWall.material = glassMaterial;
     innerGlassWall.isPickable = false;
     this.shadowGenerator.addShadowCaster(innerGlassWall);
-
     return BABYLON.Mesh.MergeMeshes(
       [...spiralStairs, outerGlassWall, innerGlassWall],
       true,
