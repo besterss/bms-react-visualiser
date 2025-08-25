@@ -187,7 +187,8 @@ export class FloorGenerator {
   initializeFurnitureMaterial() {
     if (!this.materials.furniture) {
       const mat = new BABYLON.StandardMaterial("furnitureMat", this.scene);
-      mat.diffuseColor = new BABYLON.Color3(1, 1, 1); // dřevěný tón
+      // restored to original appearance as requested
+      mat.diffuseColor = new BABYLON.Color3(1, 1, 1);
       mat.specularColor = new BABYLON.Color3(0, 0, 0);
       mat.backFaceCulling = true;
       this.materials.furniture = mat;
@@ -338,7 +339,7 @@ export class FloorGenerator {
   }
   // ----------------- FURNITURE: SIMPLE PRIMITIVES -----------------
   // jednoduchý materiál pro nábytek je vytvořen v initializeFurnitureMaterial()
-  // createTable: now circular — width parameter is used as diameter; legs placed inside top
+  // createTable: supports optional single central leg (default: single leg) with visible base slightly raised
   createTable(
     name,
     width = 1.2, // diameter
@@ -346,7 +347,9 @@ export class FloorGenerator {
     height = 0.75,
     position = { x: 0, y: 0, z: 0 },
     rotationY = 0,
-    material
+    material,
+    singleLeg = true,
+    baseDiameter = null
   ) {
     this.initializeFurnitureMaterial();
     material = material || this.materials.furniture;
@@ -361,37 +364,102 @@ export class FloorGenerator {
       },
       this.scene
     );
+    // top sits so that its bottom is at y = height - 0.05
     top.position.set(0, height - 0.05 / 2, 0);
     top.material = material;
     top.isPickable = false;
     parts.push(top);
-    // legs inside the top
-    const legDiameter = Math.max(0.03, width * 0.04);
-    const legHeight = Math.max(0.4, height - 0.05);
-    // ensure leg centers are inside table radius (subtract half leg diameter and tiny margin)
-    const legOffset = Math.max(0.01, width / 3 - legDiameter / 2 - 0.02);
-    const legPositions = [
-      { x: legOffset, z: legOffset },
-      { x: -legOffset, z: legOffset },
-      { x: legOffset, z: -legOffset },
-      { x: -legOffset, z: -legOffset },
-    ];
-    legPositions.forEach((off, i) => {
-      const leg = BABYLON.MeshBuilder.CreateCylinder(
-        `${name}_leg${i}`,
+
+    if (singleLeg) {
+      // central leg + base that is slightly raised to avoid intersecting ground
+      const legDiameter = Math.max(0.05, width * 0.09); // robustnější centrální noha
+
+      // small base dimensions
+      const baseH = 0.05; // thickness of base
+      const baseDia =
+        baseDiameter || Math.max(legDiameter * 2.8, width * 0.45, 0.35); // larger so it's visible
+
+      // small vertical raise so base isn't sunk into floor
+      const baseRaise = 0.02; // "trošičku nahoru"
+
+      // Compute leg height so its top sits exactly at the bottom of the tabletop
+      // tabletop bottom y = height - 0.05
+      // base top y = baseH + baseRaise
+      // desired leg top y = tabletop bottom y
+      // so legHeight = tabletopBottomY - baseTopY
+      const tabletopBottomY = height - 0.05;
+      let legHeight = tabletopBottomY - (baseH + baseRaise);
+      // enforce a minimum leg height
+      legHeight = Math.max(0.2, legHeight);
+
+      // If computed legHeight is unexpectedly large (fallback), clamp reasonably
+      // (not strictly necessary, but keeps proportions sane)
+      legHeight = Math.min(legHeight, Math.max(0.4, height - 0.05));
+
+      // create base using same material as the table (as requested)
+      const base = BABYLON.MeshBuilder.CreateCylinder(
+        `${name}_base`,
         {
-          diameterTop: legDiameter,
-          diameterBottom: legDiameter,
-          height: legHeight,
-          tessellation: 12,
+          diameter: baseDia,
+          height: baseH,
+          tessellation: 32,
         },
         this.scene
       );
-      leg.position.set(off.x, legHeight / 2, off.z);
+      base.material = material; // use same material as table
+      base.isPickable = false;
+      // place base so its bottom is slightly above local y=0 (raised by baseRaise)
+      base.position.set(0, baseH / 2 + baseRaise, 0);
+      parts.push(base);
+
+      // leg: placed on top of base
+      const leg = BABYLON.MeshBuilder.CreateCylinder(
+        `${name}_leg_center`,
+        {
+          diameter: legDiameter,
+          height: legHeight,
+          tessellation: 24,
+        },
+        this.scene
+      );
+      // leg center should be at base top + legHeight/2
+      // base top = base.position.y + baseH/2 = baseH + baseRaise
+      leg.position.set(0, baseH + baseRaise + legHeight / 2, 0);
       leg.material = material;
       leg.isPickable = false;
       parts.push(leg);
-    });
+    } else {
+      // four corner legs as fallback
+      const legDiameter = Math.max(0.03, width * 0.04);
+      // ensure leg top is flush with tabletop bottom
+      let legHeight = height - 0.05;
+      legHeight = Math.max(0.2, legHeight);
+      const legOffset = Math.max(0.01, width / 3 - legDiameter / 2 - 0.02);
+      const legPositions = [
+        { x: legOffset, z: legOffset },
+        { x: -legOffset, z: legOffset },
+        { x: legOffset, z: -legOffset },
+        { x: -legOffset, z: -legOffset },
+      ];
+      legPositions.forEach((off, i) => {
+        const leg = BABYLON.MeshBuilder.CreateCylinder(
+          `${name}_leg${i}`,
+          {
+            diameterTop: legDiameter,
+            diameterBottom: legDiameter,
+            height: legHeight,
+            tessellation: 12,
+          },
+          this.scene
+        );
+        // center at legHeight/2 so top is at legHeight (which equals tabletop bottom)
+        leg.position.set(off.x, legHeight / 2, off.z);
+        leg.material = material;
+        leg.isPickable = false;
+        parts.push(leg);
+      });
+    }
+
     const merged = BABYLON.Mesh.MergeMeshes(
       parts,
       true,
@@ -503,6 +571,7 @@ export class FloorGenerator {
         ? chairAngleOffset
         : angleOffsetDefault;
     const root = new BABYLON.TransformNode(name, this.scene);
+    // create table with default singleLeg = true (visible base slightly raised)
     const tableMesh = this.createTable(
       `${name}_table`,
       diameter,
@@ -1477,7 +1546,6 @@ export class FloorGenerator {
     tree.name = `tree_${position.x}_${position.z}`;
     return tree;
   }
-
   // NEW: createBushInPot (keř v květináči) — vrací TransformNode s dětmi (pot, soil, foliage)
   createBushInPot(position, scale = 1) {
     // materials (cached in this.materials)
@@ -1502,9 +1570,7 @@ export class FloorGenerator {
       leavesMat.specularColor = new BABYLON.Color3(0, 0, 0);
       this.materials.bushLeaves = leavesMat;
     }
-
     const nameBase = `bush_${position.x}_${position.z}`;
-
     // root node (group)
     const root = new BABYLON.TransformNode(nameBase, this.scene);
     root.position = new BABYLON.Vector3(
@@ -1512,13 +1578,11 @@ export class FloorGenerator {
       typeof position.y === "number" ? position.y : 0,
       typeof position.z === "number" ? position.z : 0
     );
-
     // dimensions (local units)
     const potHeight = 0.35 * scale;
     const potTopDia = 0.45 * scale;
     const potBottomDia = 0.32 * scale;
     const rimInset = 0.04 * scale;
-
     // Create outer and inner cylinders for pot (centered at origin)
     const outer = BABYLON.MeshBuilder.CreateCylinder(
       `${nameBase}_outer_tmp`,
@@ -1542,7 +1606,6 @@ export class FloorGenerator {
     );
     // Slightly raise inner so rim remains
     inner.position.y = 0.01;
-
     // CSG subtract inner from outer to get a hollow pot
     let pot;
     try {
@@ -1563,12 +1626,10 @@ export class FloorGenerator {
     try {
       inner.dispose();
     } catch {}
-
     // Position pot relative to root (so bottom sits at y=0)
     pot.parent = root;
     pot.position = new BABYLON.Vector3(0, potHeight / 2, 0);
     pot.isPickable = false;
-
     // soil fill (small cylinder inside pot)
     const soilHeight = 0.08 * scale;
     const soilDia = Math.max(0.01, potTopDia - rimInset * 1.2);
@@ -1585,7 +1646,6 @@ export class FloorGenerator {
       0
     );
     soil.isPickable = false;
-
     // foliage: overlapping spheres with small offsets (relative to root)
     const foliage = [];
     const foliageBalls = 4 + Math.floor(Math.random() * 3); // 4..6
@@ -1611,7 +1671,6 @@ export class FloorGenerator {
       ball.isPickable = false;
       foliage.push(ball);
     }
-
     // add a small decorative rim (optional, thin torus-like using torus if available)
     try {
       const rim = BABYLON.MeshBuilder.CreateTorus(
@@ -1631,7 +1690,6 @@ export class FloorGenerator {
     } catch (e) {
       // torus might not be available in some builds — ignore if error
     }
-
     // add shadows if possible
     try {
       this.shadowGenerator.addShadowCaster(pot);
@@ -1639,10 +1697,8 @@ export class FloorGenerator {
     } catch (e) {
       /* ignore */
     }
-
     return root;
   }
-
   createSpiralStairs(
     center,
     radius,
