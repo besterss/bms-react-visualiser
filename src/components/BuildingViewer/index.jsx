@@ -507,7 +507,6 @@ const BuildingViewer = () => {
     const next = activeDisplayOption === option ? null : option;
     setActiveDisplayOption(next);
 
-    // pokud nemáme scene nebo meshe ještě, nic neprovádíme
     if (
       !sceneRef.current ||
       !Array.isArray(allFloorMeshesRef.current) ||
@@ -516,7 +515,6 @@ const BuildingViewer = () => {
       return;
     }
 
-    // zavoláme asynchronně, aby se React stavy usadily a Babylon měl čas na případné úpravy scény
     requestAnimationFrame(() => {
       try {
         showBubblesOnActiveFloor(
@@ -524,12 +522,9 @@ const BuildingViewer = () => {
           currentActiveFloorRef.current,
           allFloorMeshesRef.current,
           next === "heatmap",
-          next === "wifi",
           next === "airQuality"
         );
-      } catch (e) {
-        // ignore
-      }
+      } catch (e) {}
     });
   };
 
