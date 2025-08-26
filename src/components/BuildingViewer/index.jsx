@@ -38,7 +38,6 @@ const BuildingViewer = () => {
   const sceneRef = useRef(scene);
   const allFloorMeshesRef = useRef(allFloorMeshes);
   const currentActiveFloorRef = useRef(currentActiveFloor);
-
   useEffect(() => {
     sceneRef.current = scene;
   }, [scene]);
@@ -49,9 +48,38 @@ const BuildingViewer = () => {
     currentActiveFloorRef.current = currentActiveFloor;
   }, [currentActiveFloor]);
 
-  // Pomocná funkce: uklid evakuačních meshů (rozšířená)
+  // ---------- Helper disposal utilities ----------
+  const safeDisposeTexture = (tex) => {
+    try {
+      if (!tex) return;
+      if (typeof tex.isDisposed === "function") {
+        if (!tex.isDisposed()) tex.dispose();
+      } else if (typeof tex.dispose === "function") {
+        tex.dispose();
+      }
+    } catch (e) {}
+  };
+
+  const safeDisposeMaterial = (mat) => {
+    try {
+      if (!mat) return;
+      // dispose textures referenced by material
+      safeDisposeTexture(mat.diffuseTexture);
+      safeDisposeTexture(mat.emissiveTexture);
+      safeDisposeTexture(mat.opacityTexture);
+      if (typeof mat.isDisposed === "function") {
+        if (!mat.isDisposed()) mat.dispose();
+      } else if (typeof mat.dispose === "function") {
+        mat.dispose();
+      }
+    } catch (e) {}
+  };
+
+  // ---------- Clean Evacuation / Endpoint / Label / Bubble objects ----------
   const clearEvacuationMeshes = (scn) => {
     if (!scn) return;
+
+    // prefixy/tokens pro běžné evac / path objekty
     const namePrefixes = [
       "evacuation_path_",
       "evacuation_bubble_",
@@ -78,64 +106,187 @@ const BuildingViewer = () => {
       "bubble",
       "merged_path_strip",
     ];
-    if (scn.meshes && scn.meshes.length) {
-      scn.meshes
-        .filter((m) => {
-          if (!m || !m.name) return false;
-          const nm = m.name;
-          const starts = namePrefixes.some((pref) => nm.startsWith(pref));
-          const contains = nameTokens.some((tok) => nm.includes(tok));
-          return starts || contains;
-        })
-        .forEach((m) => {
-          try {
-            m.dispose();
-          } catch (e) {
-            // ignore
-          }
-        });
-    }
-    if (scn.transformNodes && scn.transformNodes.length) {
-      scn.transformNodes
-        .filter((tn) => {
-          if (!tn || !tn.name) return false;
-          const nm = tn.name.toLowerCase();
-          return (
-            nm.startsWith("arrow_path_") ||
-            nm.startsWith("evacuation_path_") ||
-            nm.includes("evac") ||
-            nm.includes("arrow") ||
-            nm.includes("path")
-          );
-        })
-        .forEach((tn) => {
-          try {
-            tn.dispose(true, true);
-          } catch (e) {
-            // ignore
-          }
-        });
-    }
+
+    // další specifické názvy, které vytváří EvacuationPath (endpointy, labely)
+    const extraPrefixes = [
+      "marker_", // marker_disk_, marker_sphere_, marker_...
+      "marker_disk_",
+      "marker_sphere_",
+      "label_", // label_{text}_{timestamp}
+      "dist_label_",
+      "dist_",
+    ];
+
+    // 1) Meshes
     try {
-      const matNames = [
-        "path_strip_mat",
-        "arrow_mat",
-        "evac_mat",
-        "evac_label_mat",
-      ];
-      matNames.forEach((mn) => {
-        const mat =
-          scn.getMaterialByName?.(mn) ||
-          scn.materials?.find?.((m) => m && m.name === mn);
-        if (mat) {
-          try {
-            mat.dispose();
-          } catch {}
-        }
-      });
-    } catch (e) {
-      // ignore
-    }
+      if (Array.isArray(scn.meshes)) {
+        scn.meshes
+          .filter((m) => {
+            if (!m || !m.name) return false;
+            const nm = m.name;
+            // startsWith některého prefixu
+            if (namePrefixes.some((p) => nm.startsWith(p))) return true;
+            if (extraPrefixes.some((p) => nm.startsWith(p))) return true;
+            // contains některého tokenu
+            if (nameTokens.some((t) => nm.includes(t))) return true;
+            return false;
+          })
+          .forEach((m) => {
+            try {
+              // pokud má mesh přidružené dynamic textures / materiály, dispose je
+              if (m.__distTex) safeDisposeTexture(m.__distTex);
+              if (m.__distMat) safeDisposeMaterial(m.__distMat);
+              if (m.material) safeDisposeMaterial(m.material);
+            } catch (e) {}
+            try {
+              m.dispose();
+            } catch (e) {}
+          });
+      }
+    } catch (e) {}
+
+    // 2) Transform nodes (např. parent transform nodes pro arrow_path_)
+    try {
+      if (Array.isArray(scn.transformNodes)) {
+        scn.transformNodes
+          .filter((tn) => {
+            if (!tn || !tn.name) return false;
+            const nm = tn.name.toLowerCase();
+            if (
+              nm.startsWith("arrow_path_") ||
+              nm.startsWith("evacuation_path_")
+            )
+              return true;
+            if (
+              nm.includes("evac") ||
+              nm.includes("arrow") ||
+              nm.includes("path")
+            )
+              return true;
+            if (nm.includes("bubble") || nm.includes("marker")) return true;
+            return false;
+          })
+          .forEach((tn) => {
+            try {
+              tn.dispose(true, true);
+            } catch (e) {}
+          });
+      }
+    } catch (e) {}
+
+    // 3) Materials (label/material leftovers)
+    try {
+      if (Array.isArray(scn.materials)) {
+        scn.materials
+          .filter((mat) => {
+            if (!mat || !mat.name) return false;
+            const nm = mat.name.toLowerCase();
+            return (
+              nm.startsWith("label_mat_") ||
+              nm.startsWith("marker_disk_mat_") ||
+              nm.startsWith("marker_sphere_mat_") ||
+              nm.startsWith("dist_mat_") ||
+              nm.startsWith("path_strip_mat") ||
+              nm.startsWith("arrow_mat") ||
+              nm.startsWith("evac_mat") ||
+              nm.includes("bubble")
+            );
+          })
+          .forEach((mat) => {
+            try {
+              safeDisposeMaterial(mat);
+            } catch (e) {}
+          });
+      }
+    } catch (e) {}
+
+    // 4) Pokud existuje scene.__evacCache od EvacuationPath, uvolnit jeho cache (dynamic textures, šablony)
+    try {
+      const cache = scn.__evacCache;
+      if (cache) {
+        try {
+          if (cache.arrowTemplate && !cache.arrowTemplate.isDisposed())
+            cache.arrowTemplate.dispose();
+        } catch {}
+        try {
+          if (cache.pathStripMat && !cache.pathStripMat.isDisposed())
+            cache.pathStripMat.dispose();
+        } catch {}
+        try {
+          // labelCache obsahuje mat+dt páry
+          if (cache.labelCache instanceof Map) {
+            for (const entry of cache.labelCache.values()) {
+              try {
+                if (
+                  entry.dt &&
+                  typeof entry.dt.isDisposed === "function" &&
+                  !entry.dt.isDisposed()
+                )
+                  entry.dt.dispose();
+              } catch {}
+              try {
+                if (
+                  entry.mat &&
+                  typeof entry.mat.isDisposed === "function" &&
+                  !entry.mat.isDisposed()
+                )
+                  entry.mat.dispose();
+              } catch {}
+            }
+            cache.labelCache.clear();
+          }
+        } catch {}
+        // reset cache objektu (EvacuationPath si při dalším použití vytvoří novou)
+        try {
+          scn.__evacCache = null;
+        } catch {}
+      }
+    } catch (e) {}
+  };
+
+  // clearBubbles only clears objects created by bubble/heatmap/air/wifi renderers.
+  // We do NOT call this automatically on floor change if the activeDisplayOption is a bubble mode,
+  // because we want bubble overlays to persist and be redrawn for the new floor.
+  const clearBubbles = (scn) => {
+    if (!scn) return;
+    try {
+      if (Array.isArray(scn.meshes)) {
+        scn.meshes
+          .filter((m) => m && m.name && m.name.toLowerCase().includes("bubble"))
+          .forEach((m) => {
+            try {
+              m.dispose();
+            } catch {}
+          });
+      }
+    } catch {}
+    try {
+      if (Array.isArray(scn.transformNodes)) {
+        scn.transformNodes
+          .filter(
+            (tn) => tn && tn.name && tn.name.toLowerCase().includes("bubble")
+          )
+          .forEach((tn) => {
+            try {
+              tn.dispose(true, true);
+            } catch {}
+          });
+      }
+    } catch {}
+    try {
+      if (Array.isArray(scn.materials)) {
+        scn.materials
+          .filter(
+            (mat) =>
+              mat && mat.name && mat.name.toLowerCase().includes("bubble")
+          )
+          .forEach((mat) => {
+            try {
+              safeDisposeMaterial(mat);
+            } catch {}
+          });
+      }
+    } catch {}
   };
 
   useEffect(() => {
@@ -147,27 +298,22 @@ const BuildingViewer = () => {
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
-
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
       CONFIG_DATA
     );
     const result = generator.generateFloors();
-
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
-
     // sync darkMode to generator (if toggled before generation)
     if (typeof darkMode !== "undefined") {
       generator.setDarkMode(darkMode);
     }
-
     setupCamera(babylonScene, result.floorData);
-
     if (result.floorData.length > 0) {
       showFloor(
         result.floorData[0].floorNumber,
@@ -182,20 +328,21 @@ const BuildingViewer = () => {
         floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
-
     setupEventHandlers(babylonScene);
-
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
     });
-
     const handleResize = () => {
       babylonEngine.resize();
     };
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
+      try {
+        // při dispose scény/engine smažeme i bublinky a evak prvky (prevent dangling)
+        clearBubbles(babylonScene);
+        clearEvacuationMeshes(babylonScene);
+      } catch {}
       try {
         babylonEngine.dispose();
       } catch {}
@@ -210,7 +357,7 @@ const BuildingViewer = () => {
     }
   }, [floorGenerator, darkMode]);
 
-  // Tento effect provádí synchronní vykreslení bublin, pokud se mění závislosti
+  // Tento hlavní efekt vykreslí bublinky vždy když se změní activeDisplayOption / floor / scény
   useEffect(() => {
     if (
       engine &&
@@ -218,14 +365,21 @@ const BuildingViewer = () => {
       currentActiveFloor !== null &&
       allFloorMeshes.length
     ) {
-      showBubblesOnActiveFloor(
-        scene,
-        currentActiveFloor,
-        allFloorMeshes,
-        activeDisplayOption === "heatmap",
-        activeDisplayOption === "wifi",
-        activeDisplayOption === "airQuality"
-      );
+      // Pokud je aktivní režim bublin (heatmap, wifi nebo airQuality), smažeme staré bublinky a překreslíme
+      if (["heatmap", "wifi", "airQuality"].includes(activeDisplayOption)) {
+        clearBubbles(scene);
+        showBubblesOnActiveFloor(
+          scene,
+          currentActiveFloor,
+          allFloorMeshes,
+          activeDisplayOption === "heatmap",
+          activeDisplayOption === "wifi",
+          activeDisplayOption === "airQuality"
+        );
+      } else {
+        // Pokud aktuální režim není bubliny, nic neuděláme (žádné předčasné mazání)
+        // Poznámka: evak a jiné režimy se řeší jinde
+      }
     }
   }, [engine, scene, currentActiveFloor, allFloorMeshes, activeDisplayOption]);
 
@@ -251,21 +405,25 @@ const BuildingViewer = () => {
     }
   }, [engine, scene, currentActiveFloor]);
 
-  // Úklid evakuačních cest při vypnutí checkboxu nebo při změně patra
+  // Úklid evakuačních cest při vypnutí checkboxu / přepnutí režimu
   useEffect(() => {
     if (!scene) return;
     if (activeDisplayOption !== "evacuation") {
       clearEvacuationMeshes(scene);
     }
+    // Pokud přepneme z bublinových režimů na něco jiného, smažeme bublinky
+    if (!["heatmap", "wifi", "airQuality"].includes(activeDisplayOption)) {
+      clearBubbles(scene);
+    }
   }, [scene, activeDisplayOption]);
 
+  // Při změně patra: SMAZAT POUZE evakuační prvky (endpointy/šipky),
+  // bublinky ponecháme (hlavní efekt je překreslí pokud je aktivní režim bublin).
   useEffect(() => {
     if (!scene) return;
-    if (activeDisplayOption === "evacuation") {
-      // při změně patra necháme vždy uklidit staré evakuační prvky
-      clearEvacuationMeshes(scene);
-    }
-  }, [scene, currentActiveFloor, activeDisplayOption]);
+    clearEvacuationMeshes(scene);
+    // NEVOLAT clearBubbles zde — chceme, aby heatmap/air/wifi zůstaly (a hlavní efekt je překreslí)
+  }, [scene, currentActiveFloor]);
 
   const setupCamera = (scene, floors, currentActiveFloor) => {
     if (!scene || !floors) return;
@@ -371,10 +529,11 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
-    // --- NOVÉ: vyčistit evakuační meshe ---
+    // --- NOVÉ: vyčistit pouze evakuační meshe (aby A/B marker/šipky nezůstaly) ---
     if (scene) {
       try {
         clearEvacuationMeshes(scene);
+        // NEVOLAT clearBubbles zde — chceme, aby heatmap/air/wifi zůstaly aktivní
       } catch (e) {
         // ignore
       }
@@ -478,6 +637,8 @@ const BuildingViewer = () => {
   const handleFloorChange = (floorId) => {
     if (scene) {
       try {
+        // při manuální změně patra smažeme evakuační prvky,
+        // ale NE bublinky — necháme je být (hlavní efekt je překreslí pokud jsou aktivní)
         clearEvacuationMeshes(scene);
       } catch (e) {
         // ignore
@@ -506,7 +667,6 @@ const BuildingViewer = () => {
   const handleOptionToggle = (option) => {
     const next = activeDisplayOption === option ? null : option;
     setActiveDisplayOption(next);
-
     if (
       !sceneRef.current ||
       !Array.isArray(allFloorMeshesRef.current) ||
@@ -514,14 +674,18 @@ const BuildingViewer = () => {
     ) {
       return;
     }
-
     requestAnimationFrame(() => {
       try {
+        // vždy před vykreslením bublin smažeme staré bublinky
+        if (["heatmap", "wifi", "airQuality"].includes(next)) {
+          clearBubbles(sceneRef.current);
+        }
         showBubblesOnActiveFloor(
           sceneRef.current,
           currentActiveFloorRef.current,
           allFloorMeshesRef.current,
           next === "heatmap",
+          next === "wifi",
           next === "airQuality"
         );
       } catch (e) {}

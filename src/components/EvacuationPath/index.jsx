@@ -1,11 +1,9 @@
 import * as BABYLON from "babylonjs";
 import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import React, { useEffect } from "react";
-
 const DEFAULT_CLEARANCE = 0.5;
 let SAMPLE_STEP = 0.08;
 const PASSABLE_UNDER_Y = 2.0;
-
 const ARROW_SPACING = 1.2;
 const ARROW_SHAFT_LEN = 0.55;
 const ARROW_HEAD_LEN = 0.28;
@@ -13,19 +11,14 @@ const ARROW_SHAFT_THICK = 0.1;
 const ARROW_HEAD_DIAM = 0.3;
 const ARROW_START_OFFSET = 0.3;
 const ARROW_MOVE_SPEED = 1.2; // m/s – rychlost pohybu šipek podél trasy
-
 const DEFAULT_WALL_THICKNESS = 0.2;
 const BASE_GRAPH_MARGIN = 18;
-
 // žlutý pás (ribbon) – statický
 const PATH_STRIP_WIDTH = 0.75;
 const PATH_STRIP_THICKNESS = 0.04;
 const PATH_STRIP_Y_OFFSET = 0.08;
 const RIBBON_SAMPLING_STEP = 0.15;
-
-// volba výkonu pro šipky
 const USE_THIN_INSTANCES_FOR_ARROWS = false; // false = klasické instance (nejjistější viditelnost)
-
 class VGNode {
   constructor(position, id) {
     this.position = position;
@@ -33,22 +26,18 @@ class VGNode {
     this.neighbors = [];
   }
 }
-
 const getDistance = (a, b) =>
   Math.hypot(a.x - b.x, (a.y || 0) - (b.y || 0), a.z - b.z);
-
 const pointInsideOrOnRect = (p, r, eps = 1e-6) =>
   p.x >= r.minX - eps &&
   p.x <= r.maxX + eps &&
   p.z >= r.minZ - eps &&
   p.z <= r.maxZ + eps;
-
 const pointStrictInsideRect = (p, r, eps = 1e-4) =>
   p.x > r.minX + eps &&
   p.x < r.maxX - eps &&
   p.z > r.minZ + eps &&
   p.z < r.maxZ - eps;
-
 const rectIntersectsBBox = (r, bbox) =>
   !(
     r.maxX < bbox.minX ||
@@ -56,7 +45,6 @@ const rectIntersectsBBox = (r, bbox) =>
     r.maxZ < bbox.minZ ||
     r.minZ > bbox.maxZ
   );
-
 // ---------- Obstacles ----------
 const collectObstacleRects = (
   floorData,
@@ -67,7 +55,6 @@ const collectObstacleRects = (
   const parts = walls.filter((w) => w.type === "partition" && w.start && w.end);
   const rects = [];
   const eps = 1e-6;
-
   for (const p of parts) {
     const bottomY =
       typeof p.yLevel === "number"
@@ -76,18 +63,15 @@ const collectObstacleRects = (
         ? p.y
         : 0;
     if (bottomY >= passableUnderY - 1e-6) continue;
-
     const x1 = p.start.x,
       z1 = p.start.z;
     const x2 = p.end.x,
       z2 = p.end.z;
-
     const w =
       typeof p.partitionWidth === "number"
         ? p.partitionWidth
         : DEFAULT_WALL_THICKNESS;
     const half = w / 2 + clearance;
-
     if (Math.abs(z1 - z2) < eps) {
       rects.push({
         minX: Math.min(x1, x2) - clearance,
@@ -113,7 +97,6 @@ const collectObstacleRects = (
   }
   return rects;
 };
-
 const collectHoleRects = (floorData, clearance) => {
   const holes = floorData?.holes || [];
   const rects = [];
@@ -131,7 +114,6 @@ const collectHoleRects = (floorData, clearance) => {
   }
   return rects;
 };
-
 const isPinkGlassMaterial = (mat) => {
   if (!mat) return false;
   const nameOrId = (mat.name || mat.id || "").toLowerCase();
@@ -143,30 +125,23 @@ const isPinkGlassMaterial = (mat) => {
   }
   return false;
 };
-
 const collectPinkGlassRects = (scene, yLevel, clearance) => {
   const rects = [];
   if (!scene) return rects;
-
   const walkBandMin = yLevel - 0.1;
   const walkBandMax = yLevel + PASSABLE_UNDER_Y + 0.3;
-
   for (const m of scene.meshes) {
     if (!m || !m.material) continue;
     if (!isPinkGlassMaterial(m.material)) continue;
     const enabled =
       typeof m.isEnabled === "function" ? m.isEnabled() : m.isEnabled;
     if (!enabled || m.isVisible === false) continue;
-
     m.computeWorldMatrix(true);
     const bb = m.getBoundingInfo?.().boundingBox;
     if (!bb) continue;
-
     const min = bb.minimumWorld;
     const max = bb.maximumWorld;
-
     if (max.y < walkBandMin || min.y > walkBandMax) continue;
-
     rects.push({
       minX: min.x - clearance,
       maxX: max.x + clearance,
@@ -174,36 +149,28 @@ const collectPinkGlassRects = (scene, yLevel, clearance) => {
       maxZ: max.z + clearance,
     });
   }
-
   return rects;
 };
-
 const collectNamedMeshRects = (scene, yLevel, clearance, nameIncludes = []) => {
   const rects = [];
   if (!scene || !Array.isArray(scene.meshes)) return rects;
-
   const walkBandMin = yLevel - 0.1;
   const walkBandMax = yLevel + PASSABLE_UNDER_Y + 0.3;
   const includesAny = (name, arr) =>
     arr.some((token) => name.includes(token.toLowerCase()));
-
   for (const m of scene.meshes) {
     if (!m) continue;
     const enabled =
       typeof m.isEnabled === "function" ? m.isEnabled() : m.isEnabled;
     if (!enabled || m.isVisible === false) continue;
-
     const name = (m.name || "").toLowerCase();
     if (!includesAny(name, nameIncludes)) continue;
-
     m.computeWorldMatrix(true);
     const bb = m.getBoundingInfo?.().boundingBox;
     if (!bb) continue;
-
     const min = bb.minimumWorld;
     const max = bb.maximumWorld;
     if (max.y < walkBandMin || min.y > walkBandMax) continue;
-
     rects.push({
       minX: min.x - clearance,
       maxX: max.x + clearance,
@@ -213,14 +180,12 @@ const collectNamedMeshRects = (scene, yLevel, clearance, nameIncludes = []) => {
   }
   return rects;
 };
-
 // ---------- Visibility + path ----------
 const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   const dx = b.x - a.x;
   const dz = b.z - a.z;
   const dist = Math.sqrt(dx * dx + dz * dz);
   if (dist === 0) return true;
-
   const steps = Math.max(2, Math.ceil(dist / step));
   const segBB = {
     minX: Math.min(a.x, b.x),
@@ -228,7 +193,6 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
     minZ: Math.min(a.z, b.z),
     maxZ: Math.max(a.z, b.z),
   };
-
   for (const r of obstacleRects) {
     if (
       segBB.maxX < r.minX ||
@@ -237,7 +201,6 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
       segBB.minZ > r.maxZ
     )
       continue;
-
     for (let i = 1; i < steps; i++) {
       const t = i / steps;
       const x = a.x + dx * t;
@@ -247,7 +210,6 @@ const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   }
   return true;
 };
-
 const buildVisibilityNodes_multi = (start, candidates, obstacleRects) => {
   const nodes = [];
   const seen = new Set();
@@ -258,14 +220,11 @@ const buildVisibilityNodes_multi = (start, candidates, obstacleRects) => {
       nodes.push(new VGNode({ x: pt.x, y: 0, z: pt.z }, id));
     }
   };
-
   push(start, "start");
-
   for (let i = 0; i < candidates.length; i++) {
     const c = candidates[i];
     push(c, `cand_${i}`);
   }
-
   for (const r of obstacleRects) {
     [
       { x: r.minX, z: r.minZ },
@@ -276,7 +235,6 @@ const buildVisibilityNodes_multi = (start, candidates, obstacleRects) => {
   }
   return nodes;
 };
-
 const buildVisibilityGraph = (nodes, obstacleRects) => {
   const idToNode = new Map(nodes.map((n) => [n.id, n]));
   for (let i = 0; i < nodes.length; i++) {
@@ -293,7 +251,6 @@ const buildVisibilityGraph = (nodes, obstacleRects) => {
   }
   return idToNode;
 };
-
 const aStar = (nodes, idToNode, startPos, endPos) => {
   const s = nodes.find(
     (n) => n.position.x === startPos.x && n.position.z === startPos.z
@@ -302,15 +259,12 @@ const aStar = (nodes, idToNode, startPos, endPos) => {
     (n) => n.position.x === endPos.x && n.position.z === endPos.z
   );
   if (!s || !e) return [];
-
   const open = new Set([s.id]);
   const came = new Map();
   const g = new Map(nodes.map((n) => [n.id, Infinity]));
   const f = new Map(nodes.map((n) => [n.id, Infinity]));
-
   g.set(s.id, 0);
   f.set(s.id, getDistance(startPos, endPos));
-
   while (open.size) {
     let cur = null,
       best = Infinity;
@@ -321,14 +275,12 @@ const aStar = (nodes, idToNode, startPos, endPos) => {
         cur = id;
       }
     }
-
     if (cur === e.id) {
       const path = [];
       for (let cid = cur; cid; cid = came.get(cid))
         path.push(idToNode.get(cid).position);
       return path.reverse();
     }
-
     open.delete(cur);
     const node = idToNode.get(cur);
     for (const nb of node.neighbors) {
@@ -344,7 +296,6 @@ const aStar = (nodes, idToNode, startPos, endPos) => {
   }
   return [];
 };
-
 const smoothPath = (path, obstacleRects) => {
   if (path.length <= 2) return path;
   const result = [];
@@ -358,7 +309,6 @@ const smoothPath = (path, obstacleRects) => {
   }
   return result;
 };
-
 const nudgeOutOfRects = (p, rects, pad = 1e-2, maxIter = 10) => {
   const out = { ...p };
   let iter = 0;
@@ -382,12 +332,10 @@ const nudgeOutOfRects = (p, rects, pad = 1e-2, maxIter = 10) => {
   }
   return out;
 };
-
 const straightPathfinding = (start, end, obstacleRects) => {
   const s = nudgeOutOfRects(start, obstacleRects);
   const e = nudgeOutOfRects(end, obstacleRects);
   if (lineOfSight(s, e, obstacleRects)) return [s, e];
-
   const nodes = buildVisibilityNodes_multi(s, [e], obstacleRects);
   const idToNode = buildVisibilityGraph(nodes, obstacleRects);
   const raw = aStar(nodes, idToNode, s, e);
@@ -399,7 +347,6 @@ const straightPathfinding = (start, end, obstacleRects) => {
   }
   return smoothed;
 };
-
 const pathLength = (path) => {
   if (!path || path.length < 2) return Infinity;
   let L = 0;
@@ -407,7 +354,6 @@ const pathLength = (path) => {
     L += getDistance(path[i], path[i + 1]);
   return L;
 };
-
 // ---------- Scene cache ----------
 const ensureSceneCache = (scene) => {
   if (!scene.__evacCache) {
@@ -425,7 +371,6 @@ const ensureSceneCache = (scene) => {
   }
   return scene.__evacCache;
 };
-
 // ---------- Base VG cache ----------
 const getOrBuildBaseVisibilityGraphForFloor = (
   scene,
@@ -437,7 +382,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   extraPoints = []
 ) => {
   const cache = ensureSceneCache(scene);
-
   const bbox = {
     minX: Infinity,
     maxX: -Infinity,
@@ -458,16 +402,13 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   bbox.maxX += BASE_GRAPH_MARGIN;
   bbox.minZ -= BASE_GRAPH_MARGIN;
   bbox.maxZ += BASE_GRAPH_MARGIN;
-
   const regionKey = `${Math.floor(bbox.minX / BASE_GRAPH_MARGIN)}_${Math.floor(
     bbox.minZ / BASE_GRAPH_MARGIN
   )}_${Math.floor(bbox.maxX / BASE_GRAPH_MARGIN)}_${Math.floor(
     bbox.maxZ / BASE_GRAPH_MARGIN
   )}`;
   const key = `baseVG_${floorId}_${candidates.length}_${clearance}_${yLevel}_${regionKey}`;
-
   if (cache.baseVG && cache.baseVG.key === key) return cache.baseVG.value;
-
   const nodes = [];
   const seen = new Set();
   const push = (pt, label) => {
@@ -477,9 +418,7 @@ const getOrBuildBaseVisibilityGraphForFloor = (
       nodes.push(new VGNode({ x: pt.x, y: 0, z: pt.z }, id));
     }
   };
-
   for (let i = 0; i < candidates.length; i++) push(candidates[i], `cand_${i}`);
-
   for (const r of obstacles) {
     if (!rectIntersectsBBox(r, bbox)) continue;
     push({ x: r.minX, z: r.minZ }, "corner");
@@ -493,9 +432,7 @@ const getOrBuildBaseVisibilityGraphForFloor = (
     push({ x: bbox.maxX, z: bbox.maxZ }, "bbox");
     push({ x: bbox.minX, z: bbox.maxZ }, "bbox");
   }
-
   const idToNode = buildVisibilityGraph(nodes, obstacles);
-
   const candidateNodeIds = new Set();
   const mapNodeIdToCandidateIdx = new Map();
   for (let i = 0; i < candidates.length; i++) {
@@ -508,12 +445,10 @@ const getOrBuildBaseVisibilityGraphForFloor = (
       mapNodeIdToCandidateIdx.set(found.id, i);
     }
   }
-
   const value = { nodes, idToNode, candidateNodeIds, mapNodeIdToCandidateIdx };
   cache.baseVG = { key, value };
   return value;
 };
-
 // Dijkstra ...
 const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   const dist = new Map(nodes.map((n) => [n.id, Infinity]));
@@ -521,7 +456,6 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   dist.set(startId, 0);
   const visited = new Set();
   const pq = new Set([startId]);
-
   while (pq.size) {
     let cur = null;
     let best = Infinity;
@@ -533,7 +467,6 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
       }
     }
     if (cur === null) break;
-
     pq.delete(cur);
     if (targetIds.has(cur)) {
       const path = [];
@@ -543,7 +476,6 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
       }
       return path.reverse();
     }
-
     visited.add(cur);
     const node = idToNode.get(cur);
     for (const nb of node.neighbors) {
@@ -558,7 +490,6 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   }
   return [];
 };
-
 // ---------- Best-of-candidates ----------
 const getFloorEndCandidates = (floorData) => {
   const list =
@@ -567,7 +498,6 @@ const getFloorEndCandidates = (floorData) => {
     (p) => p && typeof p.x === "number" && typeof p.z === "number"
   );
 };
-
 const getNavClearance = (floorData) => {
   const floorNav = floorData?.nav || floorData?.navigation;
   if (floorNav && typeof floorNav.clearance === "number")
@@ -577,7 +507,6 @@ const getNavClearance = (floorData) => {
     return globalNav.clearance;
   return DEFAULT_CLEARANCE;
 };
-
 const getCachedObstacleRectsForFloor = (
   scene,
   floorData,
@@ -587,18 +516,15 @@ const getCachedObstacleRectsForFloor = (
   const cache = ensureSceneCache(scene);
   const key = `${floorData?.id ?? "nofloor"}_${clearance}`;
   if (cache.obstacleByFloor.has(key)) return cache.obstacleByFloor.get(key);
-
   const wallRects = collectObstacleRects(
     floorData,
     clearance,
     PASSABLE_UNDER_Y
   );
   const holeRects = collectHoleRects(floorData, clearance);
-
   const meshKey = `${scene.meshes.length}_${yLevel}_${clearance}`;
   let pinkRects = cache.pinkGlassRects;
   let namedRects = cache.namedMeshRects;
-
   if (cache.meshRectsKey !== meshKey) {
     pinkRects = collectPinkGlassRects(scene, yLevel, clearance);
     namedRects = [
@@ -617,7 +543,6 @@ const getCachedObstacleRectsForFloor = (
     cache.pinkGlassRects = pinkRects;
     cache.namedMeshRects = namedRects;
   }
-
   const all = [
     ...wallRects,
     ...holeRects,
@@ -627,7 +552,6 @@ const getCachedObstacleRectsForFloor = (
   cache.obstacleByFloor.set(key, all);
   return all;
 };
-
 const bestPathToCandidates = (
   start,
   candidates,
@@ -641,10 +565,8 @@ const bestPathToCandidates = (
     (p) => p && typeof p.x === "number" && typeof p.z === "number"
   );
   if (!validCands.length) return { path: [], target: null, length: Infinity };
-
   const s = nudgeOutOfRects(start, obstacles);
   const nudgedCands = validCands.map((c) => nudgeOutOfRects(c, obstacles));
-
   let bestDirect = null;
   for (let i = 0; i < nudgedCands.length; i++) {
     const c = nudgedCands[i];
@@ -655,7 +577,6 @@ const bestPathToCandidates = (
     }
   }
   if (bestDirect) return bestDirect;
-
   let base = null;
   try {
     if (scene && typeof floorId !== "undefined" && floorId !== null) {
@@ -672,16 +593,13 @@ const bestPathToCandidates = (
   } catch {
     base = null;
   }
-
   if (!base) {
     const nodes = buildVisibilityNodes_multi(s, nudgedCands, obstacles);
     const idToNode = buildVisibilityGraph(nodes, obstacles);
-
     const startNode = nodes.find(
       (n) => n.position.x === s.x && n.position.z === s.z
     );
     if (!startNode) return { path: [], target: null, length: Infinity };
-
     const candidateNodeIds = new Set();
     for (let i = 0; i < nudgedCands.length; i++) {
       const c = nudgedCands[i];
@@ -690,7 +608,6 @@ const bestPathToCandidates = (
       );
       if (n) candidateNodeIds.add(n.id);
     }
-
     let raw = dijkstraToAnyTarget(
       nodes,
       idToNode,
@@ -698,7 +615,6 @@ const bestPathToCandidates = (
       candidateNodeIds
     );
     if (!raw.length) return { path: [], target: null, length: Infinity };
-
     raw = smoothPath(raw, obstacles);
     if (raw.length >= 1) {
       raw[0] = s;
@@ -711,21 +627,17 @@ const bestPathToCandidates = (
     }
     return { path: [], target: null, length: Infinity };
   }
-
   const nodesCopy = base.nodes.slice();
   const idToNodeCopy = new Map(base.idToNode);
-
   const startId = `start_${s.x.toFixed(4)}_${s.z.toFixed(4)}`;
   const startNode = new VGNode({ x: s.x, y: 0, z: s.z }, startId);
   startNode.neighbors = [];
-
   for (const n of nodesCopy) {
     if (lineOfSight(startNode.position, n.position, obstacles)) {
       const d = getDistance(startNode.position, n.position);
       startNode.neighbors.push({ id: n.id, cost: d });
     }
   }
-
   if (startNode.neighbors.length === 0) {
     const nodes = buildVisibilityNodes_multi(s, nudgedCands, obstacles);
     const idToNode = buildVisibilityGraph(nodes, obstacles);
@@ -733,7 +645,6 @@ const bestPathToCandidates = (
       (n) => n.position.x === s.x && n.position.z === s.z
     );
     if (!startNode2) return { path: [], target: null, length: Infinity };
-
     const candidateNodeIds = new Set();
     for (let i = 0; i < nudgedCands.length; i++) {
       const c = nudgedCands[i];
@@ -742,7 +653,6 @@ const bestPathToCandidates = (
       );
       if (n) candidateNodeIds.add(n.id);
     }
-
     let raw = dijkstraToAnyTarget(
       nodes,
       idToNode,
@@ -750,7 +660,6 @@ const bestPathToCandidates = (
       candidateNodeIds
     );
     if (!raw.length) return { path: [], target: null, length: Infinity };
-
     raw = smoothPath(raw, obstacles);
     if (raw.length >= 1) {
       raw[0] = s;
@@ -763,14 +672,11 @@ const bestPathToCandidates = (
     }
     return { path: [], target: null, length: Infinity };
   }
-
   nodesCopy.push(startNode);
   idToNodeCopy.set(startId, startNode);
-
   const candidateNodeIds = new Set(base.candidateNodeIds);
   if (candidateNodeIds.size === 0)
     return { path: [], target: null, length: Infinity };
-
   const raw = dijkstraToAnyTarget(
     nodesCopy,
     idToNodeCopy,
@@ -778,7 +684,6 @@ const bestPathToCandidates = (
     candidateNodeIds
   );
   if (!raw || !raw.length) return { path: [], target: null, length: Infinity };
-
   const smoothed = smoothPath(raw, obstacles);
   if (smoothed.length >= 1) {
     smoothed[0] = s;
@@ -791,14 +696,12 @@ const bestPathToCandidates = (
   }
   return { path: [], target: null, length: Infinity };
 };
-
 // ---------- Arrow template ----------
 const createArrowTemplate = (scene) => {
   if (!scene) return null;
   const cache = ensureSceneCache(scene);
   if (cache.arrowTemplate && !cache.arrowTemplate.isDisposed())
     return cache.arrowTemplate;
-
   const shaft = BABYLON.MeshBuilder.CreateBox(
     "arrow_shaft",
     {
@@ -809,7 +712,6 @@ const createArrowTemplate = (scene) => {
     scene
   );
   shaft.position.z = -ARROW_HEAD_LEN / 2;
-
   const head = BABYLON.MeshBuilder.CreateCylinder(
     "arrow_head",
     {
@@ -822,7 +724,6 @@ const createArrowTemplate = (scene) => {
   );
   head.rotation.x = Math.PI / 2;
   head.position.z = ARROW_SHAFT_LEN / 2;
-
   const arrow = BABYLON.Mesh.MergeMeshes(
     [shaft, head],
     true,
@@ -832,19 +733,15 @@ const createArrowTemplate = (scene) => {
     true
   );
   arrow.name = "arrow_template";
-
   const mat = new BABYLON.StandardMaterial("arrow_mat", scene);
   mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
   mat.emissiveColor = new BABYLON.Color3(1, 0, 0);
   mat.specularColor = new BABYLON.Color3(0, 0, 0);
   arrow.material = mat;
-
   arrow.setEnabled(false); // šablona, instance budou viditelné
-
   cache.arrowTemplate = arrow;
   return arrow;
 };
-
 // ---------- Helper: sample path densely ----------
 const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
   if (!path || path.length < 2) return path ? [...path] : [];
@@ -865,58 +762,43 @@ const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
   out.push({ x: path[path.length - 1].x, z: path[path.length - 1].z });
   return out;
 };
-
 // ---------- Helper: jednotný "pásek" jako ribbon ----------
 const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
   if (!scene || !center || center.length < 2) return null;
-
   const y = yLevel + PATH_STRIP_Y_OFFSET;
   const w2 = width / 2;
-
   const left = [];
   const right = [];
   const n = center.length;
-
   for (let i = 0; i < n; i++) {
     const p = center[i];
     const prev = center[i > 0 ? i - 1 : i];
     const next = center[i < n - 1 ? i + 1 : i];
-
     let vIn = new BABYLON.Vector3(p.x - prev.x, 0, p.z - prev.z);
     let vOut = new BABYLON.Vector3(next.x - p.x, 0, next.z - p.z);
     if (vIn.lengthSquared() < 1e-10 && vOut.lengthSquared() < 1e-10) continue;
     if (vIn.lengthSquared() < 1e-10) vIn = vOut.clone();
     if (vOut.lengthSquared() < 1e-10) vOut = vIn.clone();
-
     vIn.normalize();
     vOut.normalize();
-
     const perpIn = new BABYLON.Vector3(-vIn.z, 0, vIn.x);
     const perpOut = new BABYLON.Vector3(-vOut.z, 0, vOut.x);
-
     const miter = perpIn.add(perpOut);
     if (miter.lengthSquared() < 1e-10) miter.copyFrom(perpOut);
     miter.normalize();
-
     let denom = BABYLON.Vector3.Dot(miter, perpOut);
     const eps = 1e-3;
     if (Math.abs(denom) < eps) denom = denom >= 0 ? eps : -eps;
-
     let scale = w2 / denom;
-
     const miterLimit = 3.0;
     const maxScale = w2 * miterLimit;
     if (scale > maxScale) scale = maxScale;
     if (scale < -maxScale) scale = -maxScale;
-
     const off = miter.scale(scale);
-
     left.push(new BABYLON.Vector3(p.x + off.x, y, p.z + off.z));
     right.push(new BABYLON.Vector3(p.x - off.x, y, p.z - off.z));
   }
-
   if (left.length < 2 || right.length < 2) return null;
-
   const ribbon = BABYLON.MeshBuilder.CreateRibbon(
     "path_strip_unified",
     {
@@ -928,11 +810,9 @@ const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
     },
     scene
   );
-
   ribbon.material = material;
   return ribbon;
 };
-
 // ---------- Arc-length tabulka + sampling ----------
 const buildArcLengthTable = (center) => {
   const cum = new Float32Array(center.length);
@@ -947,7 +827,6 @@ const buildArcLengthTable = (center) => {
   }
   return { cum, total };
 };
-
 const sampleAlongPath = (center, arc, s) => {
   const { cum, total } = arc;
   if (total <= 0) {
@@ -956,7 +835,6 @@ const sampleAlongPath = (center, arc, s) => {
   }
   let ss = s % total;
   if (ss < 0) ss += total;
-
   let lo = 0,
     hi = cum.length - 1;
   while (lo < hi) {
@@ -966,20 +844,16 @@ const sampleAlongPath = (center, arc, s) => {
   }
   const i1 = lo;
   const i0 = Math.max(0, i1 - 1);
-
   const segStart = cum[i0];
   const segLen = Math.max(1e-6, cum[i1] - cum[i0]);
   const t = (ss - segStart) / segLen;
-
   const a = center[i0];
   const b = center[i1];
   const x = a.x + (b.x - a.x) * t;
   const z = a.z + (b.z - a.z) * t;
   const yaw = Math.atan2(b.x - a.x, b.z - a.z);
-
   return { x, z, yaw };
 };
-
 // ---------- Viz: statický pás + pohybující se šipky ----------
 const visualizeArrowPath = (
   scene,
@@ -989,11 +863,9 @@ const visualizeArrowPath = (
   startOffset = ARROW_START_OFFSET
 ) => {
   if (!path || path.length < 2) return null;
-
   const parent = new BABYLON.TransformNode(`arrow_path_${Date.now()}`, scene);
   const template = createArrowTemplate(scene);
   const cache = ensureSceneCache(scene);
-
   // materiál pro žlutý pás (statický)
   if (!cache.pathStripMat) {
     const m = new BABYLON.StandardMaterial("path_strip_mat_base", scene);
@@ -1004,11 +876,9 @@ const visualizeArrowPath = (
     cache.pathStripMat = m;
   }
   const stripMat = cache.pathStripMat.clone(`path_strip_mat_${Date.now()}`);
-
   // centerline
   const center = densifyPath(path, RIBBON_SAMPLING_STEP);
   if (center.length < 2) return parent;
-
   // pás (ribbon) – statický
   const stripMesh = buildUnifiedStripMesh(
     scene,
@@ -1018,24 +888,19 @@ const visualizeArrowPath = (
     stripMat
   );
   if (stripMesh) stripMesh.parent = parent;
-
   // předpočítaná délka pro šipky
   const arc = buildArcLengthTable(center);
   const totalLen = arc.total;
   if (totalLen <= 1e-4) return parent;
-
   const count = Math.max(2, Math.ceil(totalLen / Math.max(0.1, spacing)));
   const stripY = yLevel + PATH_STRIP_Y_OFFSET;
   const arrowY = stripY + 0.03;
-
   const engine = scene.getEngine ? scene.getEngine() : null;
-
   // a) Thin instances (volitelné)
   let arrowHost = null;
   let matrices = null;
   // b) Klasické instance (default)
   const arrowInstances = [];
-
   if (USE_THIN_INSTANCES_FOR_ARROWS) {
     arrowHost = template.clone(`arrow_host_${Date.now()}`, parent, true);
     arrowHost.visibility = 1;
@@ -1052,9 +917,7 @@ const visualizeArrowPath = (
       arrowInstances.push(inst);
     }
   }
-
   let s0 = ((startOffset % totalLen) + totalLen) % totalLen;
-
   const updateArrows = () => {
     if (USE_THIN_INSTANCES_FOR_ARROWS) {
       for (let k = 0; k < count; k++) {
@@ -1078,28 +941,21 @@ const visualizeArrowPath = (
       }
     }
   };
-
   // první vykreslení
   updateArrows();
-
   const beforeRender = scene.onBeforeRenderObservable.add(() => {
     const dt = engine ? engine.getDeltaTime() * 0.001 : 1 / 60;
-
     // posun šipek po směru trasy (pouze šipky se hýbou, pás je statický)
     s0 += ARROW_MOVE_SPEED * dt;
     if (s0 > 1e6 || s0 < -1e6) s0 = s0 % totalLen;
-
     updateArrows();
   });
-
   parent.__evacAnimObserver = beforeRender;
   parent.__evacStripMaterial = stripMat;
   parent.__evacArrowHost = arrowHost;
   parent.__evacArrowInstances = arrowInstances;
-
   return parent;
 };
-
 // ---------- Štítky a značky ----------
 const makeLabel = (scene, text, pos, y, size = 0.35) => {
   const cache = ensureSceneCache(scene);
@@ -1114,7 +970,6 @@ const makeLabel = (scene, text, pos, y, size = 0.35) => {
     );
     const ctx = dt.getContext();
     dt.hasAlpha = true;
-
     ctx.clearRect(0, 0, 256, 256);
     ctx.font = "bold 180px Arial";
     ctx.textAlign = "center";
@@ -1125,7 +980,6 @@ const makeLabel = (scene, text, pos, y, size = 0.35) => {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 4;
     ctx.fillText(text, 128, 128);
-
     const mat = new BABYLON.StandardMaterial(`label_mat_${text}`, scene);
     mat.diffuseTexture = dt;
     mat.opacityTexture = dt;
@@ -1133,11 +987,9 @@ const makeLabel = (scene, text, pos, y, size = 0.35) => {
     mat.disableLighting = true;
     mat.backFaceCulling = false;
     mat.alpha = 1;
-
     cached = { mat, dt };
     cache.labelCache.set(key, cached);
   }
-
   const plane = BABYLON.MeshBuilder.CreatePlane(
     `label_${text}_${Date.now()}`,
     { size },
@@ -1148,80 +1000,12 @@ const makeLabel = (scene, text, pos, y, size = 0.35) => {
   plane.material = cached.mat;
   return plane;
 };
-
-const createDistanceTag = (scene, meters, pos, y, tangent = { x: 1, z: 0 }) => {
-  const text = `${meters.toFixed(1)} m`;
-  const size = 0.32;
-
-  const dt = new BABYLON.DynamicTexture(
-    `dist_${Date.now()}`,
-    { width: 256, height: 128 },
-    scene,
-    false
-  );
-  const ctx = dt.getContext();
-  dt.hasAlpha = true;
-
-  ctx.clearRect(0, 0, 256, 128);
-  ctx.fillStyle = "rgba(0,0,0,0.65)";
-  const r = 24,
-    w = 210,
-    h = 64;
-  const x = (256 - w) / 2,
-    z = (128 - h) / 2;
-  ctx.beginPath();
-  ctx.moveTo(x + r, z);
-  ctx.lineTo(x + w - r, z);
-  ctx.quadraticCurveTo(x + w, z, x + w, z + r);
-  ctx.lineTo(x + w, z + h - r);
-  ctx.quadraticCurveTo(x + w, z + h, x + w - r, z + h);
-  ctx.lineTo(x + r, z + h);
-  ctx.quadraticCurveTo(x, z + h, x, z + h - r);
-  ctx.lineTo(x, z + r);
-  ctx.quadraticCurveTo(x, z, x + r, z);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.font = "bold 64px Arial";
-  ctx.fillStyle = "#ffffff";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(text, 128, 64);
-  dt.update(false);
-
-  const mat = new BABYLON.StandardMaterial(`dist_mat_${Date.now()}`, scene);
-  mat.diffuseTexture = dt;
-  mat.opacityTexture = dt;
-  mat.emissiveTexture = dt;
-  mat.disableLighting = true;
-  mat.backFaceCulling = false;
-
-  const tLen = Math.hypot(tangent.x, tangent.z) || 1;
-  const nx = -tangent.z / tLen;
-  const nz = tangent.x / tLen;
-  const offset = 0.45;
-
-  const plane = BABYLON.MeshBuilder.CreatePlane(
-    `dist_label_${Date.now()}`,
-    { size },
-    scene
-  );
-  plane.position = new BABYLON.Vector3(
-    pos.x + nx * offset,
-    y,
-    pos.z + nz * offset
-  );
-  plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
-  plane.material = mat;
-
-  plane.__distMat = mat;
-  plane.__distTex = dt;
-  return plane;
+const createDistanceTag = (/* removed - not used anymore */) => {
+  // distance tag intentionally removed
+  return null;
 };
-
 const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   const created = [];
-
   const diskH = 0.02;
   const diskDiam = 0.7;
   const disk = BABYLON.MeshBuilder.CreateCylinder(
@@ -1239,7 +1023,6 @@ const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   diskMat.specularColor = new BABYLON.Color3(0, 0, 0);
   disk.material = diskMat;
   created.push(disk);
-
   const sphere = BABYLON.MeshBuilder.CreateSphere(
     `marker_sphere_${labelText}_${Date.now()}`,
     { diameter: 0.28, segments: 16 },
@@ -1255,17 +1038,13 @@ const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   sMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
   sphere.material = sMat;
   created.push(sphere);
-
   const label = makeLabel(scene, labelText, p, yLevel + 0.42, 0.35);
   created.push(label);
-
   return created;
 };
-
 const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
   const startColor = new BABYLON.Color3(0.1, 0.8, 0.2);
   const endColor = new BABYLON.Color3(0.9, 0.1, 0.1);
-
   const startSet = createEndpointMarker(scene, start, yLevel, startColor, "A");
   const endSet = createEndpointMarker(
     scene,
@@ -1274,10 +1053,8 @@ const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
     endColor,
     endLabelText
   );
-
   return [...startSet, ...endSet];
 };
-
 // ---------- Component ----------
 const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
   useEffect(() => {
@@ -1292,14 +1069,11 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
         floorId === null
       )
         return;
-
       const disposed =
         typeof scene.isDisposed === "function" ? scene.isDisposed() : false;
       if (disposed) return;
-
       const floorData = CONFIG_DATA.floors.find((f) => f.id === floorId);
       if (!floorData) return;
-
       // vypočet yLevel podle patra
       let yLevel = 0;
       for (let i = 0; i < CONFIG_DATA.floors.length; i++) {
@@ -1313,7 +1087,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           CONFIG_DATA.visualization.floor_thickness +
           CONFIG_DATA.visualization.floor_spacing;
       }
-
       const navClearance = getNavClearance(floorData);
       const obstacles = getCachedObstacleRectsForFloor(
         scene,
@@ -1321,10 +1094,8 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
         navClearance,
         yLevel
       );
-
       const candidates = getFloorEndCandidates(floorData);
       if (!candidates.length) return;
-
       const { path, target } = bestPathToCandidates(
         { x: startPoint.x, z: startPoint.z },
         candidates,
@@ -1334,10 +1105,8 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
         navClearance,
         yLevel
       );
-
       if (path.length >= 2) {
         const endLabelText = target?.id ? String(target.id) : "B";
-
         endpointMeshes =
           visualizeEndpoints(
             scene,
@@ -1346,7 +1115,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
             yLevel,
             endLabelText
           ) || [];
-
         arrowParent = visualizeArrowPath(
           scene,
           path,
@@ -1354,25 +1122,11 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           ARROW_SPACING,
           ARROW_START_OFFSET
         );
-
-        // vzdálenostový štítek u cíle
-        const L = pathLength(path);
-        const end = path[path.length - 1];
-        const prev = path[path.length - 2];
-        const tangent = { x: end.x - prev.x, z: end.z - prev.z };
-        const distTag = createDistanceTag(
-          scene,
-          L,
-          end,
-          yLevel + 0.46,
-          tangent
-        );
-        endpointMeshes.push(distTag);
+        // distance tag intentionally removed
       }
     } catch (e) {
       console.error("[EvacFromRoom] Error:", e);
     }
-
     return () => {
       try {
         if (arrowParent) {
@@ -1396,6 +1150,7 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
         }
       } catch {}
       try {
+        // dispose endpoint meshes created by visualizeEndpoints (labels, sphere, disk)
         for (const m of endpointMeshes) {
           if (!m) continue;
           try {
@@ -1405,10 +1160,49 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           if (!m.isDisposed()) m.dispose();
         }
       } catch {}
+      // ADDITIONAL CLEANUP: odstranit zbytkove "bubble" meshe / transformNodes / materialy pokud existují
+      try {
+        if (scene && Array.isArray(scene.meshes)) {
+          scene.meshes
+            .filter(
+              (m) => m && m.name && m.name.toLowerCase().includes("bubble")
+            )
+            .forEach((m) => {
+              try {
+                m.dispose();
+              } catch {}
+            });
+        }
+      } catch {}
+      try {
+        if (scene && Array.isArray(scene.transformNodes)) {
+          scene.transformNodes
+            .filter(
+              (tn) => tn && tn.name && tn.name.toLowerCase().includes("bubble")
+            )
+            .forEach((tn) => {
+              try {
+                tn.dispose(true, true);
+              } catch {}
+            });
+        }
+      } catch {}
+      try {
+        if (scene && Array.isArray(scene.materials)) {
+          scene.materials
+            .filter(
+              (mat) =>
+                mat && mat.name && mat.name.toLowerCase().includes("bubble")
+            )
+            .forEach((mat) => {
+              try {
+                mat.dispose();
+              } catch {}
+            });
+        }
+      } catch {}
     };
   }, [scene, floorId, enabled, startPoint?.x, startPoint?.z]);
-
   return null;
 };
-
 export default EvacuationPath;

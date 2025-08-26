@@ -50,7 +50,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
 
   useEffect(() => {
     if (!scene || !rooms || floorIndex === undefined) return;
-
     let yLevel = 0;
     for (let i = 0; i < floorIndex; i++) {
       const fc = config.floors[i];
@@ -63,7 +62,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         config.visualization.floor_thickness +
         config.visualization.floor_spacing;
     }
-
     const currentFloor = config?.floors?.[floorIndex];
     const is1NP = currentFloor ? currentFloor.id === 0 : floorIndex === 0;
     const boxHeight = is1NP
@@ -71,7 +69,6 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       : config.visualization.wall_height;
 
     let roomMeshes = [];
-
     const boxes = rooms.map((room, index) => {
       const roomName = room.name;
       const roomNumber = room.number;
@@ -130,7 +127,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
 
       roomMeshes = [...roomMeshes, ...meshes];
 
-      const setupActions = (roomName, roomNumber, meshes) => {
+      const setupActions = (roomObj, roomName, roomNumber, meshes) => {
         meshes.forEach((mesh) => {
           mesh.actionManager.registerAction(
             new BABYLON.ExecuteCodeAction(
@@ -156,18 +153,38 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
             new BABYLON.ExecuteCodeAction(
               BABYLON.ActionManager.OnPickTrigger,
               () => {
+                // Vybere místnost (vizuálně i info)
                 setSelectedRoomInfo((prev) => ({
                   name: roomName,
                   number: roomNumber,
                   status: prev?.status || "Available",
                 }));
                 setSelectedRoomNumber(roomNumber);
+
+                // Pokud je evakuace zapnutá, přepni ji na tuto nově vybranou místnost
+                if (evacOn) {
+                  const center = computeRoomCenter(roomObj);
+                  if (center) {
+                    setEvacRoomNumber(roomNumber);
+                    setEvacStartPoint(center);
+                    const fid = config?.floors?.[floorIndex]?.id ?? null;
+                    setEvacFloorId(fid);
+                  } else {
+                    // pokud nelze spočítat střed, vypneme evakaci
+                    setEvacOn(false);
+                    setEvacRoomNumber(null);
+                    setEvacStartPoint(null);
+                    setEvacFloorId(null);
+                  }
+                }
               }
             )
           );
         });
       };
-      setupActions(roomName, roomNumber, meshes);
+
+      // Předáme celý objekt místnosti, aby computeRoomCenter mohl být použit přímo
+      setupActions(room, roomName, roomNumber, meshes);
 
       return { parentNode, roomName, roomNumber, meshes };
     });
@@ -189,9 +206,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
       startY: 0,
       moved: false,
     };
-
     const MOVE_THRESHOLD_PX = 5;
-
     const pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
       const ev = pointerInfo.event;
       switch (pointerInfo.type) {
@@ -248,7 +263,7 @@ const RoomBoxes = ({ rooms, scene, floorIndex, config }) => {
         scene.onPointerObservable.remove(pointerObserver);
       }
     };
-  }, [rooms, scene, floorIndex, config, selectedRoomNumber]);
+  }, [rooms, scene, floorIndex, config, selectedRoomNumber, evacOn]);
 
   useEffect(() => {
     setSelectedRoomInfo(null);
