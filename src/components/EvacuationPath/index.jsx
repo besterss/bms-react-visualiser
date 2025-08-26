@@ -1,6 +1,7 @@
 import * as BABYLON from "babylonjs";
 import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import React, { useEffect } from "react";
+
 const DEFAULT_CLEARANCE = 0.5;
 let SAMPLE_STEP = 0.08;
 const PASSABLE_UNDER_Y = 2.0;
@@ -19,6 +20,7 @@ const PATH_STRIP_THICKNESS = 0.04;
 const PATH_STRIP_Y_OFFSET = 0.08;
 const RIBBON_SAMPLING_STEP = 0.15;
 const USE_THIN_INSTANCES_FOR_ARROWS = false; // false = klasické instance (nejjistější viditelnost)
+
 class VGNode {
   constructor(position, id) {
     this.position = position;
@@ -45,6 +47,7 @@ const rectIntersectsBBox = (r, bbox) =>
     r.maxZ < bbox.minZ ||
     r.minZ > bbox.maxZ
   );
+
 // ---------- Obstacles ----------
 const collectObstacleRects = (
   floorData,
@@ -180,6 +183,7 @@ const collectNamedMeshRects = (scene, yLevel, clearance, nameIncludes = []) => {
   }
   return rects;
 };
+
 // ---------- Visibility + path ----------
 const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   const dx = b.x - a.x;
@@ -354,6 +358,7 @@ const pathLength = (path) => {
     L += getDistance(path[i], path[i + 1]);
   return L;
 };
+
 // ---------- Scene cache ----------
 const ensureSceneCache = (scene) => {
   if (!scene.__evacCache) {
@@ -371,6 +376,7 @@ const ensureSceneCache = (scene) => {
   }
   return scene.__evacCache;
 };
+
 // ---------- Base VG cache ----------
 const getOrBuildBaseVisibilityGraphForFloor = (
   scene,
@@ -449,6 +455,7 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   cache.baseVG = { key, value };
   return value;
 };
+
 // Dijkstra ...
 const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   const dist = new Map(nodes.map((n) => [n.id, Infinity]));
@@ -490,6 +497,7 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   }
   return [];
 };
+
 // ---------- Best-of-candidates ----------
 const getFloorEndCandidates = (floorData) => {
   const list =
@@ -552,6 +560,7 @@ const getCachedObstacleRectsForFloor = (
   cache.obstacleByFloor.set(key, all);
   return all;
 };
+
 const bestPathToCandidates = (
   start,
   candidates,
@@ -696,6 +705,7 @@ const bestPathToCandidates = (
   }
   return { path: [], target: null, length: Infinity };
 };
+
 // ---------- Arrow template ----------
 const createArrowTemplate = (scene) => {
   if (!scene) return null;
@@ -703,7 +713,7 @@ const createArrowTemplate = (scene) => {
   if (cache.arrowTemplate && !cache.arrowTemplate.isDisposed())
     return cache.arrowTemplate;
   const shaft = BABYLON.MeshBuilder.CreateBox(
-    "arrow_shaft",
+    "evac_arrow_shaft",
     {
       width: ARROW_SHAFT_THICK,
       height: ARROW_SHAFT_THICK,
@@ -713,7 +723,7 @@ const createArrowTemplate = (scene) => {
   );
   shaft.position.z = -ARROW_HEAD_LEN / 2;
   const head = BABYLON.MeshBuilder.CreateCylinder(
-    "arrow_head",
+    "evac_arrow_head",
     {
       height: ARROW_HEAD_LEN,
       diameterTop: 0,
@@ -732,16 +742,21 @@ const createArrowTemplate = (scene) => {
     false,
     true
   );
-  arrow.name = "arrow_template";
-  const mat = new BABYLON.StandardMaterial("arrow_mat", scene);
+  if (!arrow) return null;
+  arrow.name = "evac_arrow_template";
+  const mat = new BABYLON.StandardMaterial("evac_arrow_mat", scene);
   mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
   mat.emissiveColor = new BABYLON.Color3(1, 0, 0);
   mat.specularColor = new BABYLON.Color3(0, 0, 0);
   arrow.material = mat;
   arrow.setEnabled(false); // šablona, instance budou viditelné
+  // označení šablony jako evakuační (bezpečné pro cleanup)
+  arrow.metadata = arrow.metadata || {};
+  arrow.metadata.__isEvac = true;
   cache.arrowTemplate = arrow;
   return arrow;
 };
+
 // ---------- Helper: sample path densely ----------
 const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
   if (!path || path.length < 2) return path ? [...path] : [];
@@ -762,6 +777,7 @@ const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
   out.push({ x: path[path.length - 1].x, z: path[path.length - 1].z });
   return out;
 };
+
 // ---------- Helper: jednotný "pásek" jako ribbon ----------
 const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
   if (!scene || !center || center.length < 2) return null;
@@ -800,7 +816,7 @@ const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
   }
   if (left.length < 2 || right.length < 2) return null;
   const ribbon = BABYLON.MeshBuilder.CreateRibbon(
-    "path_strip_unified",
+    `evac_path_strip_unified_${Date.now()}`,
     {
       pathArray: [left, right],
       closeArray: false,
@@ -811,8 +827,12 @@ const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
     scene
   );
   ribbon.material = material;
+  // označení
+  ribbon.metadata = ribbon.metadata || {};
+  ribbon.metadata.__isEvac = true;
   return ribbon;
 };
+
 // ---------- Arc-length tabulka + sampling ----------
 const buildArcLengthTable = (center) => {
   const cum = new Float32Array(center.length);
@@ -854,6 +874,7 @@ const sampleAlongPath = (center, arc, s) => {
   const yaw = Math.atan2(b.x - a.x, b.z - a.z);
   return { x, z, yaw };
 };
+
 // ---------- Viz: statický pás + pohybující se šipky ----------
 const visualizeArrowPath = (
   scene,
@@ -863,19 +884,27 @@ const visualizeArrowPath = (
   startOffset = ARROW_START_OFFSET
 ) => {
   if (!path || path.length < 2) return null;
-  const parent = new BABYLON.TransformNode(`arrow_path_${Date.now()}`, scene);
+  const parent = new BABYLON.TransformNode(
+    `evacuation_path_${Date.now()}`,
+    scene
+  );
+  parent.metadata = parent.metadata || {};
+  parent.metadata.__isEvac = true;
+
   const template = createArrowTemplate(scene);
   const cache = ensureSceneCache(scene);
   // materiál pro žlutý pás (statický)
   if (!cache.pathStripMat) {
-    const m = new BABYLON.StandardMaterial("path_strip_mat_base", scene);
+    const m = new BABYLON.StandardMaterial("evac_path_strip_mat_base", scene);
     m.diffuseColor = new BABYLON.Color3(1, 1, 0);
     m.emissiveColor = new BABYLON.Color3(1, 1, 0);
     m.disableLighting = true;
     m.backFaceCulling = false;
     cache.pathStripMat = m;
   }
-  const stripMat = cache.pathStripMat.clone(`path_strip_mat_${Date.now()}`);
+  const stripMat = cache.pathStripMat.clone(
+    `evac_path_strip_mat_${Date.now()}`
+  );
   // centerline
   const center = densifyPath(path, RIBBON_SAMPLING_STEP);
   if (center.length < 2) return parent;
@@ -896,30 +925,36 @@ const visualizeArrowPath = (
   const stripY = yLevel + PATH_STRIP_Y_OFFSET;
   const arrowY = stripY + 0.03;
   const engine = scene.getEngine ? scene.getEngine() : null;
-  // a) Thin instances (volitelné)
+
+  const arrowInstances = [];
+  // thin instances branch (if enabled)
   let arrowHost = null;
   let matrices = null;
-  // b) Klasické instance (default)
-  const arrowInstances = [];
   if (USE_THIN_INSTANCES_FOR_ARROWS) {
-    arrowHost = template.clone(`arrow_host_${Date.now()}`, parent, true);
+    arrowHost = template.clone(`evac_arrow_host_${Date.now()}`, parent, true);
     arrowHost.visibility = 1;
     arrowHost.setEnabled(true);
+    arrowHost.metadata = arrowHost.metadata || {};
+    arrowHost.metadata.__isEvac = true;
     matrices = new Float32Array(16 * count);
     arrowHost.thinInstanceSetBuffer("matrix", matrices, 16, true);
   } else {
     for (let i = 0; i < count; i++) {
       const inst = template.createInstance(
-        `arrow_inst_${cache.arrowInstanceCounter++}_${Date.now()}`
+        `evac_arrow_inst_${ensureSceneCache(scene)
+          .arrowInstanceCounter++}_${Date.now()}`
       );
       inst.parent = parent;
       inst.scaling.set(1, 1, 1);
+      inst.metadata = inst.metadata || {};
+      inst.metadata.__isEvac = true;
       arrowInstances.push(inst);
     }
   }
+
   let s0 = ((startOffset % totalLen) + totalLen) % totalLen;
   const updateArrows = () => {
-    if (USE_THIN_INSTANCES_FOR_ARROWS) {
+    if (USE_THIN_INSTANCES_FOR_ARROWS && arrowHost && matrices) {
       for (let k = 0; k < count; k++) {
         const s = s0 + k * spacing;
         const { x, z, yaw } = sampleAlongPath(center, arc, s);
@@ -929,7 +964,9 @@ const visualizeArrowPath = (
         const m = BABYLON.Matrix.Compose(scl, rotQ, pos);
         m.copyToArray(matrices, k * 16);
       }
-      arrowHost.thinInstanceBufferUpdated("matrix");
+      try {
+        arrowHost.thinInstanceBufferUpdated("matrix");
+      } catch {}
     } else {
       for (let k = 0; k < count; k++) {
         const s = s0 + k * spacing;
@@ -956,6 +993,7 @@ const visualizeArrowPath = (
   parent.__evacArrowInstances = arrowInstances;
   return parent;
 };
+
 // ---------- Štítky a značky ----------
 const makeLabel = (scene, text, pos, y, size = 0.35) => {
   const cache = ensureSceneCache(scene);
@@ -1000,48 +1038,62 @@ const makeLabel = (scene, text, pos, y, size = 0.35) => {
   plane.material = cached.mat;
   return plane;
 };
-const createDistanceTag = (/* removed - not used anymore */) => {
-  // distance tag intentionally removed
-  return null;
-};
+
 const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   const created = [];
   const diskH = 0.02;
   const diskDiam = 0.7;
+  const ts = Date.now();
+
   const disk = BABYLON.MeshBuilder.CreateCylinder(
-    `marker_disk_${labelText}_${Date.now()}`,
+    `evacuation_marker_disk_${labelText}_${ts}`,
     { height: diskH, diameter: diskDiam, tessellation: 36 },
     scene
   );
   disk.position = new BABYLON.Vector3(p.x, yLevel + diskH * 0.5 + 0.002, p.z);
   const diskMat = new BABYLON.StandardMaterial(
-    `marker_disk_mat_${labelText}`,
+    `evacuation_marker_disk_mat_${labelText}_${ts}`,
     scene
   );
   diskMat.diffuseColor = color.clone();
   diskMat.emissiveColor = color.clone();
   diskMat.specularColor = new BABYLON.Color3(0, 0, 0);
   disk.material = diskMat;
+  disk.metadata = disk.metadata || {};
+  disk.metadata.__isEvac = true;
   created.push(disk);
+
   const sphere = BABYLON.MeshBuilder.CreateSphere(
-    `marker_sphere_${labelText}_${Date.now()}`,
+    `evacuation_marker_sphere_${labelText}_${ts}`,
     { diameter: 0.28, segments: 16 },
     scene
   );
   sphere.position = new BABYLON.Vector3(p.x, yLevel + 0.35, p.z);
   const sMat = new BABYLON.StandardMaterial(
-    `marker_sphere_mat_${labelText}`,
+    `evacuation_marker_sphere_mat_${labelText}_${ts}`,
     scene
   );
   sMat.diffuseColor = color.clone();
   sMat.emissiveColor = color.clone();
   sMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
   sphere.material = sMat;
+  sphere.metadata = sphere.metadata || {};
+  sphere.metadata.__isEvac = true;
   created.push(sphere);
+
   const label = makeLabel(scene, labelText, p, yLevel + 0.42, 0.35);
-  created.push(label);
+  if (label) {
+    try {
+      label.name = `evac_label_${labelText}_${ts}`;
+    } catch {}
+    label.metadata = label.metadata || {};
+    label.metadata.__isEvac = true;
+    created.push(label);
+  }
+
   return created;
 };
+
 const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
   const startColor = new BABYLON.Color3(0.1, 0.8, 0.2);
   const endColor = new BABYLON.Color3(0.9, 0.1, 0.1);
@@ -1055,6 +1107,7 @@ const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
   );
   return [...startSet, ...endSet];
 };
+
 // ---------- Component ----------
 const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
   useEffect(() => {
@@ -1160,26 +1213,42 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           if (!m.isDisposed()) m.dispose();
         }
       } catch {}
-      // ADDITIONAL CLEANUP: odstranit zbytkove "bubble" meshe / transformNodes / materialy pokud existují
+
+      // ADDITIONAL CLEANUP: bezpečně odstranit pouze evakuační prvky (ty které jsme zde vytváříme)
       try {
         if (scene && Array.isArray(scene.meshes)) {
           scene.meshes
-            .filter(
-              (m) => m && m.name && m.name.toLowerCase().includes("bubble")
-            )
+            .filter((m) => {
+              if (!m) return false;
+              const metaEvac = m.metadata && m.metadata.__isEvac;
+              const name = (m.name || "").toLowerCase();
+              const nameEvac =
+                name.startsWith("evac") ||
+                name.startsWith("evacuation_") ||
+                name.startsWith("evac_label_");
+              return metaEvac || nameEvac;
+            })
             .forEach((m) => {
               try {
-                m.dispose();
+                if (!m.isDisposed()) m.dispose();
               } catch {}
             });
         }
       } catch {}
+
       try {
         if (scene && Array.isArray(scene.transformNodes)) {
           scene.transformNodes
-            .filter(
-              (tn) => tn && tn.name && tn.name.toLowerCase().includes("bubble")
-            )
+            .filter((tn) => {
+              if (!tn) return false;
+              const meta = tn.metadata && tn.metadata.__isEvac;
+              const name = (tn.name || "").toLowerCase();
+              const nameEvac =
+                name.startsWith("evac") ||
+                name.startsWith("evacuation_") ||
+                name.startsWith("evac_label_");
+              return meta || nameEvac;
+            })
             .forEach((tn) => {
               try {
                 tn.dispose(true, true);
@@ -1187,22 +1256,31 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
             });
         }
       } catch {}
+
       try {
         if (scene && Array.isArray(scene.materials)) {
           scene.materials
-            .filter(
-              (mat) =>
-                mat && mat.name && mat.name.toLowerCase().includes("bubble")
-            )
+            .filter((mat) => {
+              if (!mat || !mat.name) return false;
+              const name = mat.name.toLowerCase();
+              return (
+                name.startsWith("evac") ||
+                name.startsWith("evacuation_") ||
+                name.startsWith("evac_label_") ||
+                name.startsWith("evac_path_strip_mat_")
+              );
+            })
             .forEach((mat) => {
               try {
-                mat.dispose();
+                if (!mat.isDisposed()) mat.dispose();
               } catch {}
             });
         }
       } catch {}
     };
   }, [scene, floorId, enabled, startPoint?.x, startPoint?.z]);
+
   return null;
 };
+
 export default EvacuationPath;
