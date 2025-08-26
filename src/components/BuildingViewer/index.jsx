@@ -32,14 +32,26 @@ const BuildingViewer = () => {
     activeFloor: "N/A",
   });
   const [circleDisplayMode, setCircleDisplayMode] = useState("click");
-  // NEW: dark mode state
   const [darkMode, setDarkMode] = useState(false);
+
+  // Refs to avoid stale closures in immediate handlers
+  const sceneRef = useRef(scene);
+  const allFloorMeshesRef = useRef(allFloorMeshes);
+  const currentActiveFloorRef = useRef(currentActiveFloor);
+
+  useEffect(() => {
+    sceneRef.current = scene;
+  }, [scene]);
+  useEffect(() => {
+    allFloorMeshesRef.current = allFloorMeshes;
+  }, [allFloorMeshes]);
+  useEffect(() => {
+    currentActiveFloorRef.current = currentActiveFloor;
+  }, [currentActiveFloor]);
 
   // Pomocná funkce: uklid evakuačních meshů (rozšířená)
   const clearEvacuationMeshes = (scn) => {
     if (!scn) return;
-
-    // Prefixy/klíčová slova pro mesh jména, která chceme odstranit
     const namePrefixes = [
       "evacuation_path_",
       "evacuation_bubble_",
@@ -55,9 +67,8 @@ const BuildingViewer = () => {
       "merged_path_strip_",
       "path_patch_",
       "evac_route_",
-      "evac_label_", // pokud EvacuationPath používá tento prefix pro své labely
+      "evac_label_",
     ];
-    // klíčová slova, která mohou být kdekoli v názvu
     const nameTokens = [
       "evac",
       "arrow",
@@ -67,8 +78,6 @@ const BuildingViewer = () => {
       "bubble",
       "merged_path_strip",
     ];
-
-    // odstranit mesh, pokud začíná některým prefixem nebo obsahuje některý token
     if (scn.meshes && scn.meshes.length) {
       scn.meshes
         .filter((m) => {
@@ -76,9 +85,6 @@ const BuildingViewer = () => {
           const nm = m.name;
           const starts = namePrefixes.some((pref) => nm.startsWith(pref));
           const contains = nameTokens.some((tok) => nm.includes(tok));
-          // vynech některé běžné mesh jména, která by náhodou obsahovala tokeny (pokud máš takové, přidej sem výjimky)
-          // např. necháme meshy začínající "label" nedotčeny (pokud nechceš mazat room labely)
-          // zde tedy nepouštíme obecné "label" do contains testu
           return starts || contains;
         })
         .forEach((m) => {
@@ -89,8 +95,6 @@ const BuildingViewer = () => {
           }
         });
     }
-
-    // odstranit transformNodes (parenty/přes group), pokud obsahují evak klíč
     if (scn.transformNodes && scn.transformNodes.length) {
       scn.transformNodes
         .filter((tn) => {
@@ -106,15 +110,12 @@ const BuildingViewer = () => {
         })
         .forEach((tn) => {
           try {
-            // dispose children + itself
             tn.dispose(true, true);
           } catch (e) {
             // ignore
           }
         });
     }
-
-    // případně odstranit materiály/textury, které by byly použity pouze pro tyto vizualizace
     try {
       const matNames = [
         "path_strip_mat",
@@ -146,22 +147,27 @@ const BuildingViewer = () => {
     const babylonScene = new BABYLON.Scene(babylonEngine);
     babylonScene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.98);
     babylonScene.transparencyAndDepthSorting = true;
+
     const generator = new FloorGenerator(
       babylonScene,
       babylonEngine,
       CONFIG_DATA
     );
     const result = generator.generateFloors();
+
     setEngine(babylonEngine);
     setScene(babylonScene);
     setFloorGenerator(generator);
     setFloorData(result.floorData);
     setAllFloorMeshes(result.allFloorMeshes);
-    // synchronizace darkMode pro případ, že je darkMode jiný než výchozí
+
+    // sync darkMode to generator (if toggled before generation)
     if (typeof darkMode !== "undefined") {
       generator.setDarkMode(darkMode);
     }
+
     setupCamera(babylonScene, result.floorData);
+
     if (result.floorData.length > 0) {
       showFloor(
         result.floorData[0].floorNumber,
@@ -176,17 +182,23 @@ const BuildingViewer = () => {
         floorArea: `${result.floorData[0].area.toFixed(2)} m²`,
       }));
     }
+
     setupEventHandlers(babylonScene);
+
     babylonEngine.runRenderLoop(() => {
       babylonScene.render();
     });
+
     const handleResize = () => {
       babylonEngine.resize();
     };
     window.addEventListener("resize", handleResize);
+
     return () => {
       window.removeEventListener("resize", handleResize);
-      babylonEngine.dispose();
+      try {
+        babylonEngine.dispose();
+      } catch {}
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -198,6 +210,7 @@ const BuildingViewer = () => {
     }
   }, [floorGenerator, darkMode]);
 
+  // Tento effect provádí synchronní vykreslení bublin, pokud se mění závislosti
   useEffect(() => {
     if (
       engine &&
@@ -236,11 +249,7 @@ const BuildingViewer = () => {
       clearLabels(scene);
       setLabelData([]);
     }
-  }, [engine, scene, currentActiveFloor, CONFIG_DATA]);
-
-  const handleOptionToggle = (option) => {
-    setActiveDisplayOption((prev) => (prev === option ? null : option));
-  };
+  }, [engine, scene, currentActiveFloor]);
 
   // Úklid evakuačních cest při vypnutí checkboxu nebo při změně patra
   useEffect(() => {
@@ -362,8 +371,7 @@ const BuildingViewer = () => {
     generator = floorGenerator
   ) => {
     if (!generator) return;
-
-    // --- NOVÉ: vyčistit evakuační meshe (vše: šipky, žluté patchy/ribbony, bubliny, endpointy) ---
+    // --- NOVÉ: vyčistit evakuační meshe ---
     if (scene) {
       try {
         clearEvacuationMeshes(scene);
@@ -371,8 +379,6 @@ const BuildingViewer = () => {
         // ignore
       }
     }
-    // --- konec nové části
-
     setCurrentActiveFloor(floorId);
     const isViewingAllFloors = floorId === "all";
     const activeFloorIndex = floors.findIndex(
@@ -470,7 +476,6 @@ const BuildingViewer = () => {
   };
 
   const handleFloorChange = (floorId) => {
-    // --- NOVÉ: vyčistit evakuační meshe při požadavku na změnu patra ---
     if (scene) {
       try {
         clearEvacuationMeshes(scene);
@@ -478,7 +483,6 @@ const BuildingViewer = () => {
         // ignore
       }
     }
-    // --- konec nové části ---
     showFloor(floorId);
     setRoomInfo((prev) => ({
       ...prev,
@@ -489,13 +493,44 @@ const BuildingViewer = () => {
 
   const clearLabels = (scene) => {
     if (!scene || !scene.meshes) return;
-    // Pozor: necháme room-labely (ty máš jinde), proto zde mažeme pouze mesh whose name starts with "label"
-    // Pokud chceš zachovat i ty endpoint labely vytvořené EvacuationPath, je lepší EvacuationPath vytvářet je s prefixem "evac_label_".
     scene.meshes
       .filter((mesh) => mesh.name.startsWith("label"))
       .forEach((mesh) => {
-        mesh.dispose();
+        try {
+          mesh.dispose();
+        } catch {}
       });
+  };
+
+  // Upravený handler: nastaví stav a ihned (asynchronně) zavolá showBubblesOnActiveFloor s aktuálními hodnotami z refů
+  const handleOptionToggle = (option) => {
+    const next = activeDisplayOption === option ? null : option;
+    setActiveDisplayOption(next);
+
+    // pokud nemáme scene nebo meshe ještě, nic neprovádíme
+    if (
+      !sceneRef.current ||
+      !Array.isArray(allFloorMeshesRef.current) ||
+      currentActiveFloorRef.current === null
+    ) {
+      return;
+    }
+
+    // zavoláme asynchronně, aby se React stavy usadily a Babylon měl čas na případné úpravy scény
+    requestAnimationFrame(() => {
+      try {
+        showBubblesOnActiveFloor(
+          sceneRef.current,
+          currentActiveFloorRef.current,
+          allFloorMeshesRef.current,
+          next === "heatmap",
+          next === "wifi",
+          next === "airQuality"
+        );
+      } catch (e) {
+        // ignore
+      }
+    });
   };
 
   useEffect(() => {
@@ -540,7 +575,6 @@ const BuildingViewer = () => {
         onFloorChange={handleFloorChange}
         activeDisplayOption={activeDisplayOption}
         onOptionToggle={handleOptionToggle}
-        // NEW: pass darkMode and handler into controls
         darkMode={darkMode}
         onDarkModeToggle={(enabled) => setDarkMode(enabled)}
         onCircleDisplayModeChange={setCircleDisplayMode}

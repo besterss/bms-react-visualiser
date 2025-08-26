@@ -1687,10 +1687,7 @@ export class FloorGenerator {
       rim.position = new BABYLON.Vector3(0, potHeight - 0.01, 0);
       rim.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
       rim.isPickable = false;
-    } catch (e) {
-      // torus might not be available in some builds — ignore if error
-    }
-    // add shadows if possible
+    } catch (e) {}
     try {
       this.shadowGenerator.addShadowCaster(pot);
       this.shadowGenerator.addShadowCaster(...foliage);
