@@ -42,19 +42,49 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
     );
     borderMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
 
+    const createdADTs = [];
+
+    // Posun o -0.2 podle požadavku
+    const Y_OFFSET = -0.2;
+
+    // Výchozí střed, aby se vizuálně zachovalo chování jako dříve:
+    const DEFAULT_CENTER_Y = 3.5;
+    const DEFAULT_HEIGHT = 0.2;
+    const defaultFloorY = DEFAULT_CENTER_Y - DEFAULT_HEIGHT / 2;
+
+    // globální floorY: priorita parkingConfig.floorY / parkingConfig.yLevel, jinak defaultFloorY
+    const globalFloorY =
+      typeof parkingConfig.floorY !== "undefined"
+        ? parkingConfig.floorY
+        : typeof parkingConfig.yLevel !== "undefined"
+        ? parkingConfig.yLevel
+        : defaultFloorY;
+
     parkingConfig.forEach((spot, index) => {
       const width = Math.abs(spot.end.x - spot.start.x);
       const depth = Math.abs(spot.end.z - spot.start.z);
       const positionX = (spot.start.x + spot.end.x) / 2;
       const positionZ = (spot.start.z + spot.end.z) / 2;
-      const height = 0.2;
+      const height = DEFAULT_HEIGHT;
+
+      // priorita: spot.floorY / spot.yLevel -> globální -> default (tak, aby střed byl 3.5)
+      const floorY =
+        typeof spot.floorY !== "undefined"
+          ? spot.floorY
+          : typeof spot.yLevel !== "undefined"
+          ? spot.yLevel
+          : globalFloorY;
+
+      // aplikujeme posun Y_OFFSET (posune vše o -0.2)
+      const centerY = floorY + height / 2 + Y_OFFSET;
+      const topY = floorY + height + Y_OFFSET;
 
       const parkingSpot = BABYLON.MeshBuilder.CreateBox(
         `spot${index}`,
         { height, width, depth },
         scene
       );
-      parkingSpot.position = new BABYLON.Vector3(positionX, 3.5, positionZ);
+      parkingSpot.position = new BABYLON.Vector3(positionX, centerY, positionZ);
 
       let baseMaterial;
       switch (spot.status) {
@@ -72,6 +102,7 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
 
       const borderThickness = 0.1;
       const borderHeight = 0.1;
+      const borderY = topY + borderHeight / 2;
 
       const createBorder = (w, h, d, x, y, z, idx) => {
         const border = BABYLON.MeshBuilder.CreateBox(
@@ -88,7 +119,7 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
         borderHeight,
         borderThickness,
         positionX,
-        3.5 + height / 2,
+        borderY,
         positionZ + depth / 2,
         0
       );
@@ -97,7 +128,7 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
         borderHeight,
         borderThickness,
         positionX,
-        3.5 + height / 2,
+        borderY,
         positionZ - depth / 2,
         1
       );
@@ -106,7 +137,7 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
         borderHeight,
         depth,
         positionX - width / 2,
-        3.5 + height / 2,
+        borderY,
         positionZ,
         2
       );
@@ -115,21 +146,27 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
         borderHeight,
         depth,
         positionX + width / 2,
-        3.5 + height / 2,
+        borderY,
         positionZ,
         3
       );
 
+      const labelSize = Math.min(
+        2,
+        Math.max(0.5, Math.min(width, depth) * 0.8)
+      );
       const numberPlane = BABYLON.MeshBuilder.CreatePlane(
         `spotNumber${index}`,
-        { size: 2 },
+        { size: labelSize },
         scene
       );
-      numberPlane.position = new BABYLON.Vector3(positionX, 3.7, positionZ);
+      const numberY = topY + 0.01;
+      numberPlane.position = new BABYLON.Vector3(positionX, numberY, positionZ);
       numberPlane.rotation.x = Math.PI / 2;
 
       const advancedTexture =
         GUI.AdvancedDynamicTexture.CreateForMesh(numberPlane);
+      createdADTs.push(advancedTexture);
       const textBlock = new GUI.TextBlock();
       textBlock.text = `${index + 1}`;
       textBlock.color = "white";
@@ -139,16 +176,21 @@ const ParkingSpots = ({ scene, parkingConfig }) => {
     });
 
     return () => {
+      // dispose všech meshů, které začínají "spot"
       scene.meshes
-        .filter(
-          (mesh) =>
-            mesh.name.startsWith("spot") || mesh.name.startsWith("spotBorder")
-        )
+        .filter((mesh) => mesh.name.startsWith("spot"))
         .forEach((mesh) => mesh.dispose());
+
+      // dispose ADT textur
+      createdADTs.forEach((adt) => {
+        try {
+          adt.dispose();
+        } catch (e) {}
+      });
     };
   }, [scene, parkingConfig]);
 
-  return null; // No visual component rendered directly by React
+  return null;
 };
 
 export default ParkingSpots;
