@@ -1,7 +1,6 @@
 import * as BABYLON from "babylonjs";
 import { CONFIG_DATA } from "../BuildingLayoutConfig";
 import React, { useEffect } from "react";
-
 const DEFAULT_CLEARANCE = 0.5;
 let SAMPLE_STEP = 0.08;
 const PASSABLE_UNDER_Y = 2.0;
@@ -19,8 +18,7 @@ const PATH_STRIP_WIDTH = 0.75;
 const PATH_STRIP_THICKNESS = 0.04;
 const PATH_STRIP_Y_OFFSET = 0.08;
 const RIBBON_SAMPLING_STEP = 0.15;
-const USE_THIN_INSTANCES_FOR_ARROWS = false; // false = klasické instance (nejjistější viditelnost)
-
+const USE_THIN_INSTANCES_FOR_ARROWS = false; // false = klasické instances (nejjistější viditelnost)
 class VGNode {
   constructor(position, id) {
     this.position = position;
@@ -47,7 +45,6 @@ const rectIntersectsBBox = (r, bbox) =>
     r.maxZ < bbox.minZ ||
     r.minZ > bbox.maxZ
   );
-
 // ---------- Obstacles ----------
 const collectObstacleRects = (
   floorData,
@@ -183,7 +180,6 @@ const collectNamedMeshRects = (scene, yLevel, clearance, nameIncludes = []) => {
   }
   return rects;
 };
-
 // ---------- Visibility + path ----------
 const lineOfSight = (a, b, obstacleRects, step = SAMPLE_STEP) => {
   const dx = b.x - a.x;
@@ -358,7 +354,6 @@ const pathLength = (path) => {
     L += getDistance(path[i], path[i + 1]);
   return L;
 };
-
 // ---------- Scene cache ----------
 const ensureSceneCache = (scene) => {
   if (!scene.__evacCache) {
@@ -376,7 +371,6 @@ const ensureSceneCache = (scene) => {
   }
   return scene.__evacCache;
 };
-
 // ---------- Base VG cache ----------
 const getOrBuildBaseVisibilityGraphForFloor = (
   scene,
@@ -455,7 +449,6 @@ const getOrBuildBaseVisibilityGraphForFloor = (
   cache.baseVG = { key, value };
   return value;
 };
-
 // Dijkstra ...
 const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   const dist = new Map(nodes.map((n) => [n.id, Infinity]));
@@ -497,7 +490,6 @@ const dijkstraToAnyTarget = (nodes, idToNode, startId, targetIds) => {
   }
   return [];
 };
-
 // ---------- Best-of-candidates ----------
 const getFloorEndCandidates = (floorData) => {
   const list =
@@ -560,7 +552,6 @@ const getCachedObstacleRectsForFloor = (
   cache.obstacleByFloor.set(key, all);
   return all;
 };
-
 const bestPathToCandidates = (
   start,
   candidates,
@@ -705,7 +696,6 @@ const bestPathToCandidates = (
   }
   return { path: [], target: null, length: Infinity };
 };
-
 // ---------- Arrow template ----------
 const createArrowTemplate = (scene) => {
   if (!scene) return null;
@@ -756,7 +746,6 @@ const createArrowTemplate = (scene) => {
   cache.arrowTemplate = arrow;
   return arrow;
 };
-
 // ---------- Helper: sample path densely ----------
 const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
   if (!path || path.length < 2) return path ? [...path] : [];
@@ -778,10 +767,50 @@ const densifyPath = (path, step = RIBBON_SAMPLING_STEP) => {
   return out;
 };
 
-// ---------- Helper: jednotný "pásek" jako ribbon ----------
+// ---------- NEW: collect parking meshes bounding rects with top Y (includes 'spot') ----------
+const collectParkingBoxes = (scene) => {
+  if (!scene || !Array.isArray(scene.meshes)) return [];
+  const tokens = [
+    "spot",
+    "park",
+    "parking",
+    "parking_spot",
+    "parkov",
+    "carpark",
+    "car_park",
+    "carspot",
+    "parkingspace",
+    "parking_space",
+  ];
+  const boxes = [];
+  for (const m of scene.meshes) {
+    if (!m) continue;
+    const enabled =
+      typeof m.isEnabled === "function" ? m.isEnabled() : m.isEnabled;
+    if (!enabled || m.isVisible === false) continue;
+    const name = (m.name || "").toLowerCase();
+    if (!tokens.some((t) => name.includes(t))) continue;
+    try {
+      m.computeWorldMatrix(true);
+      const bb = m.getBoundingInfo?.().boundingBox;
+      if (!bb) continue;
+      const min = bb.minimumWorld;
+      const max = bb.maximumWorld;
+      boxes.push({
+        minX: min.x,
+        maxX: max.x,
+        minZ: min.z,
+        maxZ: max.z,
+        maxY: max.y,
+      });
+    } catch {}
+  }
+  return boxes;
+};
+
+// ---------- Helper: jednotný "pásek" jako ribbon (používá center[].y pokud je) ----------
 const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
   if (!scene || !center || center.length < 2) return null;
-  const y = yLevel + PATH_STRIP_Y_OFFSET;
   const w2 = width / 2;
   const left = [];
   const right = [];
@@ -811,8 +840,9 @@ const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
     if (scale > maxScale) scale = maxScale;
     if (scale < -maxScale) scale = -maxScale;
     const off = miter.scale(scale);
-    left.push(new BABYLON.Vector3(p.x + off.x, y, p.z + off.z));
-    right.push(new BABYLON.Vector3(p.x - off.x, y, p.z - off.z));
+    const py = typeof p.y === "number" ? p.y : yLevel + PATH_STRIP_Y_OFFSET;
+    left.push(new BABYLON.Vector3(p.x + off.x, py, p.z + off.z));
+    right.push(new BABYLON.Vector3(p.x - off.x, py, p.z - off.z));
   }
   if (left.length < 2 || right.length < 2) return null;
   const ribbon = BABYLON.MeshBuilder.CreateRibbon(
@@ -832,7 +862,6 @@ const buildUnifiedStripMesh = (scene, center, yLevel, width, material) => {
   ribbon.metadata.__isEvac = true;
   return ribbon;
 };
-
 // ---------- Arc-length tabulka + sampling ----------
 const buildArcLengthTable = (center) => {
   const cum = new Float32Array(center.length);
@@ -851,7 +880,12 @@ const sampleAlongPath = (center, arc, s) => {
   const { cum, total } = arc;
   if (total <= 0) {
     const p = center[0];
-    return { x: p.x, z: p.z, yaw: 0 };
+    return {
+      x: p.x,
+      z: p.z,
+      yaw: 0,
+      y: typeof p.y === "number" ? p.y : undefined,
+    };
   }
   let ss = s % total;
   if (ss < 0) ss += total;
@@ -872,9 +906,20 @@ const sampleAlongPath = (center, arc, s) => {
   const x = a.x + (b.x - a.x) * t;
   const z = a.z + (b.z - a.z) * t;
   const yaw = Math.atan2(b.x - a.x, b.z - a.z);
-  return { x, z, yaw };
+  const ay = typeof a.y === "number" ? a.y : undefined;
+  const by = typeof b.y === "number" ? b.y : undefined;
+  let y;
+  if (typeof ay === "number" && typeof by === "number") {
+    y = ay + (by - ay) * t;
+  } else if (typeof ay === "number") {
+    y = ay;
+  } else if (typeof by === "number") {
+    y = by;
+  } else {
+    y = undefined;
+  }
+  return { x, z, yaw, y };
 };
-
 // ---------- Viz: statický pás + pohybující se šipky ----------
 const visualizeArrowPath = (
   scene,
@@ -890,7 +935,6 @@ const visualizeArrowPath = (
   );
   parent.metadata = parent.metadata || {};
   parent.metadata.__isEvac = true;
-
   const template = createArrowTemplate(scene);
   const cache = ensureSceneCache(scene);
   // materiál pro žlutý pás (statický)
@@ -905,10 +949,34 @@ const visualizeArrowPath = (
   const stripMat = cache.pathStripMat.clone(
     `evac_path_strip_mat_${Date.now()}`
   );
-  // centerline
+
+  // centerline (densify) a pak přidat lokální y podle parkovacích meshů
   const center = densifyPath(path, RIBBON_SAMPLING_STEP);
   if (center.length < 2) return parent;
-  // pás (ribbon) – statický
+
+  // collect parking boxes once
+  const parkingBoxes = collectParkingBoxes(scene);
+  const defaultY = yLevel + PATH_STRIP_Y_OFFSET;
+  const parkingMargin = 0.05; // zvýšený margin nad parking top
+  for (let i = 0; i < center.length; i++) {
+    const p = center[i];
+    // start with default
+    let py = defaultY;
+    for (const b of parkingBoxes) {
+      if (
+        p.x >= b.minX - 1e-6 &&
+        p.x <= b.maxX + 1e-6 &&
+        p.z >= b.minZ - 1e-6 &&
+        p.z <= b.maxZ + 1e-6
+      ) {
+        // pokud leží nad parkovacím boxem, nastavíme výšku nad jeho maxY + tloušťka pásu + margin
+        py = Math.max(py, b.maxY + PATH_STRIP_THICKNESS + parkingMargin);
+      }
+    }
+    p.y = py;
+  }
+
+  // pás (ribbon) – statický (buildUnifiedStripMesh nyní bere center[].y)
   const stripMesh = buildUnifiedStripMesh(
     scene,
     center,
@@ -917,16 +985,15 @@ const visualizeArrowPath = (
     stripMat
   );
   if (stripMesh) stripMesh.parent = parent;
+
   // předpočítaná délka pro šipky
   const arc = buildArcLengthTable(center);
   const totalLen = arc.total;
   if (totalLen <= 1e-4) return parent;
   const count = Math.max(2, Math.ceil(totalLen / Math.max(0.1, spacing)));
-  const stripY = yLevel + PATH_STRIP_Y_OFFSET;
-  const arrowY = stripY + 0.03;
   const engine = scene.getEngine ? scene.getEngine() : null;
-
   const arrowInstances = [];
+
   // thin instances branch (if enabled)
   let arrowHost = null;
   let matrices = null;
@@ -937,7 +1004,11 @@ const visualizeArrowPath = (
     arrowHost.metadata = arrowHost.metadata || {};
     arrowHost.metadata.__isEvac = true;
     matrices = new Float32Array(16 * count);
-    arrowHost.thinInstanceSetBuffer("matrix", matrices, 16, true);
+    try {
+      arrowHost.thinInstanceSetBuffer("matrix", matrices, 16, true);
+    } catch (e) {
+      matrices = null;
+    }
   } else {
     for (let i = 0; i < count; i++) {
       const inst = template.createInstance(
@@ -957,9 +1028,10 @@ const visualizeArrowPath = (
     if (USE_THIN_INSTANCES_FOR_ARROWS && arrowHost && matrices) {
       for (let k = 0; k < count; k++) {
         const s = s0 + k * spacing;
-        const { x, z, yaw } = sampleAlongPath(center, arc, s);
+        const { x, z, yaw, y } = sampleAlongPath(center, arc, s);
+        const posY = typeof y === "number" ? y + 0.06 : defaultY + 0.06; // šipky o něco výš než pás
         const rotQ = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
-        const pos = new BABYLON.Vector3(x, arrowY, z);
+        const pos = new BABYLON.Vector3(x, posY, z);
         const scl = new BABYLON.Vector3(1, 1, 1);
         const m = BABYLON.Matrix.Compose(scl, rotQ, pos);
         m.copyToArray(matrices, k * 16);
@@ -968,16 +1040,18 @@ const visualizeArrowPath = (
         arrowHost.thinInstanceBufferUpdated("matrix");
       } catch {}
     } else {
-      for (let k = 0; k < count; k++) {
+      for (let k = 0; k < arrowInstances.length; k++) {
         const s = s0 + k * spacing;
-        const { x, z, yaw } = sampleAlongPath(center, arc, s);
+        const { x, z, yaw, y } = sampleAlongPath(center, arc, s);
         const inst = arrowInstances[k];
         if (!inst || inst.isDisposed()) continue;
-        inst.position.set(x, arrowY, z);
+        const posY = typeof y === "number" ? y + 0.06 : defaultY + 0.06;
+        inst.position.set(x, posY, z);
         inst.rotationQuaternion = BABYLON.Quaternion.FromEulerAngles(0, yaw, 0);
       }
     }
   };
+
   // první vykreslení
   updateArrows();
   const beforeRender = scene.onBeforeRenderObservable.add(() => {
@@ -993,7 +1067,6 @@ const visualizeArrowPath = (
   parent.__evacArrowInstances = arrowInstances;
   return parent;
 };
-
 // ---------- Štítky a značky ----------
 const makeLabel = (scene, text, pos, y, size = 0.35) => {
   const cache = ensureSceneCache(scene);
@@ -1038,13 +1111,11 @@ const makeLabel = (scene, text, pos, y, size = 0.35) => {
   plane.material = cached.mat;
   return plane;
 };
-
 const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   const created = [];
   const diskH = 0.02;
   const diskDiam = 0.7;
   const ts = Date.now();
-
   const disk = BABYLON.MeshBuilder.CreateCylinder(
     `evacuation_marker_disk_${labelText}_${ts}`,
     { height: diskH, diameter: diskDiam, tessellation: 36 },
@@ -1062,7 +1133,6 @@ const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   disk.metadata = disk.metadata || {};
   disk.metadata.__isEvac = true;
   created.push(disk);
-
   const sphere = BABYLON.MeshBuilder.CreateSphere(
     `evacuation_marker_sphere_${labelText}_${ts}`,
     { diameter: 0.28, segments: 16 },
@@ -1080,7 +1150,6 @@ const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
   sphere.metadata = sphere.metadata || {};
   sphere.metadata.__isEvac = true;
   created.push(sphere);
-
   const label = makeLabel(scene, labelText, p, yLevel + 0.42, 0.35);
   if (label) {
     try {
@@ -1090,10 +1159,8 @@ const createEndpointMarker = (scene, p, yLevel, color, labelText) => {
     label.metadata.__isEvac = true;
     created.push(label);
   }
-
   return created;
 };
-
 const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
   const startColor = new BABYLON.Color3(0.1, 0.8, 0.2);
   const endColor = new BABYLON.Color3(0.9, 0.1, 0.1);
@@ -1107,7 +1174,6 @@ const visualizeEndpoints = (scene, start, end, yLevel, endLabelText = "B") => {
   );
   return [...startSet, ...endSet];
 };
-
 // ---------- Component ----------
 const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
   useEffect(() => {
@@ -1213,7 +1279,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
           if (!m.isDisposed()) m.dispose();
         }
       } catch {}
-
       // ADDITIONAL CLEANUP: bezpečně odstranit pouze evakuační prvky (ty které jsme zde vytváříme)
       try {
         if (scene && Array.isArray(scene.meshes)) {
@@ -1235,7 +1300,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
             });
         }
       } catch {}
-
       try {
         if (scene && Array.isArray(scene.transformNodes)) {
           scene.transformNodes
@@ -1256,7 +1320,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
             });
         }
       } catch {}
-
       try {
         if (scene && Array.isArray(scene.materials)) {
           scene.materials
@@ -1279,8 +1342,6 @@ const EvacuationPath = ({ scene, floorId, startPoint, enabled }) => {
       } catch {}
     };
   }, [scene, floorId, enabled, startPoint?.x, startPoint?.z]);
-
   return null;
 };
-
 export default EvacuationPath;
