@@ -5444,26 +5444,6 @@ export const CONFIG_DATA = {
           {
             type: "table",
             x: 12,
-            z: -6,
-            rotation: 0,
-            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
-            chairs: 4,
-            chairRadius: 1.1,
-            chairAngleOffset: Math.PI / 4,
-          },
-          {
-            type: "table",
-            x: 15,
-            z: -6,
-            rotation: 0,
-            tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
-            chairs: 4,
-            chairRadius: 1.1, // vzdálenost židlí od středu stolu
-            chairAngleOffset: Math.PI / 4,
-          },
-          {
-            type: "table",
-            x: 12,
             z: 15,
             rotation: 0,
             tableOptions: { diameter: 1.6, height: 0.75 }, // kulatý stůl průměr 1.6 m
@@ -5564,6 +5544,86 @@ export const CONFIG_DATA = {
         ],
 
         walls: [
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 11.4, z: -5.04 },
+            end: { x: 12.19, z: -5.04 },
+            partitionHeight: 1,
+            partitionWidth: 0.72,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 13.165, z: -5.375 },
+            end: { x: 12.19, z: -5.375 },
+            partitionHeight: 1,
+            partitionWidth: 0.05,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 13.165, z: -5.04 },
+            end: { x: 13.7, z: -5.04 },
+            partitionHeight: 1,
+            partitionWidth: 0.72,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 14.6, z: -5.04 },
+            end: { x: 15.6, z: -5.04 },
+            partitionHeight: 1,
+            partitionWidth: 0.72,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 11.45, z: -5.4 },
+            end: { x: 11.45, z: -1.2 },
+            partitionHeight: 1,
+            partitionWidth: 0.1,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 11.5, z: -1.25 },
+            end: { x: 15.5, z: -1.25 },
+            partitionHeight: 1,
+            partitionWidth: 0.1,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 15.55, z: -5.4 },
+            end: { x: 15.55, z: -1.2 },
+            partitionHeight: 1,
+            partitionWidth: 0.1,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 11.9, z: -4.68 },
+            end: { x: 11.9, z: -1.2 },
+            partitionHeight: 0.8,
+            partitionWidth: 0.8,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 15.1, z: -4.68 },
+            end: { x: 15.1, z: -1.2 },
+            partitionHeight: 0.8,
+            partitionWidth: 0.8,
+          },
+          {
+            //kavarna
+            type: "partition",
+            start: { x: 11.5, z: -1.7 },
+            end: { x: 15.5, z: -1.7 },
+            partitionHeight: 0.8,
+            partitionWidth: 0.8,
+          },
           {
             type: "partition",
             start: { x: 0.45, z: 9.775 },
