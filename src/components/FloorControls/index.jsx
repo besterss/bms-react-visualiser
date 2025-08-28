@@ -43,6 +43,11 @@ const FloorControls = ({
   darkMode,
   onDarkModeToggle,
 }) => {
+  const isAll = activeFloor === "all";
+  const numericId =
+    typeof activeFloor === "number" ? activeFloor : parseInt(activeFloor, 10);
+  const showTheme = isAll || (!Number.isNaN(numericId) && numericId >= 0);
+
   return (
     <div className="controls" style={{ padding: 12 }}>
       <div className="control-group">
@@ -62,7 +67,7 @@ const FloorControls = ({
           </button>
         ))}
         <button
-          className={activeFloor === "all" ? "active" : ""}
+          className={isAll ? "active" : ""}
           onClick={() => onFloorChange("all")}
           style={{ marginBottom: 6, padding: "6px 10px" }}
         >
@@ -106,13 +111,15 @@ const FloorControls = ({
         </label>
       </div>
 
-      <div className="control-group" style={{ marginTop: 12 }}>
-        <h3>Theme</h3>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <ToggleButton on={darkMode} onToggle={onDarkModeToggle} />
-          <div>{darkMode ? "Dark Mode" : "Light Mode"}</div>
+      {showTheme && (
+        <div className="control-group" style={{ marginTop: 12 }}>
+          <h3>Theme</h3>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <ToggleButton on={darkMode} onToggle={onDarkModeToggle} />
+            <div>{darkMode ? "Dark Mode" : "Light Mode"}</div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
