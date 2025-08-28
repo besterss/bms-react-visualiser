@@ -1832,6 +1832,8 @@ export const CONFIG_DATA = {
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
         { x: -31.5625, z: 43.5205, width: 1.225, depth: 6.568 },
         { x: 38.175, z: 43.8985, width: 1.35, depth: 6.568 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
       ],
       endPoints: [
         { x: -9, z: 15.4, id: "B" },
@@ -1847,6 +1849,27 @@ export const CONFIG_DATA = {
           rows: 1,
         },
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "stairs",
             position: { x: 9.075, z: -15.552 },
@@ -5337,6 +5360,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 13.1775, width: 2.6, depth: 5.045 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: -2.6, z: 15.5, id: "B" },
@@ -5536,6 +5564,27 @@ export const CONFIG_DATA = {
         ],
 
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "partition",
             start: { x: 9.65, z: 9.65 },
@@ -7347,6 +7396,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: 2.95, z: 3.6, id: "B" },
@@ -7363,6 +7417,27 @@ export const CONFIG_DATA = {
         },
 
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "stairs",
             position: { x: 7.725, z: -12 },
@@ -8972,6 +9047,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: 11.6, z: 8.1, id: "B" },
@@ -8987,6 +9067,27 @@ export const CONFIG_DATA = {
           rows: 1,
         },
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "stairs",
             position: { x: 7.725, z: -12 },
@@ -10498,6 +10599,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: -6.3, z: -11.7, id: "B" },
@@ -10514,6 +10620,27 @@ export const CONFIG_DATA = {
         },
 
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "stairs",
             position: { x: 7.725, z: -12 },
@@ -12217,6 +12344,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: -11.6, z: 6.25, id: "B" },
@@ -12233,6 +12365,27 @@ export const CONFIG_DATA = {
         },
 
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "stairs",
             position: { x: 7.725, z: -12 },
@@ -14029,6 +14182,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: 11.6, z: 8.1, id: "B" },
@@ -14044,6 +14202,27 @@ export const CONFIG_DATA = {
           rows: 1,
         },
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "outline",
             points: [
@@ -15632,6 +15811,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: -9.1, z: 11.2, id: "B" },
@@ -15663,6 +15847,27 @@ export const CONFIG_DATA = {
           },
         ],
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "stairs",
             position: { x: 7.725, z: -12 },
@@ -17552,6 +17757,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
+        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
+        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
+        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
+        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
       ],
       endPoints: [
         { x: -9.1, z: 11.2, id: "B" },
@@ -17567,6 +17777,27 @@ export const CONFIG_DATA = {
         },
 
         walls: [
+          {
+            type: "partition",
+            start: { x: 0.45, z: 9.775 },
+            end: { x: 1.35, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: 2.25, z: 9.775 },
+            end: { x: 3.15, z: 9.775 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            type: "partition",
+            start: { x: -0.63, z: 9.7 },
+            end: { x: 4.23, z: 9.7 },
+            yLevel: 2.1,
+            partitionWidth: 0.2,
+          },
           {
             type: "outline",
             points: [
@@ -19476,6 +19707,7 @@ export const CONFIG_DATA = {
       holes: [
         { x: 8.4, z: -14.4, width: 3, depth: 5 },
         { x: -8.4, z: 14.2, width: 3, depth: 4.7 },
+        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
       ],
       endPoints: [
         { x: -9.1, z: 11.2, id: "B" },
