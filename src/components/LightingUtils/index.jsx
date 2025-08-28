@@ -32,7 +32,7 @@ export const setupSceneLighting = (scene) => {
     new BABYLON.Vector3(0, 400, 0), // Position higher up for even distribution
     scene
   );
-  omniFillLight.intensity = 1; // Low intensity to subtly illuminate shadowed spots
+  omniFillLight.intensity = 0.9; // Low intensity to subtly illuminate shadowed spots
 
   return {
     mainDirectionalLight,

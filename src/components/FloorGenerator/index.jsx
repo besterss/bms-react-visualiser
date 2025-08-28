@@ -44,10 +44,20 @@ export class FloorGenerator {
       };
     }
     this.darkMode = false;
+
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
+
+    // 2) AUTOMATICALLY make *every* mesh both cast & receive shadows
+    this.scene.onNewMeshAddedObservable.add((mesh) => {
+      // receive shadows
+      mesh.receiveShadows = true;
+      // cast shadows
+      // the `true` 2nd parameter will traverse down into children,
+      // but you can omit it if you only want the single mesh.
+      this.shadowGenerator.addShadowCaster(mesh, true);
+    });
     // ensure furniture material exists
-    this.initializeFurnitureMaterial();
   }
   // ----------------- MATERIALS -----------------
   initializeGrassMaterial() {
@@ -92,9 +102,9 @@ export class FloorGenerator {
       this.scene
     );
     this.materials.floorDefault.diffuseColor = new BABYLON.Color3(
-      0.73,
-      0.73,
-      0.73
+      0.78,
+      0.78,
+      0.78
     );
     this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.floorDefault.backFaceCulling = false;
@@ -182,17 +192,6 @@ export class FloorGenerator {
     this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
     this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
     // also create furniture material here
-    this.initializeFurnitureMaterial();
-  }
-  initializeFurnitureMaterial() {
-    if (!this.materials.furniture) {
-      const mat = new BABYLON.StandardMaterial("furnitureMat", this.scene);
-      // restored to original appearance as requested
-      mat.diffuseColor = new BABYLON.Color3(1, 1, 1);
-      mat.specularColor = new BABYLON.Color3(0, 0, 0);
-      mat.backFaceCulling = true;
-      this.materials.furniture = mat;
-    }
   }
   // ----------------- DARK MODE -----------------
   setDarkMode(enabled) {
@@ -351,8 +350,7 @@ export class FloorGenerator {
     singleLeg = true,
     baseDiameter = null
   ) {
-    this.initializeFurnitureMaterial();
-    material = material || this.materials.furniture;
+    material = material || this.wallOpaque;
     const parts = [];
     // top (cylinder) centered at local origin
     const top = BABYLON.MeshBuilder.CreateCylinder(
@@ -473,6 +471,7 @@ export class FloorGenerator {
       if (rotationY) merged.rotation.y = rotationY;
       merged.position = new BABYLON.Vector3(position.x, position.y, position.z);
       try {
+        merged.receiveShadows = true;
         this.shadowGenerator.addShadowCaster(merged);
       } catch {}
       merged.isPickable = false;
@@ -489,8 +488,7 @@ export class FloorGenerator {
     rotationY = 0,
     material
   ) {
-    this.initializeFurnitureMaterial();
-    material = material || this.materials.furniture;
+    material = material || this.materials.wallOpaque;
     const parts = [];
     const seat = BABYLON.MeshBuilder.CreateBox(
       `${name}_seat`,
@@ -542,6 +540,7 @@ export class FloorGenerator {
       if (rotationY) merged.rotation.y = rotationY;
       merged.position = new BABYLON.Vector3(position.x, position.y, position.z);
       try {
+        merged.receiveShadows = true;
         this.shadowGenerator.addShadowCaster(merged);
       } catch {}
       merged.isPickable = false;
@@ -614,6 +613,7 @@ export class FloorGenerator {
       if (tableMesh) this.shadowGenerator.addShadowCaster(tableMesh);
       chairMeshes.forEach((c) => {
         try {
+          c.receiveShadows = true;
           this.shadowGenerator.addShadowCaster(c);
         } catch {}
       });
@@ -916,7 +916,7 @@ export class FloorGenerator {
           const mat =
             furn.materialType === "pink"
               ? this.materials.pinkGlass
-              : this.materials.furniture;
+              : this.materials.wallOpaque;
           if (furn.type === "table") {
             const tableOpts = furn.tableOptions || {
               width: 1.2,
