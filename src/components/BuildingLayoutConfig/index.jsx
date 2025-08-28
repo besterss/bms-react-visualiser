@@ -9097,6 +9097,10 @@ export const CONFIG_DATA = {
       segments: [
         { width: 28.19, depth: 35.82, position: { x: -3.855, z: 0 } },
         { width: 4, depth: 1.4, position: { x: 11.6, z: 8.1 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: -17.5 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: 17.5 } },
+        { width: 0.84, depth: 35.8, position: { x: -17.5, z: 0 } },
+        { width: 0.84, depth: 35.8, position: { x: 17.5, z: 0 } },
       ],
       holes: [
         { x: 8.4, z: -14.4, width: 3, depth: 5 },
@@ -10648,7 +10652,11 @@ export const CONFIG_DATA = {
       segments: [
         { width: 35.82, depth: 28.19, position: { x: 0, z: 3.855 } },
         { width: 3, depth: 10, position: { x: 8.5, z: -12 } },
-        { width: 1.2, depth: 3.2, position: { x: -6.3, z: -11.7 } }, // kostka hlavni
+        { width: 1.2, depth: 3.2, position: { x: -6.3, z: -11.7 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: -17.5 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: 17.5 } },
+        { width: 0.84, depth: 35.8, position: { x: -17.5, z: 0 } },
+        { width: 0.84, depth: 35.8, position: { x: 17.5, z: 0 } }, // kostka hlavni
       ],
       holes: [
         { x: 8.4, z: -14.4, width: 3, depth: 5 },
@@ -12394,7 +12402,11 @@ export const CONFIG_DATA = {
       segments: [
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
         { width: 28.19, depth: 35.82, position: { x: 3.855, z: 0 } },
-        { width: 3.5, depth: 1.2, position: { x: -11.6, z: 6.25 } }, // kostka hlavni
+        { width: 3.5, depth: 1.2, position: { x: -11.6, z: 6.25 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: -17.5 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: 17.5 } },
+        { width: 0.84, depth: 35.8, position: { x: -17.5, z: 0 } },
+        { width: 0.84, depth: 35.8, position: { x: 17.5, z: 0 } }, // kostka hlavni
       ],
       holes: [
         { x: 8.4, z: -14.4, width: 3, depth: 5 }, //1.1
@@ -14231,6 +14243,10 @@ export const CONFIG_DATA = {
         { width: 9, depth: 2, position: { x: -12, z: -9 } },
         { width: 20.56, depth: 35.82, position: { x: 0, z: 0 } },
         { width: 3.5, depth: 1.2, position: { x: 11.6, z: 8.1 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: -17.5 } },
+        { width: 35.82, depth: 0.84, position: { x: 0, z: 17.5 } },
+        { width: 0.84, depth: 35.8, position: { x: -17.5, z: 0 } },
+        { width: 0.84, depth: 35.8, position: { x: 17.5, z: 0 } },
       ],
 
       holes: [
