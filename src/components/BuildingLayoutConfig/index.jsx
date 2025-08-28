@@ -7237,6 +7237,35 @@ export const CONFIG_DATA = {
             end: { x: 10.15, z: -16.875 },
             partitionWidth: 0.15,
           },
+          {
+            // bar nejaky divny
+            type: "partition",
+            start: { x: -10.7, z: 3.4 },
+            end: { x: -10.7, z: -4.4 },
+            partitionWidth: 1.2,
+            partitionHeight: 0.8,
+          },
+          {
+            type: "partition",
+            start: { x: -10.1, z: 3.4 },
+            end: { x: -13.1, z: 3.4 },
+            partitionWidth: 1.2,
+            partitionHeight: 0.8,
+          },
+          {
+            type: "partition",
+            start: { x: -13.7, z: 4 },
+            end: { x: -13.7, z: -0.8 },
+            partitionWidth: 1.2,
+            partitionHeight: 0.8,
+          },
+          {
+            type: "partition",
+            start: { x: -13.7, z: -1.8 },
+            end: { x: -13.7, z: -4.4 },
+            partitionWidth: 1.2,
+            partitionHeight: 0.8,
+          },
         ],
       },
       rooms: [
