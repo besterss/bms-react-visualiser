@@ -10,13 +10,17 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run deploy"
   },
   "dependencies": {
+    "@aws-appsync/eslint-plugin": "^2.0.2",
     "@babylonjs/core": "^8.16.0",
     "@babylonjs/gui": "^8.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
     "babylonjs": "^8.15.1",
     "babylonjs-loaders": "^8.15.1",
+    "eslint-config-prettier": "^10.1.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
