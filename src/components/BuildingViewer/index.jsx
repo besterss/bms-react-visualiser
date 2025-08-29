@@ -430,6 +430,8 @@ const BuildingViewer = () => {
                 mesh.material = generator.materials.pinkGlass;
               } else if (mesh.name.includes("_greenGlass")) {
                 mesh.material = generator.materials.greenGlass;
+              } else if (mesh.name.includes("_yellowGlass")) {
+                mesh.material = generator.materials.yellowGlass;
               } else if (mesh.name.includes("_glass")) {
                 mesh.material = generator.materials.glass;
               } else {

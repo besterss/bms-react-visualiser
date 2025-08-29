@@ -148,6 +148,15 @@ export class FloorGenerator {
     greenGlass.needDepthPrePass = true;
     this.materials.greenGlass = greenGlass;
 
+    // Yellow glass
+    const yellowGlass = new BABYLON.StandardMaterial("yellowGlass", this.scene);
+    yellowGlass.diffuseColor = new BABYLON.Color3(1.0, 1.0, 0.6);
+    yellowGlass.specularColor = new BABYLON.Color3(0, 0, 0);
+    yellowGlass.alpha = 0.5; // same semi-transparent look
+    yellowGlass.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    yellowGlass.needDepthPrePass = true;
+    this.materials.yellowGlass = yellowGlass;
+
     // Grass (exterior lawns)
     const grass = new BABYLON.StandardMaterial("grassMat", this.scene);
     grass.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
@@ -1039,6 +1048,9 @@ export class FloorGenerator {
               break;
             case "greenGlass":
               material = this.materials.greenGlass;
+              break;
+            case "yellowGlass":
+              material = this.materials.yellowGlass;
               break;
             default:
               material = this.materials.wallOpaque;

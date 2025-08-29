@@ -5547,6 +5547,42 @@ export const CONFIG_DATA = {
 
         walls: [
           {
+            //kavarna sklo
+            type: "partition",
+            start: { x: 11.4, z: -1.2 },
+            end: { x: 15.6, z: -1.2 },
+            yLevel: 2.5,
+            partitionWidth: 0.05,
+            materialType: "greenGlass",
+          },
+          {
+            //kavarna sklo
+            type: "partition",
+            start: { x: 11.4, z: -1.2 },
+            end: { x: 11.4, z: -5.4 },
+            yLevel: 2.5,
+            partitionWidth: 0.05,
+            materialType: "greenGlass",
+          },
+          {
+            //kavarna sklo
+            type: "partition",
+            start: { x: 11.4, z: -5.4 },
+            end: { x: 15.6, z: -5.4 },
+            yLevel: 2.5,
+            partitionWidth: 0.05,
+            materialType: "greenGlass",
+          },
+          {
+            //kavarna sklo
+            type: "partition",
+            start: { x: 15.6, z: -1.2 },
+            end: { x: 15.6, z: -5.4 },
+            yLevel: 2.5,
+            partitionWidth: 0.05,
+            materialType: "greenGlass",
+          },
+          {
             //kavarna
             type: "partition",
             start: { x: 11.4, z: -5.04 },
@@ -7273,6 +7309,42 @@ export const CONFIG_DATA = {
             partitionWidth: 1.2,
             partitionHeight: 0.8,
           },
+          {
+            // bar nejaky divny sklo
+            type: "partition",
+            start: { x: -14.3, z: 4 },
+            end: { x: -14.3, z: -0.2 },
+            partitionWidth: 0.05,
+            yLevel: 2.5,
+            materialType: "yellowGlass",
+          },
+          {
+            // bar nejaky divny sklo
+            type: "partition",
+            start: { x: -10.1, z: 4 },
+            end: { x: -14.3, z: 4 },
+            partitionWidth: 0.05,
+            yLevel: 2.5,
+            materialType: "yellowGlass",
+          },
+          {
+            // bar nejaky divny sklo
+            type: "partition",
+            start: { x: -10.1, z: 4 },
+            end: { x: -10.1, z: -0.2 },
+            partitionWidth: 0.05,
+            yLevel: 2.5,
+            materialType: "yellowGlass",
+          },
+          {
+            // bar nejaky divny sklo
+            type: "partition",
+            start: { x: -10.1, z: -0.2 },
+            end: { x: -14.3, z: -0.2 },
+            partitionWidth: 0.05,
+            yLevel: 2.5,
+            materialType: "yellowGlass",
+          },
         ],
       },
       rooms: [
@@ -8377,13 +8449,6 @@ export const CONFIG_DATA = {
             stepDepth: 1.165,
             start: 0,
           },
-          /* {
-            //schody tocite v pravo nahore sloup
-            type: "circular",
-            center: { x: 13.5, z: 7.2 },
-            radius: 0,
-            circularWidth: 0.8,
-          }, */
           {
             //Schodiste01 - prava
             type: "partition",
