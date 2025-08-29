@@ -2378,21 +2378,23 @@ export const CONFIG_DATA = {
           },
           {
             //schodiste11 zabradli vetsi
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.05, z: 4.62 },
             end: { x: -0.45, z: 4.62 },
             partitionWidth: 0.05,
             yLevel: 1.55,
             partitionHeight: 1,
+            materialType: "pinkGlass",
           },
           {
             //schodiste11 zabradlni mensi
-            type: "pinkglass",
+            type: "partition",
             start: { x: 1.7, z: 2.35 },
             end: { x: 1.85, z: 2.35 },
             partitionWidth: 0.05,
             yLevel: 1.55,
             partitionHeight: 1,
+            materialType: "pinkGlass",
           },
           {
             //Schodiste02 - leva
@@ -5773,21 +5775,23 @@ export const CONFIG_DATA = {
             direction: "top",
           },
           {
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.05, z: -4.6 },
             end: { x: -0.45, z: -4.6 },
             partitionWidth: 0.05,
             yLevel: 3.65,
             partitionHeight: 1,
+            materialType: "pinkGlass",
           },
 
           {
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.05, z: 4.6 },
             end: { x: -0.45, z: 4.6 },
             partitionWidth: 0.05,
             yLevel: 1.765,
             partitionHeight: 1,
+            materialType: "pinkGlass",
           },
           {
             type: "stairs",
@@ -5804,28 +5808,31 @@ export const CONFIG_DATA = {
           },
           {
             //schodiste11 vnejsi leva
-            type: "pinkglass",
+            type: "partition",
             start: { x: -0.3, z: 4.6 },
             end: { x: -0.3, z: -4.4 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
           {
             //schodiste11 vnejsi vrchni leva
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.05, z: 4.6 },
             end: { x: -0.32, z: 4.6 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
 
           {
             //schodiste11 vnejsi prava
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.03, z: -4.4 },
             end: { x: 4.03, z: 4.6 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
 
           {
@@ -8989,43 +8996,48 @@ export const CONFIG_DATA = {
           },
           {
             //schodiste11 vnejsi leva
-            type: "pinkglass",
+            type: "partition",
             start: { x: -0.3, z: 4 },
             end: { x: -0.3, z: -4.4 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
           {
             //schodiste11 vnejsi vrchni leva
-            type: "pinkglass",
+            type: "partition",
             start: { x: 1.87, z: 4 },
             end: { x: -0.325, z: 4 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
           {
             //schodiste11 vnejsi vrchni leva
-            type: "pinkglass",
+            type: "partition",
             start: { x: 1.87, z: 4 },
             end: { x: 1.87, z: 2.35 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
           {
             //schodiste11 vnejsi prava
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.03, z: -4.4 },
             end: { x: 4.03, z: 4 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
           {
             //schodiste11 vnejsi spodni
-            type: "pinkglass",
+            type: "partition",
             start: { x: 4.05, z: -4.4 },
             end: { x: -0.325, z: -4.4 },
             partitionHeight: 1.2,
             partitionWidth: 0.05,
+            materialType: "pinkGlass",
           },
         ],
       },

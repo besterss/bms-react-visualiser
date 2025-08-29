@@ -419,13 +419,22 @@ const BuildingViewer = () => {
             } else if (mesh.name.includes("_glass")) {
               mesh.material = generator.materials.glass;
             } else if (
-              mesh.name.includes("_partition") ||
               mesh.name.includes("_circular") ||
               mesh.name.includes("_curved")
             ) {
               mesh.material = generator.materials.wallOpaque;
             } else if (mesh.name.includes("_outline")) {
               mesh.material = generator.materials.glass;
+            } else if (mesh.name.includes("_partition")) {
+              if (mesh.name.includes("_pinkGlass")) {
+                mesh.material = generator.materials.pinkGlass;
+              } else if (mesh.name.includes("_greenGlass")) {
+                mesh.material = generator.materials.greenGlass;
+              } else if (mesh.name.includes("_glass")) {
+                mesh.material = generator.materials.glass;
+              } else {
+                mesh.material = generator.materials.wallOpaque;
+              }
             }
           }
         }

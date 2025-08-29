@@ -5,20 +5,17 @@ export class FloorGenerator {
     this.scene = scene;
     this.engine = engine;
     this.config = configData;
+
     this.allFloorMeshes = [];
     this.floorData = [];
     this.materials = {};
-    // initialize centralized materials (creates this.materials.glass, pinkGlass, ...)
+
+    // initialize all materials in one place
     this.initializeMaterials();
-    // additional materials and defaults
-    this.materials.grass = this.initializeGrassMaterial();
-    this.materials.water = this.initializeWaterMaterial();
-    // create a dark variant specifically for railings (used only in dark mode)
-    this.materials.railingDark = this.initializeRailingMaterial();
-    // default "railing" reference: in normal mode we want railings to be the same as glass
-    this.materials.railing = this.materials.glass;
-    // Track created railing meshes so we can swap their material when toggling dark mode
+
+    // track railing meshes for dark mode swaps
     this._railingMeshes = [];
+
     // Store original glass/pinkGlass props so we can revert later
     this._originalGlassProps = {};
     if (this.materials.glass) {
@@ -32,121 +29,79 @@ export class FloorGenerator {
         specularPower: this.materials.glass.specularPower,
       };
     }
-    if (this.materials.pinkGlass) {
-      this._originalGlassProps.pinkGlass = {
-        diffuseColor: this.materials.pinkGlass.diffuseColor.clone(),
-        alpha: this.materials.pinkGlass.alpha,
-        transparencyMode: this.materials.pinkGlass.transparencyMode,
-        specularColor: this.materials.pinkGlass.specularColor.clone(),
-        backFaceCulling: this.materials.pinkGlass.backFaceCulling,
-        needDepthPrePass: this.materials.pinkGlass.needDepthPrePass,
-        specularPower: this.materials.pinkGlass.specularPower,
-      };
-    }
+
     this.darkMode = false;
 
     const { shadowGenerator } = setupSceneLighting(this.scene);
     this.shadowGenerator = shadowGenerator;
 
-    // 2) AUTOMATICALLY make *every* mesh both cast & receive shadows
     this.scene.onNewMeshAddedObservable.add((mesh) => {
-      // receive shadows
       mesh.receiveShadows = true;
-      // cast shadows
-      // the `true` 2nd parameter will traverse down into children,
-      // but you can omit it if you only want the single mesh.
       this.shadowGenerator.addShadowCaster(mesh, true);
     });
-    // ensure furniture material exists
+
+    this.scene.onNewMeshAddedObservable.add((mesh) => {
+      mesh.receiveShadows = true;
+      this.shadowGenerator.addShadowCaster(mesh, true);
+      if (mesh.name === "floor_0_partition_31_pinkGlass") {
+        console.log("Material object:", mesh.material);
+        console.log("Material name:", mesh.material?.name);
+      }
+    });
   }
   // ----------------- MATERIALS -----------------
-  initializeGrassMaterial() {
-    const grassMaterial = new BABYLON.StandardMaterial("grassMat", this.scene);
-    grassMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
-    grassMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    grassMaterial.alpha = 0.7;
-    grassMaterial.backFaceCulling = false;
-    return grassMaterial;
-  }
-  initializeRailingMaterial() {
-    const railingMaterial = new BABYLON.StandardMaterial(
-      "railingMatDark",
-      this.scene
-    );
-    railingMaterial.diffuseColor = new BABYLON.Color3(
-      203 / 255,
-      211 / 255,
-      225 / 255
-    );
-    railingMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    railingMaterial.alpha = 0.5;
-    railingMaterial.backFaceCulling = false;
-    return railingMaterial;
-  }
-  initializeWaterMaterial() {
-    const waterMaterial = new BABYLON.StandardMaterial("waterMat", this.scene);
-    waterMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.3, 1.0);
-    waterMaterial.specularColor = new BABYLON.Color3(0.8, 0.8, 0.8);
-    waterMaterial.backFaceCulling = false;
-    return waterMaterial;
-  }
   initializeMaterials() {
-    this.materials.wallOpaque = new BABYLON.StandardMaterial(
+    this.materials = this.materials || {};
+
+    // Opaque wall
+    const wallOpaque = new BABYLON.StandardMaterial(
       "wallOpaqueMat",
       this.scene
     );
-    this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
-    this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.floorDefault = new BABYLON.StandardMaterial(
+    wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
+    wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.wallOpaque = wallOpaque;
+
+    // Default floor
+    const floorDefault = new BABYLON.StandardMaterial(
       "floorDefaultMat",
       this.scene
     );
-    this.materials.floorDefault.diffuseColor = new BABYLON.Color3(
-      0.78,
-      0.78,
-      0.78
-    );
-    this.materials.floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.floorDefault.backFaceCulling = false;
-    this.materials.floorDefault.alpha = 1;
-    this.materials.aboveGroundTransparent = new BABYLON.StandardMaterial(
+    floorDefault.diffuseColor = new BABYLON.Color3(0.78, 0.78, 0.78);
+    floorDefault.specularColor = new BABYLON.Color3(0, 0, 0);
+    floorDefault.backFaceCulling = false;
+    floorDefault.alpha = 1;
+    this.materials.floorDefault = floorDefault;
+
+    // Above-ground transparent
+    const aboveGroundTransparent = new BABYLON.StandardMaterial(
       "aboveGroundTransparentMat",
       this.scene
     );
-    this.materials.aboveGroundTransparent.diffuseColor = new BABYLON.Color3(
-      0.3,
-      0.3,
-      0.3
-    );
-    this.materials.aboveGroundTransparent.backFaceCulling = false;
-    this.materials.aboveGroundTransparent.alpha = 0.7;
-    this.materials.aboveGroundTransparent.transparencyMode =
+    aboveGroundTransparent.diffuseColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+    aboveGroundTransparent.backFaceCulling = false;
+    aboveGroundTransparent.alpha = 0.7;
+    aboveGroundTransparent.transparencyMode =
       BABYLON.Material.MATERIAL_ALPHABLEND;
-    this.materials.aboveGroundTransparent.needDepthPrePass = true;
-    this.materials.aboveGroundTransparent.specularColor = new BABYLON.Color3(
-      0,
-      0,
-      0
-    );
-    this.materials.undergroundTransparent = new BABYLON.StandardMaterial(
+    aboveGroundTransparent.needDepthPrePass = true;
+    aboveGroundTransparent.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.aboveGroundTransparent = aboveGroundTransparent;
+
+    // Underground transparent
+    const undergroundTransparent = new BABYLON.StandardMaterial(
       "undergroundTransparentMat",
       this.scene
     );
-    this.materials.undergroundTransparent.diffuseColor = new BABYLON.Color3(
-      0.6,
-      0.8,
-      1
-    );
-    this.materials.undergroundTransparent.backFaceCulling = false;
-    this.materials.undergroundTransparent.alpha = 0.7;
-    this.materials.undergroundTransparent.transparencyMode =
+    undergroundTransparent.diffuseColor = new BABYLON.Color3(0.6, 0.8, 1);
+    undergroundTransparent.backFaceCulling = false;
+    undergroundTransparent.alpha = 0.7;
+    undergroundTransparent.transparencyMode =
       BABYLON.Material.MATERIAL_ALPHABLEND;
-    this.materials.undergroundTransparent.needDepthPrePass = true;
-    this.materials.undergroundTransparent.specularColor = new BABYLON.Color3(
-      0,
-      0,
-      0
-    );
+    undergroundTransparent.needDepthPrePass = true;
+    undergroundTransparent.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.undergroundTransparent = undergroundTransparent;
+
+    // Grass (1NP visual)
     const grass1NP = new BABYLON.StandardMaterial("grass1NP", this.scene);
     grass1NP.diffuseColor = new BABYLON.Color3(0.44, 0.44, 0.44);
     grass1NP.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -155,29 +110,28 @@ export class FloorGenerator {
     grass1NP.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     grass1NP.needDepthPrePass = true;
     this.materials.grass1NP = grass1NP;
-    this.materials.ground = new BABYLON.StandardMaterial(
-      "groundMat",
-      this.scene
-    );
-    this.materials.ground.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
-    this.materials.ground.backFaceCulling = false;
-    this.materials.ground.alpha = 1;
-    this.materials.ground.transparencyMode =
-      BABYLON.Material.MATERIAL_ALPHABLEND;
-    this.materials.ground.needDepthPrePass = true;
-    this.materials.ground.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.glass = new BABYLON.StandardMaterial("glassMat", this.scene);
-    this.materials.glass.diffuseColor = new BABYLON.Color3(
-      203 / 255,
-      211 / 255,
-      225 / 255
-    );
-    this.materials.glass.alpha = 0.5;
-    this.materials.glass.backFaceCulling = true;
-    this.materials.glass.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.glass.transparencyMode =
-      BABYLON.Material.MATERIAL_ALPHABLEND;
-    this.materials.glass.needDepthPrePass = true;
+
+    // Ground
+    const ground = new BABYLON.StandardMaterial("groundMat", this.scene);
+    ground.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+    ground.backFaceCulling = false;
+    ground.alpha = 1;
+    ground.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    ground.needDepthPrePass = true;
+    ground.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.ground = ground;
+
+    // Glass
+    const glass = new BABYLON.StandardMaterial("glassMat", this.scene);
+    glass.diffuseColor = new BABYLON.Color3(203 / 255, 211 / 255, 225 / 255);
+    glass.alpha = 0.5;
+    glass.backFaceCulling = true;
+    glass.specularColor = new BABYLON.Color3(0, 0, 0);
+    glass.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    glass.needDepthPrePass = true;
+    this.materials.glass = glass;
+
+    // Pink glass
     const pinkGlass = new BABYLON.StandardMaterial("pinkGlass", this.scene);
     pinkGlass.diffuseColor = new BABYLON.Color3(1, 0.75, 0.8);
     pinkGlass.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -185,13 +139,66 @@ export class FloorGenerator {
     pinkGlass.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
     pinkGlass.needDepthPrePass = true;
     this.materials.pinkGlass = pinkGlass;
-    this.materials.wallOpaque = new BABYLON.StandardMaterial(
-      "wallOpaqueMat",
+
+    const greenGlass = new BABYLON.StandardMaterial("greenGlass", this.scene);
+    greenGlass.diffuseColor = new BABYLON.Color3(0.7, 1.0, 0.7); // soft green tint
+    greenGlass.specularColor = new BABYLON.Color3(0, 0, 0);
+    greenGlass.alpha = 0.5;
+    greenGlass.transparencyMode = BABYLON.Material.MATERIAL_ALPHABLEND;
+    greenGlass.needDepthPrePass = true;
+    this.materials.greenGlass = greenGlass;
+
+    // Grass (exterior lawns)
+    const grass = new BABYLON.StandardMaterial("grassMat", this.scene);
+    grass.diffuseColor = new BABYLON.Color3(0.0, 0.55, 0.0);
+    grass.specularColor = new BABYLON.Color3(0, 0, 0);
+    grass.alpha = 0.7;
+    grass.backFaceCulling = false;
+    this.materials.grass = grass;
+
+    // Water
+    const water = new BABYLON.StandardMaterial("waterMat", this.scene);
+    water.diffuseColor = new BABYLON.Color3(0.0, 0.3, 1.0);
+    water.specularColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+    water.backFaceCulling = false;
+    this.materials.water = water;
+
+    // Railing (dark variant for dark mode)
+    const railingDark = new BABYLON.StandardMaterial(
+      "railingMatDark",
       this.scene
     );
-    this.materials.wallOpaque.specularColor = new BABYLON.Color3(0, 0, 0);
-    this.materials.wallOpaque.diffuseColor = new BABYLON.Color3(1, 1, 1);
-    // also create furniture material here
+    railingDark.diffuseColor = new BABYLON.Color3(
+      203 / 255,
+      211 / 255,
+      225 / 255
+    );
+    railingDark.specularColor = new BABYLON.Color3(0, 0, 0);
+    railingDark.alpha = 0.5;
+    railingDark.backFaceCulling = false;
+    this.materials.railingDark = railingDark;
+
+    // Default "railing" reference: use glass for normal mode
+    this.materials.railing = this.materials.glass;
+
+    // Optional: plant/pot materials used by createBushInPot
+    const potMat = new BABYLON.StandardMaterial("potMat", this.scene);
+    potMat.diffuseColor = new BABYLON.Color3(0.55, 0.27, 0.07);
+    potMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+    this.materials.pot = potMat;
+
+    const soilMat = new BABYLON.StandardMaterial("soilMat", this.scene);
+    soilMat.diffuseColor = new BABYLON.Color3(0.12, 0.07, 0.03);
+    soilMat.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.soil = soilMat;
+
+    const bushLeavesMat = new BABYLON.StandardMaterial(
+      "bushLeavesMat",
+      this.scene
+    );
+    bushLeavesMat.diffuseColor = new BABYLON.Color3(0.07, 0.45, 0.07);
+    bushLeavesMat.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.materials.bushLeaves = bushLeavesMat;
   }
   // ----------------- DARK MODE -----------------
   setDarkMode(enabled) {
@@ -252,23 +259,6 @@ export class FloorGenerator {
           // ignore disposed meshes
         }
       });
-    }
-    // PINK GLASS restore
-    if (
-      !this.darkMode &&
-      this.materials &&
-      this.materials.pinkGlass &&
-      this._originalGlassProps &&
-      this._originalGlassProps.pinkGlass
-    ) {
-      const origPink = this._originalGlassProps.pinkGlass;
-      this.materials.pinkGlass.diffuseColor = origPink.diffuseColor.clone();
-      this.materials.pinkGlass.alpha = origPink.alpha;
-      this.materials.pinkGlass.specularColor = origPink.specularColor.clone();
-      this.materials.pinkGlass.specularPower = origPink.specularPower;
-      this.materials.pinkGlass.backFaceCulling = origPink.backFaceCulling;
-      this.materials.pinkGlass.transparencyMode = origPink.transparencyMode;
-      this.materials.pinkGlass.needDepthPrePass = origPink.needDepthPrePass;
     }
   }
   // ----------------- UTIL COLOR HELPERS -----------------
@@ -1032,9 +1022,28 @@ export class FloorGenerator {
           let partitionHeight = wall.partitionHeight || wallHeight;
           if (wall.yLevel) {
             partitionYLevel = baseYLevel + wall.yLevel;
-            partitionHeight = wallHeight - wall.yLevel;
+            if (wall.partitionHeight) {
+              partitionHeight = wall.partitionHeight;
+            } else {
+              partitionHeight = wallHeight - wall.yLevel;
+            }
           }
-          const materialType = wall.materialType || "opaque";
+          const materialType = wall.materialType;
+          let material;
+          switch (materialType) {
+            case "glass":
+              material = this.materials.glass;
+              break;
+            case "pinkGlass":
+              material = this.materials.pinkGlass;
+              break;
+            case "greenGlass":
+              material = this.materials.greenGlass;
+              break;
+            default:
+              material = this.materials.wallOpaque;
+              break;
+          }
           wallMesh = this.createWallSegment(
             p1,
             p2,
@@ -1043,7 +1052,7 @@ export class FloorGenerator {
             partitionHeight,
             partitionThickness,
             isUnderground,
-            materialType
+            material
           );
           floorMeshes.push(wallMesh);
         } else if (wall.type === "circular") {
@@ -1079,25 +1088,6 @@ export class FloorGenerator {
             isUnderground
           );
           floorMeshes.push(wallMesh);
-        } else if (wall.type === "pinkglass") {
-          const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
-          const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
-          const partitionThickness = wall.partitionWidth || wallThickness;
-          const baseYLevel = yLevel;
-          let partitionYLevel = baseYLevel;
-          let partitionHeight = wall.partitionHeight || wallHeight;
-          if (wall.yLevel) {
-            partitionYLevel = baseYLevel + wall.yLevel;
-            partitionHeight = wall.partitionHeight || wallHeight - wall.yLevel;
-          }
-          const pinkGlassPartition = this.createPinkGlassPartition(
-            p1,
-            p2,
-            partitionThickness,
-            partitionYLevel,
-            partitionHeight
-          );
-          floorMeshes.push(pinkGlassPartition);
         } else if (wall.type === "railing") {
           const p1 = new BABYLON.Vector3(wall.start.x, 0, wall.start.z);
           const p2 = new BABYLON.Vector3(wall.end.x, 0, wall.end.z);
@@ -1184,17 +1174,7 @@ export class FloorGenerator {
     const direction = p2.subtract(p1).normalize();
     const angle = Math.atan2(direction.x, direction.z);
     wall.rotation.y = angle;
-    switch (materialType) {
-      case "glass":
-        wall.material = this.materials.glass;
-        break;
-      case "opaque":
-        wall.material = this.materials.wallOpaque;
-        break;
-      default:
-        wall.material = this.materials.wallOpaque;
-        break;
-    }
+    wall.material = materialType;
     wall.isPickable = false;
     this.shadowGenerator.addShadowCaster(wall);
     return wall;
@@ -1793,25 +1773,5 @@ export class FloorGenerator {
       false,
       true
     );
-  }
-  createPinkGlassPartition(start, end, width, yLevel, height) {
-    const length = new BABYLON.Vector3(
-      end.x - start.x,
-      0,
-      end.z - start.z
-    ).length();
-    const wall = BABYLON.MeshBuilder.CreateBox(
-      "pinkGlassPartition",
-      { width: length, height: height, depth: width },
-      this.scene
-    );
-    wall.position.x = (start.x + end.x) / 2;
-    wall.position.y = yLevel + height / 2;
-    wall.position.z = (start.z + end.z) / 2;
-    const angle = Math.atan2(end.z - start.z, end.x - start.x);
-    wall.rotation.y = -angle;
-    wall.material = this.materials.pinkGlass;
-    wall.isPickable = false;
-    return wall;
   }
 }
