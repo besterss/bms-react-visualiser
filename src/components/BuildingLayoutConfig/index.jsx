@@ -34,6 +34,88 @@ export const CONFIG_DATA = {
 
         walls: [
           {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 16.6 },
+            end: { x: -4.1, z: 16.145 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 16.145 },
+            end: { x: -4.1125, z: 15.645 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 15.645 },
+            end: { x: -4.125, z: 15.145 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 16.145 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 15.045 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.845 },
+            end: { x: -4.1, z: 14.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 14.445 },
+            end: { x: -4.1125, z: 13.995 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 13.995 },
+            end: { x: -4.125, z: 13.545 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.445 },
+            end: { x: -4.1, z: 13.545 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 13.545 },
+            end: { x: -4.1, z: 13.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
             type: "stairs",
             position: { x: -31.5625, z: 46.8 },
             stepWidth: 1.225,
@@ -1832,8 +1914,8 @@ export const CONFIG_DATA = {
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
         { x: -31.5625, z: 43.5205, width: 1.225, depth: 6.568 },
         { x: 38.175, z: 43.8985, width: 1.35, depth: 6.568 },
-        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
-        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
+        { x: -5.375, z: 15.825, width: 2.45, depth: 1.6 }, //v4
+        { x: -5.375, z: 14.15, width: 2.45, depth: 1.45 }, //v5
       ],
       endPoints: [
         { x: -9, z: 15.4, id: "B" },
@@ -1849,6 +1931,211 @@ export const CONFIG_DATA = {
           rows: 1,
         },
         walls: [
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: -0.75, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0, z: 9.875 },
+            end: { x: -0.45, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.8625 },
+            end: { x: 0, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: 0.965, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.155, z: 9.85 },
+            end: { x: 1.35, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.875 },
+            end: { x: 1.8, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.8, z: 9.8625 },
+            end: { x: 2.25, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.85 },
+            end: { x: 2.25, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 2.25, z: 9.85 },
+            end: { x: 2.765, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 2.955, z: 9.85 },
+            end: { x: 3.15, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.875 },
+            end: { x: 3.6, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.6, z: 9.8625 },
+            end: { x: 4.05, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.85 },
+            end: { x: 4.05, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 4.05, z: 9.85 },
+            end: { x: 4.575, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 16.6 },
+            end: { x: -4.1, z: 16.145 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 16.145 },
+            end: { x: -4.1125, z: 15.645 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 15.645 },
+            end: { x: -4.125, z: 15.145 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 16.145 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 15.045 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.845 },
+            end: { x: -4.1, z: 14.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 14.445 },
+            end: { x: -4.1125, z: 13.995 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 13.995 },
+            end: { x: -4.125, z: 13.545 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.445 },
+            end: { x: -4.1, z: 13.545 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 13.545 },
+            end: { x: -4.1, z: 13.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
           {
             type: "partition",
             start: { x: 0.45, z: 9.775 },
@@ -5362,11 +5649,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 13.1775, width: 2.6, depth: 5.045 },
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
-        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
-        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
-        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
-        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
-        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
+        { x: -5.375, z: 15.825, width: 2.45, depth: 1.6 }, //v4
+        { x: -5.375, z: 14.15, width: 2.45, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.8, width: 1.72, depth: 1.85 }, //v1
+        { x: 1.96, z: 10.8, width: 1.615, depth: 1.85 }, //v2
+        { x: 3.765, z: 10.8, width: 1.625, depth: 1.85 }, //v3
       ],
       endPoints: [
         { x: -2.6, z: 15.5, id: "B" },
@@ -5546,6 +5833,211 @@ export const CONFIG_DATA = {
         ],
 
         walls: [
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: -0.75, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0, z: 9.875 },
+            end: { x: -0.45, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.8625 },
+            end: { x: 0, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: 0.965, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.155, z: 9.85 },
+            end: { x: 1.35, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.875 },
+            end: { x: 1.8, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.8, z: 9.8625 },
+            end: { x: 2.25, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.85 },
+            end: { x: 2.25, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 2.25, z: 9.85 },
+            end: { x: 2.765, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 2.955, z: 9.85 },
+            end: { x: 3.15, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.875 },
+            end: { x: 3.6, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.6, z: 9.8625 },
+            end: { x: 4.05, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.85 },
+            end: { x: 4.05, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 4.05, z: 9.85 },
+            end: { x: 4.575, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 16.6 },
+            end: { x: -4.1, z: 16.145 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 16.145 },
+            end: { x: -4.1125, z: 15.645 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 15.645 },
+            end: { x: -4.125, z: 15.145 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 16.145 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 15.045 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.845 },
+            end: { x: -4.1, z: 14.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 14.445 },
+            end: { x: -4.1125, z: 13.995 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 13.995 },
+            end: { x: -4.125, z: 13.545 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.445 },
+            end: { x: -4.1, z: 13.545 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 13.545 },
+            end: { x: -4.1, z: 13.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
           {
             //kavarna sklo
             type: "partition",
@@ -7679,11 +8171,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
-        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
-        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
-        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
-        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
-        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
+        { x: -5.375, z: 15.825, width: 2.45, depth: 1.6 }, //v4
+        { x: -5.375, z: 14.15, width: 2.45, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.8, width: 1.72, depth: 1.85 }, //v1
+        { x: 1.96, z: 10.8, width: 1.615, depth: 1.85 }, //v2
+        { x: 3.765, z: 10.8, width: 1.625, depth: 1.85 }, //v3
       ],
       endPoints: [
         { x: 2.95, z: 3.6, id: "B" },
@@ -7700,6 +8192,211 @@ export const CONFIG_DATA = {
         },
 
         walls: [
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: -0.75, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0, z: 9.875 },
+            end: { x: -0.45, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.8625 },
+            end: { x: 0, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: 0.965, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.155, z: 9.85 },
+            end: { x: 1.35, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.875 },
+            end: { x: 1.8, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.8, z: 9.8625 },
+            end: { x: 2.25, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.85 },
+            end: { x: 2.25, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 2.25, z: 9.85 },
+            end: { x: 2.765, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 2.955, z: 9.85 },
+            end: { x: 3.15, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.875 },
+            end: { x: 3.6, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.6, z: 9.8625 },
+            end: { x: 4.05, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.85 },
+            end: { x: 4.05, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 4.05, z: 9.85 },
+            end: { x: 4.575, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 16.6 },
+            end: { x: -4.1, z: 16.145 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 16.145 },
+            end: { x: -4.1125, z: 15.645 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 15.645 },
+            end: { x: -4.125, z: 15.145 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 16.145 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 15.045 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.845 },
+            end: { x: -4.1, z: 14.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 14.445 },
+            end: { x: -4.1125, z: 13.995 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 13.995 },
+            end: { x: -4.125, z: 13.545 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.445 },
+            end: { x: -4.1, z: 13.545 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 13.545 },
+            end: { x: -4.1, z: 13.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
           {
             type: "partition",
             start: { x: 0.45, z: 9.775 },
@@ -9332,11 +10029,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
-        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
-        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
-        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
-        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
-        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
+        { x: -5.375, z: 15.825, width: 2.45, depth: 1.6 }, //v4
+        { x: -5.375, z: 14.15, width: 2.45, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.8, width: 1.72, depth: 1.85 }, //v1
+        { x: 1.96, z: 10.8, width: 1.615, depth: 1.85 }, //v2
+        { x: 3.765, z: 10.8, width: 1.625, depth: 1.85 }, //v3
       ],
       endPoints: [
         { x: 11.6, z: 8.1, id: "B" },
@@ -9352,6 +10049,211 @@ export const CONFIG_DATA = {
           rows: 1,
         },
         walls: [
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: -0.75, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0, z: 9.875 },
+            end: { x: -0.45, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.8625 },
+            end: { x: 0, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: 0.965, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.155, z: 9.85 },
+            end: { x: 1.35, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.875 },
+            end: { x: 1.8, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.8, z: 9.8625 },
+            end: { x: 2.25, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.85 },
+            end: { x: 2.25, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 2.25, z: 9.85 },
+            end: { x: 2.765, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 2.955, z: 9.85 },
+            end: { x: 3.15, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.875 },
+            end: { x: 3.6, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.6, z: 9.8625 },
+            end: { x: 4.05, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.85 },
+            end: { x: 4.05, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 4.05, z: 9.85 },
+            end: { x: 4.575, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 16.6 },
+            end: { x: -4.1, z: 16.145 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 16.145 },
+            end: { x: -4.1125, z: 15.645 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 15.645 },
+            end: { x: -4.125, z: 15.145 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 16.145 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 15.045 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.845 },
+            end: { x: -4.1, z: 14.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 14.445 },
+            end: { x: -4.1125, z: 13.995 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 13.995 },
+            end: { x: -4.125, z: 13.545 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.445 },
+            end: { x: -4.1, z: 13.545 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 13.545 },
+            end: { x: -4.1, z: 13.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
           {
             type: "partition",
             start: { x: 0.45, z: 9.775 },
@@ -10888,11 +11790,11 @@ export const CONFIG_DATA = {
         { x: -8.4, z: 14.4, width: 3, depth: 5 }, //1.1
         { x: 1.875, z: 12.95, width: 5.3, depth: 2.15 },
         { x: 7.35, z: 15.95, width: 4.65, depth: 1.35 },
-        { x: -5.325, z: 15.825, width: 2.56, depth: 1.6 }, //v4
-        { x: -5.325, z: 14.15, width: 2.56, depth: 1.45 }, //v5
-        { x: 0.1075, z: 10.75, width: 1.72, depth: 1.95 }, //v1
-        { x: 1.96, z: 10.75, width: 1.615, depth: 1.95 }, //v2
-        { x: 3.765, z: 10.75, width: 1.625, depth: 1.95 }, //v3
+        { x: -5.375, z: 15.825, width: 2.45, depth: 1.6 }, //v4
+        { x: -5.375, z: 14.15, width: 2.45, depth: 1.45 }, //v5
+        { x: 0.1075, z: 10.8, width: 1.72, depth: 1.85 }, //v1
+        { x: 1.96, z: 10.8, width: 1.615, depth: 1.85 }, //v2
+        { x: 3.765, z: 10.8, width: 1.625, depth: 1.85 }, //v3
       ],
       endPoints: [
         { x: -6.3, z: -11.7, id: "B" },
@@ -10909,6 +11811,211 @@ export const CONFIG_DATA = {
         },
 
         walls: [
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: -0.75, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0, z: 9.875 },
+            end: { x: -0.45, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.8625 },
+            end: { x: 0, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: -0.45, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V1 dvere patro
+            type: "partition",
+            start: { x: 0.45, z: 9.85 },
+            end: { x: 0.965, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.155, z: 9.85 },
+            end: { x: 1.35, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.875 },
+            end: { x: 1.8, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.8, z: 9.8625 },
+            end: { x: 2.25, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 1.35, z: 9.85 },
+            end: { x: 2.25, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V2 dvere patro
+            type: "partition",
+            start: { x: 2.25, z: 9.85 },
+            end: { x: 2.765, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 2.955, z: 9.85 },
+            end: { x: 3.15, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.875 },
+            end: { x: 3.6, z: 9.875 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.6, z: 9.8625 },
+            end: { x: 4.05, z: 9.8625 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 3.15, z: 9.85 },
+            end: { x: 4.05, z: 9.85 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V3 dvere patro
+            type: "partition",
+            start: { x: 4.05, z: 9.85 },
+            end: { x: 4.575, z: 9.85 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 16.6 },
+            end: { x: -4.1, z: 16.145 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 16.145 },
+            end: { x: -4.1125, z: 15.645 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 15.645 },
+            end: { x: -4.125, z: 15.145 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 16.145 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V4 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 15.145 },
+            end: { x: -4.1, z: 15.045 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.845 },
+            end: { x: -4.1, z: 14.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1125, z: 14.445 },
+            end: { x: -4.1125, z: 13.995 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.075,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.125, z: 13.995 },
+            end: { x: -4.125, z: 13.545 },
+            partitionHeight: 2.1,
+            partitionWidth: 0.05,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 14.445 },
+            end: { x: -4.1, z: 13.545 },
+            yLevel: 2.1,
+            partitionHeight: 0.2,
+            partitionWidth: 0.1,
+          },
+          {
+            //vytah V5 dvere patro
+            type: "partition",
+            start: { x: -4.1, z: 13.545 },
+            end: { x: -4.1, z: 13.445 },
+            partitionHeight: 2.3,
+            partitionWidth: 0.1,
+          },
           {
             type: "partition",
             start: { x: 0.45, z: 9.775 },
