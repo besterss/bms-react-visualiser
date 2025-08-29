@@ -6533,6 +6533,14 @@ export const CONFIG_DATA = {
             materialType: "glass",
           },
           {
+            //Kostka - schodiste02 pricka dvere
+            type: "partition",
+            start: { x: -7.8, z: 17.91 },
+            end: { x: -9, z: 17.91 },
+            yLevel: 2.7,
+            materialType: "glass",
+          },
+          {
             //Kostka - vnejsi vrsek 2
             type: "partition",
             start: { x: -7.8, z: 17.91 },
@@ -6540,16 +6548,17 @@ export const CONFIG_DATA = {
             materialType: "glass",
           },
           {
-            //Kostka - vnejsi vrsek 3
+            //Kostka - pricka dvere 1.04
             type: "partition",
             start: { x: -1.8, z: 17.91 },
-            end: { x: 0.61, z: 17.91 },
+            end: { x: -3.6, z: 17.91 },
+            yLevel: 2.7,
             materialType: "glass",
           },
           {
-            //Kostka - vnejsi vrsek 4
+            //Kostka - vnejsi vrsek 3
             type: "partition",
-            start: { x: 1.79, z: 17.91 },
+            start: { x: -1.8, z: 17.91 },
             end: { x: 17.91, z: 17.91 },
             materialType: "glass",
           },
@@ -6585,7 +6594,15 @@ export const CONFIG_DATA = {
             //Kostka - vnejsi spodni 3
             type: "partition",
             start: { x: -1.88, z: -17.91 },
-            end: { x: 7.76, z: -17.91 },
+            end: { x: 7.8, z: -17.91 },
+            materialType: "glass",
+          },
+          {
+            //Kostka - vnejsi pricka schodiste01
+            type: "partition",
+            start: { x: 7.8, z: -17.91 },
+            end: { x: 10.2, z: -17.91 },
+            yLevel: 2.7,
             materialType: "glass",
           },
           {
@@ -6677,6 +6694,14 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -10.2, z: 16.875 },
             end: { x: -9, z: 16.875 },
+            partitionWidth: 0.15,
+          },
+          {
+            //Schodiste02 - pricka dvere
+            type: "partition",
+            start: { x: -7.8, z: 16.875 },
+            end: { x: -9, z: 16.875 },
+            yLevel: 2.7,
             partitionWidth: 0.15,
           },
           {
@@ -6836,6 +6861,14 @@ export const CONFIG_DATA = {
             type: "partition",
             start: { x: -6.6, z: 9.7 },
             end: { x: -3.35, z: 9.7 },
+            partitionWidth: 0.2,
+          },
+          {
+            //1.04 - pricka deere
+            type: "partition",
+            start: { x: -1.8, z: 16.7 },
+            end: { x: -3.6, z: 16.7 },
+            yLevel: 2.7,
             partitionWidth: 0.2,
           },
           {
@@ -7097,7 +7130,7 @@ export const CONFIG_DATA = {
             start: { x: -7.68, z: -17.91 },
             end: { x: -5.48, z: -17.91 },
             partitionWidth: 0.15,
-            yLevel: 2.6,
+            yLevel: 2.7,
             materialType: "glass",
           },
           {
@@ -7106,7 +7139,7 @@ export const CONFIG_DATA = {
             start: { x: -4.08, z: -17.91 },
             end: { x: -1.88, z: -17.91 },
             partitionWidth: 0.15,
-            yLevel: 2.6,
+            yLevel: 2.7,
             materialType: "glass",
           },
           {
@@ -7115,7 +7148,7 @@ export const CONFIG_DATA = {
             start: { x: -7.68, z: -13.875 },
             end: { x: -5.48, z: -13.875 },
             partitionWidth: 0.1,
-            yLevel: 2.6,
+            yLevel: 2.7,
             materialType: "glass",
           },
           {
@@ -7124,7 +7157,7 @@ export const CONFIG_DATA = {
             start: { x: -4.08, z: -13.875 },
             end: { x: -1.88, z: -13.875 },
             partitionWidth: 0.1,
-            yLevel: 2.6,
+            yLevel: 2.7,
             materialType: "glass",
           },
           {
@@ -7230,6 +7263,15 @@ export const CONFIG_DATA = {
             materialType: "glass",
           },
           {
+            //1.14 pricka dvere
+            type: "partition",
+            start: { x: 2.97, z: -16.2 },
+            end: { x: 2.97, z: -15.2 },
+            yLevel: 2.8,
+            partitionWidth: 0.1,
+            materialType: "glass",
+          },
+          {
             //1.14 prava spodni
             type: "partition",
             start: { x: 2.97, z: -16.2 },
@@ -7253,6 +7295,14 @@ export const CONFIG_DATA = {
             partitionWidth: 0.55,
           },
           {
+            //Schodiste01 - pricka dvere leve
+            type: "partition",
+            start: { x: 6.875, z: -15.7 },
+            end: { x: 6.875, z: -16.8 },
+            yLevel: 2.7,
+            partitionWidth: 0.55,
+          },
+          {
             //Schodiste01 - prava
             type: "partition",
             start: { x: 9.925, z: -16.8 },
@@ -7270,13 +7320,21 @@ export const CONFIG_DATA = {
             //Schodiste01 - spodni leva
             type: "partition",
             start: { x: 6.6, z: -16.875 },
-            end: { x: 7.76, z: -16.875 },
+            end: { x: 7.8, z: -16.875 },
+            partitionWidth: 0.15,
+          },
+          {
+            //Schodiste01 - spodni pricka dvere
+            type: "partition",
+            start: { x: 9, z: -16.875 },
+            end: { x: 7.8, z: -16.875 },
+            yLevel: 2.7,
             partitionWidth: 0.15,
           },
           {
             //Schodiste01 - spodni prava
             type: "partition",
-            start: { x: 8.94, z: -16.875 },
+            start: { x: 9, z: -16.875 },
             end: { x: 10.15, z: -16.875 },
             partitionWidth: 0.15,
           },
